@@ -97,7 +97,11 @@ Renders page header with logo, links and search
 
 {#snippet Settings()}
   <a href="#settings" onclick={toggleShowSettings}>
-    <img src="/" class="ultra-logo" alt="logo" />
+    <img
+      src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png"
+      class="ultra-logo"
+      alt="logo"
+    />
   </a>
 
   <a href="#settings" onclick={toggleShowSettings}> Settings </a>
