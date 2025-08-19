@@ -24,7 +24,7 @@
 ## Install
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/) or any other userscript manager.
-2. Download and install the script from the [Releases](https://github.com/clangmoyai/plab-ultra/releases) page.
+2. Click [plab-ultra.user.js](https://github.com/clangmoyai/plab-ultra/raw/main/dist/plab-ultra.user.js) to open it in Tampermonkey.
 3. When prompted by Tampermonkey, click "Always allow all domains".
 
 ## Screenshot
