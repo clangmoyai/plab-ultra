@@ -1,0 +1,64 @@
+html {
+  --border-radius-large: 8px;
+  --border-radius-small: 4px;
+  --tag-color: rgb(255, 255, 255);
+  --content-margin: 1rem;
+  --highlighted: rgb(180 99 0);
+}
+
+html[data-theme="dark"] {
+  --main-bg: rgb(18, 18, 18);
+  --post-bg: rgb(40, 40, 40);
+  --post-date-color: rgb(135, 179, 223);
+  --post-border-color: rgb(85, 85, 85);
+  --post-odd-bg: rgb(55, 55, 55);
+  --link-color: rgb(156, 206, 255);
+  --tag-bg: rgb(50 50 50);
+  --search-color: rgb(255, 255, 255);
+  --overlay-bg: rgb(32, 32, 32, 0.75);
+  --input-bg: rgb(28, 27, 27);
+  --incognito-filter: brightness(0);
+  --button-color: rgb(40, 74, 134);
+  --seed-color: rgb(51, 185, 51);
+  --leech-color: rgb(255, 84, 84);
+}
+
+html[data-theme="light"] {
+  --main-bg: rgb(255, 255, 255);
+  --post-bg: rgb(239, 239, 239);
+  --post-date-color: rgb(52, 93, 164);
+  --post-border-color: rgb(202, 202, 202);
+  --post-odd-bg: rgb(227, 227, 227);
+  --link-color: rgb(52, 93, 164);
+  --tag-bg: var(--link-color);
+  --search-color: rgb(0, 0, 0);
+  --overlay-bg: rgba(255, 255, 255, 0.75);
+  --input-bg: rgb(250, 250, 250);
+  --incognito-filter: brightness(0) invert(1);
+  --button-color: rgb(70, 119, 204);
+  --seed-color: rgb(0, 102, 0);
+  --leech-color: rgb(153, 0, 0);
+}
+
+#ultra {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 2.5rem 1.5rem 2.5rem;
+  font-family: system-ui;
+  background-color: var(--main-bg);
+}
+
+#ultra .section {
+  background-color: var(--post-bg);
+  border-radius: var(--border-radius-large);
+  overflow: hidden;
+  border: 1px solid var(--post-border-color);
+}
+
+#ultra img {
+  filter: unset;
+}
+
+body {
+  min-width: unset !important;
+}

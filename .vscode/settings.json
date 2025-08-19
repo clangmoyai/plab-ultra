@@ -1,0 +1,10 @@
+{
+  "svelte.enable-ts-plugin": true,
+  "[svelte, typescript, javascript, json, html, css]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+  "eslint.validate": ["javascript", "typescript", "svelte"],
+  "eslint.probe": ["javascript", "typescript", "svelte"],
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2
+}
