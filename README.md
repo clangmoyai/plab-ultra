@@ -4,7 +4,7 @@
 <!-- markdownlint-disable MD033 -->
 
 <p align="center">
-  <img width="400" src="src/assets/logo800.png" alt="logo" />
+  <img width="400" src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo800.png" alt="logo" />
 </p>
 
 <p align="center">
@@ -28,8 +28,8 @@
 3. When prompted by Tampermonkey, click "Always allow all domains".
 
 ## Screenshot
-<!-- ![screenshot](src/assets/logo800.png) -->
-...
+
+![screenshot](https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/screenshot.jpg)
 
 ## FAQ
 
