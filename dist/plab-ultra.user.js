@@ -4755,7 +4755,7 @@ location.reload();
   var root_7$3 = /* @__PURE__ */ from_html(`<a aria-label="inbox"><i></i></a>`);
   var root_9$1 = /* @__PURE__ */ from_html(`<span class="themeIcon svelte-14s75i7"></span>`);
   var root_10$2 = /* @__PURE__ */ from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
-  var root_11$1 = /* @__PURE__ */ from_html(`<a href="#settings"><img src="/" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
+  var root_11$1 = /* @__PURE__ */ from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
   var root_12$1 = /* @__PURE__ */ from_html(`<a href="#disable">Disable</a>`);
   var root$5 = /* @__PURE__ */ from_html(`<div id="x-header"><div class="logo svelte-14s75i7"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-14s75i7"><div class="container svelte-14s75i7"><div class="links svelte-14s75i7"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-14s75i7"><input type="text" name="search" placeholder="Search…" class="svelte-14s75i7"/> <button class="svelte-14s75i7">»</button></div></div></div></div>`);
   function Header($$anchor, $$props) {
