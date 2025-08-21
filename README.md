@@ -67,6 +67,9 @@ pnpx sv check && \
 # update dependencies
 pnpm up -L
 
-# build -> /dist
+# build -> dist
 pnpm build
+
+# publish.ts
+pnpm run publish
 ```
