@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2025.08.21
+// @version      2025.08.22
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -22,9 +22,9 @@
 (function () {
   'use strict';
 
-  const d=new Set;const e = async e=>{d.has(e)||(d.add(e),(t=>{typeof GM_addStyle=="function"?GM_addStyle(t):document.head.appendChild(document.createElement("style")).append(t);})(e));};
+  const d=new Set;const importCSS = async e=>{d.has(e)||(d.add(e),(t=>{typeof GM_addStyle=="function"?GM_addStyle(t):document.head.appendChild(document.createElement("style")).append(t);})(e));};
 
-  e(` .ultra-logo.svelte-14s75i7{width:16px;display:inline-flex;vertical-align:top;margin:0 .45rem 0 0}.ultra-logo.svelte-14s75i7:hover{cursor:pointer}#x-header.svelte-14s75i7{--header-height: 4.5rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;margin-bottom:var(--content-margin);min-height:var(--header-height)}.floatingDownload.svelte-14s75i7{padding-right:5rem}.logo.svelte-14s75i7{height:var(--header-height)}.logo.svelte-14s75i7 img:where(.svelte-14s75i7){height:100%;border-radius:var(--border-radius-large)}.align-right.svelte-14s75i7{display:flex;justify-content:flex-end;min-width:0}.container.svelte-14s75i7{display:flex;flex-direction:column;min-width:0;row-gap:1rem}.links.svelte-14s75i7{display:flex;min-width:0;flex-wrap:nowrap;justify-content:end}.unread.svelte-14s75i7{color:var(--highlighted);filter:brightness(1.25)}.item.svelte-14s75i7{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item.svelte-14s75i7+.item:where(.svelte-14s75i7):before{display:inline-block;content:"|";margin:0 .8rem;color:var(--post-border-color);transform:translateY(-1px)}.search.svelte-14s75i7{display:flex;gap:.5rem}.search.svelte-14s75i7 input:where(.svelte-14s75i7){flex:1 1 auto;min-width:0;border:1px solid var(--post-border-color);color:var(--search-color);background:var(--input-bg)!important;padding:.3rem .5rem .4rem;border-radius:var(--border-radius-small);font-size:.8rem!important;font-family:inherit}.search.svelte-14s75i7 button:where(.svelte-14s75i7){background:var(--input-bg)!important;border:1px solid var(--post-border-color)!important;width:1.75rem;border-radius:var(--border-radius-small)}.incognito.svelte-14s75i7{filter:var(--incognito-filter)!important}.themeIcon.svelte-14s75i7 a,.themeIcon.svelte-14s75i7 a:hover{text-decoration:none!important}@media (max-width: 768px){#x-header.svelte-14s75i7{grid-template-columns:1fr}.logo.svelte-14s75i7{display:none}.container.svelte-14s75i7{width:100%}}.container.svelte-5e73jo{display:flex;gap:1.15rem;justify-content:space-between}.column.svelte-5e73jo{display:flex;flex-direction:column;overflow:hidden;gap:.75rem}h2.svelte-5e73jo{margin:0;margin-bottom:.25rem;font-size:1rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=checkbox].svelte-5e73jo{margin:4px}label.svelte-5e73jo{display:flex;align-items:center;gap:.5rem}.disabled.svelte-5e73jo{text-decoration:line-through;cursor:default}span.svelte-5e73jo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.description.svelte-5e73jo{opacity:.5}input[type=checkbox].svelte-5e73jo:disabled{cursor:default}@media (max-width: 1200px){.container.svelte-5e73jo{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);gap:1rem;justify-content:stretch}.column.svelte-5e73jo{min-width:0}}@media (max-width: 768px){.container.svelte-5e73jo{display:flex;flex-direction:column;gap:1rem}.column.svelte-5e73jo{min-width:0;width:100%}}button.svelte-ig1se8{all:unset;display:flex;justify-content:center;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none;white-space:nowrap;background:var(--button-color)!important;border:none!important;border-radius:var(--border-radius-small);padding:.4rem .5rem;font-family:inherit;font-weight:500;font-size:.8rem;color:#fff;transition:background-color opacity 1.8s ease-in-out}button.svelte-ig1se8:disabled{background-color:var(--post-border-color)!important;opacity:.5;cursor:not-allowed}svg.svelte-ig1se8{position:absolute}svg.svelte-ig1se8 path:where(.svelte-ig1se8){transform-origin:center;fill:#fff}.container.svelte-d5217q{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}.align-right.svelte-d5217q{display:flex;gap:.5rem}.container.svelte-6don7f{display:flex;flex-direction:column;margin-top:1.25rem}.item.svelte-6don7f{display:grid;grid-template-columns:min-content minmax(0,10rem) 1fr auto;align-items:center;gap:.75rem;min-width:0;margin-bottom:.5rem}img.svelte-6don7f{width:.9rem;height:.9rem;flex-shrink:0}input[type=text].svelte-6don7f{padding:.3rem .5rem .4rem;border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:.8rem!important;background:var(--input-bg)!important;color:inherit;font:inherit;min-width:0}button.svelte-6don7f{background:#a62f2fbf!important;border-radius:var(--border-radius-small);font-size:1.2rem;border:none!important;color:#fff!important;display:flex;align-items:center;width:1.5rem;height:1.5rem;align-items:flex-end;justify-content:center;-webkit-user-select:none;user-select:none}button.svelte-6don7f:hover{background:#a62f2f!important}div.svelte-rmjlst{font-size:.8rem;position:relative;background:var(--post-bg);border:1px solid var(--post-border-color);padding:.9rem 1rem 1rem;border-radius:var(--border-radius-large);overflow:hidden;display:flex;flex-flow:column;font-family:inherit;margin-bottom:var(--content-margin)}button.svelte-rmjlst{position:absolute;top:.6rem;right:.6rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0;-webkit-user-select:none;user-select:none}div.svelte-hyxnps{position:fixed;top:1.3rem;right:2.5rem;z-index:9999;border-radius:var(--border-radius-large);padding:.35rem;border:1px solid var(--post-border-color);background-color:#009c3c!important}button.svelte-hyxnps{cursor:pointer;aspect-ratio:1 / 1;--size: 1.7rem;width:var(--size);background-color:#fff!important}.ic--sharp-download.svelte-hyxnps{display:inline-block;--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z'/%3E%3C/svg%3E");background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%}.container.svelte-m808n{position:absolute;z-index:2;transform:translate(-50%);padding-top:.2rem}.indicator.svelte-m808n{position:absolute;left:calc(50% - 8px);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:7px solid var(--post-border-color)}.items.svelte-m808n{margin-top:7px;position:relative;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:var(--border-radius-large);-webkit-user-select:none;user-select:none;border:1px solid var(--post-border-color);box-shadow:#00000040 0 25px 50px -12px;background:var(--overlay-bg);white-space:nowrap}.items.svelte-m808n img:where(.svelte-m808n){width:.9rem;height:1rem;width:1rem;-webkit-user-drag:none}.items.svelte-m808n a:where(.svelte-m808n){display:flex;align-items:center;gap:.75rem;font-size:.9rem;font-weight:500;text-decoration:none;padding:.5rem 1rem;-webkit-user-drag:none}.items.svelte-m808n a:where(.svelte-m808n):hover{color:unset}.items.svelte-m808n a:where(.svelte-m808n):first-of-type{padding-top:.9rem}.items.svelte-m808n a:where(.svelte-m808n):last-of-type{padding-bottom:1rem}#x-title.svelte-12bxepp{font-size:1.375rem;margin-top:0;margin-bottom:var(--content-margin)}.original-title.svelte-12bxepp{text-decoration:none}.title-item.svelte-12bxepp{color:unset;text-decoration:none}.title-item.svelte-12bxepp:hover,.title-item--hover{text-decoration:underline!important;color:var(--link-color)!important;cursor:pointer}button.svelte-1ilvoyd{all:unset;cursor:pointer;background:none!important}button.svelte-1ilvoyd:disabled{cursor:text;-webkit-user-select:text;user-select:text}#thx-btn{all:unset!important}#x-stats.svelte-7pdkl5{display:flex;flex-wrap:wrap;gap:.8rem;font-weight:500;font-size:.8rem;margin-bottom:var(--content-margin)}.item.svelte-7pdkl5:not(:last-child):after{display:inline-block;content:"|";color:var(--post-border-color);margin-left:.8rem;transform:translateY(-1px)}button.svelte-7pdkl5{all:unset;cursor:pointer;background:none!important}button.svelte-7pdkl5:disabled{cursor:text;-webkit-user-select:text;user-select:text}.seeders.svelte-7pdkl5{color:var(--seed-color)}.leechers.svelte-7pdkl5,.error.svelte-7pdkl5{color:var(--leech-color)}#x-tags.svelte-hxarl5{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--content-margin)}.tag-item.svelte-hxarl5{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .6rem .255rem;border-radius:var(--border-radius-small);font-size:.7rem;white-space:nowrap;text-decoration:none;cursor:pointer;font-weight:500;opacity:.75;transition:opacity .1s ease;color:var(--tag-color);background-color:var(--tag-bg);row-gap:.35rem;column-gap:.35rem;transition:opacity .15s ease-in-out}.tag-item.svelte-hxarl5:hover,.tag-item--hover{opacity:1!important;text-decoration:none!important}.tag-res.svelte-hxarl5{background:var(--highlighted)!important;color:#fff!important;opacity:1}.filelist.svelte-eqeghx{background:var(--post-bg);border:1px solid var(--post-border-color);padding:.75rem;border-radius:var(--border-radius-large);margin-bottom:var(--content-margin)}.filelist.svelte-eqeghx i{color:var(--link-color);font-style:normal;font-weight:500}div.svelte-1rhiyed{display:flex;flex-direction:column;gap:1rem;will-change:width;position:relative}.dragging.svelte-1rhiyed{cursor:ew-resize}.loader.svelte-10rouec{width:15%;height:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}svg.svelte-10rouec{width:100%;height:auto;will-change:transform}svg.svelte-10rouec path:where(.svelte-10rouec){fill:#fff}.animate.svelte-10rouec{animation:svelte-10rouec-spin 1s linear infinite;transform-origin:center center}@keyframes svelte-10rouec-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.debug.svelte-zizdl6{position:relative;display:flex;flex-direction:column;font-family:monospace;background:var(--button-color);padding:1rem;width:-webkit-fill-available;color:#fff;-webkit-user-select:text;user-select:text;word-wrap:break-word;gap:.4rem}.debug.svelte-zizdl6 a:where(.svelte-zizdl6){color:#fff;text-decoration:none;display:contents}.error.svelte-zizdl6{color:red}.copy.svelte-zizdl6{position:absolute;top:.5rem;right:.5rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0}svg.svelte-zizdl6 path:where(.svelte-zizdl6){transform-origin:center;fill:#fff;transform:translateY(2px)}.section.svelte-ojhdzd{display:flex;padding:1rem;flex-direction:column;align-items:center;-webkit-user-select:none;user-select:none;margin-bottom:var(--content-margin)}a.svelte-ojhdzd{position:relative;display:block;overflow:hidden}.container.svelte-ojhdzd{border-radius:var(--border-radius-small);overflow:hidden}img.svelte-ojhdzd{width:100%;height:auto;border:none;flex:1 0 100%;-webkit-user-select:none;user-select:none;will-change:width;display:block}a.gif.svelte-ojhdzd{width:fit-content}img.gif.svelte-ojhdzd{width:auto;max-width:100%}.incognito.svelte-ojhdzd{filter:var(--incognito-filter)!important}.dragging.svelte-ojhdzd a:where(.svelte-ojhdzd),.dragging.svelte-ojhdzd img:where(.svelte-ojhdzd){pointer-events:none}.forumline.svelte-14j3c1y{padding:1rem;position:relative;display:flex;flex-direction:column;align-items:center}.section.svelte-14j3c1y{margin-bottom:var(--content-margin)}a.svelte-14j3c1y{color:#4da3ff;text-decoration:none}a.svelte-14j3c1y:hover{text-decoration:underline}.post.svelte-14j3c1y{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid var(--post-border-color)}.post.svelte-14j3c1y:nth-child(2n){background-color:var(--post-odd-bg)}.post.svelte-14j3c1y:last-child{border-bottom:none}.avatar.svelte-14j3c1y img:where(.svelte-14j3c1y){width:48px;height:48px;border-radius:var(--border-radius-small);object-fit:cover;border:1px solid var(--post-border-color)}.no-avatar.svelte-14j3c1y{display:flex;width:48px;height:48px;text-align:center;line-height:48px;background:var(--main-bg);border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:1.3rem;cursor:pointer;justify-content:center;align-items:center}.no-avatar.svelte-14j3c1y svg:where(.svelte-14j3c1y){width:55%;height:55%}.no-avatar.svelte-14j3c1y:hover{text-decoration:none!important}.content.svelte-14j3c1y{flex:1}.header.svelte-14j3c1y{font-size:.8rem;color:#bbb;margin-block-end:.4rem;display:flex;gap:.5rem;align-items:center}.nick.svelte-14j3c1y{font-weight:600}.date.svelte-14j3c1y{all:unset!important;color:var(--post-date-color)!important;font-weight:400!important;opacity:.8!important;cursor:pointer!important}.date.svelte-14j3c1y:hover{opacity:1!important}.message.svelte-14j3c1y{margin:0;line-height:1.4}#ultra-pagination.svelte-13k3ejc{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:var(--content-margin)}#ultra-pagination a{text-decoration:none!important}html{--border-radius-large: 8px;--border-radius-small: 4px;--tag-color: rgb(255, 255, 255);--content-margin: 1rem;--highlighted: rgb(180 99 0)}html[data-theme=dark]{--main-bg: rgb(18, 18, 18);--post-bg: rgb(40, 40, 40);--post-date-color: rgb(135, 179, 223);--post-border-color: rgb(85, 85, 85);--post-odd-bg: rgb(55, 55, 55);--link-color: rgb(156, 206, 255);--tag-bg: rgb(50 50 50);--search-color: rgb(255, 255, 255);--overlay-bg: rgb(32, 32, 32, .75);--input-bg: rgb(28, 27, 27);--incognito-filter: brightness(0);--button-color: rgb(40, 74, 134);--seed-color: rgb(51, 185, 51);--leech-color: rgb(255, 84, 84)}html[data-theme=light]{--main-bg: rgb(255, 255, 255);--post-bg: rgb(239, 239, 239);--post-date-color: rgb(52, 93, 164);--post-border-color: rgb(202, 202, 202);--post-odd-bg: rgb(227, 227, 227);--link-color: rgb(52, 93, 164);--tag-bg: var(--link-color);--search-color: rgb(0, 0, 0);--overlay-bg: rgba(255, 255, 255, .75);--input-bg: rgb(250, 250, 250);--incognito-filter: brightness(0) invert(1);--button-color: rgb(70, 119, 204);--seed-color: rgb(0, 102, 0);--leech-color: rgb(153, 0, 0)}#ultra{display:flex;flex-direction:column;padding:1.5rem 2.5rem;font-family:system-ui;background-color:var(--main-bg)}#ultra .section{background-color:var(--post-bg);border-radius:var(--border-radius-large);overflow:hidden;border:1px solid var(--post-border-color)}#ultra img{filter:unset}body{min-width:unset!important} `);
+  importCSS(` .ultra-logo.svelte-14s75i7{width:16px;display:inline-flex;vertical-align:top;margin:0 .45rem 0 0}.ultra-logo.svelte-14s75i7:hover{cursor:pointer}#x-header.svelte-14s75i7{--header-height: 4.5rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;margin-bottom:var(--content-margin);min-height:var(--header-height)}.floatingDownload.svelte-14s75i7{padding-right:5rem}.logo.svelte-14s75i7{height:var(--header-height)}.logo.svelte-14s75i7 img:where(.svelte-14s75i7){height:100%;border-radius:var(--border-radius-large)}.align-right.svelte-14s75i7{display:flex;justify-content:flex-end;min-width:0}.container.svelte-14s75i7{display:flex;flex-direction:column;min-width:0;row-gap:1rem}.links.svelte-14s75i7{display:flex;min-width:0;flex-wrap:nowrap;justify-content:end}.unread.svelte-14s75i7{color:var(--highlighted);filter:brightness(1.25)}.item.svelte-14s75i7{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item.svelte-14s75i7+.item:where(.svelte-14s75i7):before{display:inline-block;content:"|";margin:0 .8rem;color:var(--post-border-color);transform:translateY(-1px)}.search.svelte-14s75i7{display:flex;gap:.5rem}.search.svelte-14s75i7 input:where(.svelte-14s75i7){flex:1 1 auto;min-width:0;border:1px solid var(--post-border-color);color:var(--search-color);background:var(--input-bg)!important;padding:.3rem .5rem .4rem;border-radius:var(--border-radius-small);font-size:.8rem!important;font-family:inherit}.search.svelte-14s75i7 button:where(.svelte-14s75i7){background:var(--input-bg)!important;border:1px solid var(--post-border-color)!important;width:1.75rem;border-radius:var(--border-radius-small)}.incognito.svelte-14s75i7{filter:var(--incognito-filter)!important}.themeIcon.svelte-14s75i7 a,.themeIcon.svelte-14s75i7 a:hover{text-decoration:none!important}@media (max-width: 768px){#x-header.svelte-14s75i7{grid-template-columns:1fr}.logo.svelte-14s75i7{display:none}.container.svelte-14s75i7{width:100%}}.container.svelte-5e73jo{display:flex;gap:1.15rem;justify-content:space-between}.column.svelte-5e73jo{display:flex;flex-direction:column;overflow:hidden;gap:.75rem}h2.svelte-5e73jo{margin:0;margin-bottom:.25rem;font-size:1rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=checkbox].svelte-5e73jo{margin:4px}label.svelte-5e73jo{display:flex;align-items:center;gap:.5rem}.disabled.svelte-5e73jo{text-decoration:line-through;cursor:default}span.svelte-5e73jo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.description.svelte-5e73jo{opacity:.5}input[type=checkbox].svelte-5e73jo:disabled{cursor:default}@media (max-width: 1200px){.container.svelte-5e73jo{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);gap:1rem;justify-content:stretch}.column.svelte-5e73jo{min-width:0}}@media (max-width: 768px){.container.svelte-5e73jo{display:flex;flex-direction:column;gap:1rem}.column.svelte-5e73jo{min-width:0;width:100%}}button.svelte-ig1se8{all:unset;display:flex;justify-content:center;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none;white-space:nowrap;background:var(--button-color)!important;border:none!important;border-radius:var(--border-radius-small);padding:.4rem .5rem;font-family:inherit;font-weight:500;font-size:.8rem;color:#fff;transition:background-color opacity 1.8s ease-in-out}button.svelte-ig1se8:disabled{background-color:var(--post-border-color)!important;opacity:.5;cursor:not-allowed}svg.svelte-ig1se8{position:absolute}svg.svelte-ig1se8 path:where(.svelte-ig1se8){transform-origin:center;fill:#fff}.container.svelte-d5217q{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}.align-right.svelte-d5217q{display:flex;gap:.5rem}.container.svelte-6don7f{display:flex;flex-direction:column;margin-top:1.25rem}.item.svelte-6don7f{display:grid;grid-template-columns:min-content minmax(0,10rem) 1fr auto;align-items:center;gap:.75rem;min-width:0;margin-bottom:.5rem}img.svelte-6don7f{width:.9rem;height:.9rem;flex-shrink:0}input[type=text].svelte-6don7f{padding:.3rem .5rem .4rem;border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:.8rem!important;background:var(--input-bg)!important;color:inherit;font:inherit;min-width:0}button.svelte-6don7f{background:#a62f2fbf!important;border-radius:var(--border-radius-small);font-size:1.2rem;border:none!important;color:#fff!important;display:flex;align-items:center;width:1.5rem;height:1.5rem;align-items:flex-end;justify-content:center;-webkit-user-select:none;user-select:none}button.svelte-6don7f:hover{background:#a62f2f!important}div.svelte-rmjlst{font-size:.8rem;position:relative;background:var(--post-bg);border:1px solid var(--post-border-color);padding:.9rem 1rem 1rem;border-radius:var(--border-radius-large);overflow:hidden;display:flex;flex-flow:column;font-family:inherit;margin-bottom:var(--content-margin)}button.svelte-rmjlst{position:absolute;top:.6rem;right:.6rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0;-webkit-user-select:none;user-select:none}div.svelte-hyxnps{position:fixed;top:1.3rem;right:2.5rem;z-index:9999;border-radius:var(--border-radius-large);padding:.35rem;border:1px solid var(--post-border-color);background-color:#009c3c!important}button.svelte-hyxnps{cursor:pointer;aspect-ratio:1 / 1;--size: 1.7rem;width:var(--size);background-color:#fff!important}.ic--sharp-download.svelte-hyxnps{display:inline-block;--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z'/%3E%3C/svg%3E");background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%}.container.svelte-m808n{position:absolute;z-index:2;transform:translate(-50%);padding-top:.2rem}.indicator.svelte-m808n{position:absolute;left:calc(50% - 8px);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:7px solid var(--post-border-color)}.items.svelte-m808n{margin-top:7px;position:relative;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:var(--border-radius-large);-webkit-user-select:none;user-select:none;border:1px solid var(--post-border-color);box-shadow:#00000040 0 25px 50px -12px;background:var(--overlay-bg);white-space:nowrap}.items.svelte-m808n img:where(.svelte-m808n){width:.9rem;height:1rem;width:1rem;-webkit-user-drag:none}.items.svelte-m808n a:where(.svelte-m808n){display:flex;align-items:center;gap:.75rem;font-size:.9rem;font-weight:500;text-decoration:none;padding:.5rem 1rem;-webkit-user-drag:none}.items.svelte-m808n a:where(.svelte-m808n):hover{color:unset}.items.svelte-m808n a:where(.svelte-m808n):first-of-type{padding-top:.9rem}.items.svelte-m808n a:where(.svelte-m808n):last-of-type{padding-bottom:1rem}#x-title.svelte-12bxepp{font-size:1.375rem;margin-top:0;margin-bottom:var(--content-margin)}.original-title.svelte-12bxepp{text-decoration:none}.title-item.svelte-12bxepp{color:unset;text-decoration:none}.title-item.svelte-12bxepp:hover,.title-item--hover{text-decoration:underline!important;color:var(--link-color)!important;cursor:pointer}button.svelte-1ilvoyd{all:unset;cursor:pointer;background:none!important}button.svelte-1ilvoyd:disabled{cursor:text;-webkit-user-select:text;user-select:text}#thx-btn{all:unset!important}#x-stats.svelte-7pdkl5{display:flex;flex-wrap:wrap;gap:.8rem;font-weight:500;font-size:.8rem;margin-bottom:var(--content-margin)}.item.svelte-7pdkl5:not(:last-child):after{display:inline-block;content:"|";color:var(--post-border-color);margin-left:.8rem;transform:translateY(-1px)}button.svelte-7pdkl5{all:unset;cursor:pointer;background:none!important}button.svelte-7pdkl5:disabled{cursor:text;-webkit-user-select:text;user-select:text}.seeders.svelte-7pdkl5{color:var(--seed-color)}.leechers.svelte-7pdkl5,.error.svelte-7pdkl5{color:var(--leech-color)}#x-tags.svelte-hxarl5{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--content-margin)}.tag-item.svelte-hxarl5{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .6rem .255rem;border-radius:var(--border-radius-small);font-size:.7rem;white-space:nowrap;text-decoration:none;cursor:pointer;font-weight:500;opacity:.75;transition:opacity .1s ease;color:var(--tag-color);background-color:var(--tag-bg);row-gap:.35rem;column-gap:.35rem;transition:opacity .15s ease-in-out}.tag-item.svelte-hxarl5:hover,.tag-item--hover{opacity:1!important;text-decoration:none!important}.tag-res.svelte-hxarl5{background:var(--highlighted)!important;color:#fff!important;opacity:1}.filelist.svelte-eqeghx{background:var(--post-bg);border:1px solid var(--post-border-color);padding:.75rem;border-radius:var(--border-radius-large);margin-bottom:var(--content-margin)}.filelist.svelte-eqeghx i{color:var(--link-color);font-style:normal;font-weight:500}div.svelte-1rhiyed{display:flex;flex-direction:column;gap:1rem;will-change:width;position:relative}.dragging.svelte-1rhiyed{cursor:ew-resize}.loader.svelte-10rouec{width:15%;height:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}svg.svelte-10rouec{width:100%;height:auto;will-change:transform}svg.svelte-10rouec path:where(.svelte-10rouec){fill:#fff}.animate.svelte-10rouec{animation:svelte-10rouec-spin 1s linear infinite;transform-origin:center center}@keyframes svelte-10rouec-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.debug.svelte-zizdl6{position:relative;display:flex;flex-direction:column;font-family:monospace;background:var(--button-color);padding:1rem;width:-webkit-fill-available;color:#fff;-webkit-user-select:text;user-select:text;word-wrap:break-word;gap:.4rem}.debug.svelte-zizdl6 a:where(.svelte-zizdl6){color:#fff;text-decoration:none;display:contents}.error.svelte-zizdl6{color:red}.copy.svelte-zizdl6{position:absolute;top:.5rem;right:.5rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0}svg.svelte-zizdl6 path:where(.svelte-zizdl6){transform-origin:center;fill:#fff;transform:translateY(2px)}.section.svelte-ojhdzd{display:flex;padding:1rem;flex-direction:column;align-items:center;-webkit-user-select:none;user-select:none;margin-bottom:var(--content-margin)}a.svelte-ojhdzd{position:relative;display:block;overflow:hidden}.container.svelte-ojhdzd{border-radius:var(--border-radius-small);overflow:hidden}img.svelte-ojhdzd{width:100%;height:auto;border:none;flex:1 0 100%;-webkit-user-select:none;user-select:none;will-change:width;display:block}a.gif.svelte-ojhdzd{width:fit-content}img.gif.svelte-ojhdzd{width:auto;max-width:100%}.incognito.svelte-ojhdzd{filter:var(--incognito-filter)!important}.dragging.svelte-ojhdzd a:where(.svelte-ojhdzd),.dragging.svelte-ojhdzd img:where(.svelte-ojhdzd){pointer-events:none}.forumline.svelte-14j3c1y{padding:1rem;position:relative;display:flex;flex-direction:column;align-items:center}.section.svelte-14j3c1y{margin-bottom:var(--content-margin)}a.svelte-14j3c1y{color:#4da3ff;text-decoration:none}a.svelte-14j3c1y:hover{text-decoration:underline}.post.svelte-14j3c1y{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid var(--post-border-color)}.post.svelte-14j3c1y:nth-child(2n){background-color:var(--post-odd-bg)}.post.svelte-14j3c1y:last-child{border-bottom:none}.avatar.svelte-14j3c1y img:where(.svelte-14j3c1y){width:48px;height:48px;border-radius:var(--border-radius-small);object-fit:cover;border:1px solid var(--post-border-color)}.no-avatar.svelte-14j3c1y{display:flex;width:48px;height:48px;text-align:center;line-height:48px;background:var(--main-bg);border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:1.3rem;cursor:pointer;justify-content:center;align-items:center}.no-avatar.svelte-14j3c1y svg:where(.svelte-14j3c1y){width:55%;height:55%}.no-avatar.svelte-14j3c1y:hover{text-decoration:none!important}.content.svelte-14j3c1y{flex:1}.header.svelte-14j3c1y{font-size:.8rem;color:#bbb;margin-block-end:.4rem;display:flex;gap:.5rem;align-items:center}.nick.svelte-14j3c1y{font-weight:600}.date.svelte-14j3c1y{all:unset!important;color:var(--post-date-color)!important;font-weight:400!important;opacity:.8!important;cursor:pointer!important}.date.svelte-14j3c1y:hover{opacity:1!important}.message.svelte-14j3c1y{margin:0;line-height:1.4}#ultra-pagination.svelte-13k3ejc{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:var(--content-margin)}#ultra-pagination a{text-decoration:none!important} `);
 
   const DEV = false;
   var is_array = Array.isArray;
@@ -4733,7 +4733,7 @@ location.reload();
     append($$anchor, a_2);
   };
   const Settings$1 = ($$anchor) => {
-    var fragment_3 = root_11$1();
+    var fragment_3 = root_11$2();
     var a_4 = first_child(fragment_3);
     a_4.__click = function(...$$args) {
       toggleShowSettings?.apply(this, $$args);
@@ -4749,13 +4749,13 @@ location.reload();
     setUserscript(true);
   }
   var root_1$d = /* @__PURE__ */ from_html(`<div class="item svelte-14s75i7"><!></div>`);
-  var root_5$4 = /* @__PURE__ */ from_html(`<a>Profile</a>`);
-  var root_6$6 = /* @__PURE__ */ from_html(`<a href="/">Login</a>`);
+  var root_5$5 = /* @__PURE__ */ from_html(`<a>Profile</a>`);
+  var root_6$5 = /* @__PURE__ */ from_html(`<a href="/">Login</a>`);
   var root_7$3 = /* @__PURE__ */ from_html(`<a aria-label="inbox"><i></i></a>`);
-  var root_9$1 = /* @__PURE__ */ from_html(`<span class="themeIcon svelte-14s75i7"></span>`);
-  var root_10$2 = /* @__PURE__ */ from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
-  var root_11$1 = /* @__PURE__ */ from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
-  var root_12$1 = /* @__PURE__ */ from_html(`<a href="#disable">Disable</a>`);
+  var root_9$2 = /* @__PURE__ */ from_html(`<span class="themeIcon svelte-14s75i7"></span>`);
+  var root_10$1 = /* @__PURE__ */ from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
+  var root_11$2 = /* @__PURE__ */ from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
+  var root_12 = /* @__PURE__ */ from_html(`<a href="#disable">Disable</a>`);
   var root$5 = /* @__PURE__ */ from_html(`<div id="x-header"><div class="logo svelte-14s75i7"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-14s75i7"><div class="container svelte-14s75i7"><div class="links svelte-14s75i7"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-14s75i7"><input type="text" name="search" placeholder="Search…" class="svelte-14s75i7"/> <button class="svelte-14s75i7">»</button></div></div></div></div>`);
   function Header($$anchor, $$props) {
     push($$props, true);
@@ -4772,7 +4772,7 @@ location.reload();
           var node_2 = first_child(fragment_1);
           {
             var consequent_1 = ($$anchor4) => {
-              var a = root_5$4();
+              var a = root_5$5();
               template_effect(() => {
                 set_attribute(a, "href", data.user.link);
                 set_attribute(a, "title", data.user?.name);
@@ -4780,7 +4780,7 @@ location.reload();
               append($$anchor4, a);
             };
             var alternate = ($$anchor4) => {
-              var a_1 = root_6$6();
+              var a_1 = root_6$5();
               append($$anchor4, a_1);
             };
             if_block(
@@ -4806,13 +4806,13 @@ location.reload();
       var node_3 = first_child(fragment_2);
       {
         var consequent_2 = ($$anchor3) => {
-          var span = root_9$1();
+          var span = root_9$2();
           attach(span, () => appendThemeButton(data.theme.element));
           append($$anchor3, span);
         };
         var alternate_2 = ($$anchor3) => {
           const darkMode = /* @__PURE__ */ user_derived(() => data.theme?.darkmode);
-          var a_3 = root_10$2();
+          var a_3 = root_10$1();
           var i_1 = child(a_3);
           template_effect(() => set_class(i_1, 1, clsx([
             "fas",
@@ -4829,7 +4829,7 @@ location.reload();
       append($$anchor2, fragment_2);
     };
     const Disable = ($$anchor2) => {
-      var a_6 = root_12$1();
+      var a_6 = root_12();
       a_6.__click = [disableUserscript];
       append($$anchor2, a_6);
     };
@@ -4909,7 +4909,7 @@ location.reload();
   var on_click$4 = (event2) => {
     event2.currentTarget?.blur();
   };
-  var root_3$5 = /* @__PURE__ */ from_html(`<span class="description svelte-5e73jo"> </span>`);
+  var root_3$6 = /* @__PURE__ */ from_html(`<span class="description svelte-5e73jo"> </span>`);
   var root_2$5 = /* @__PURE__ */ from_html(`<label><input type="checkbox" class="svelte-5e73jo"/> <span class="svelte-5e73jo"><!> <!></span></label>`);
   var root_1$c = /* @__PURE__ */ from_html(`<div class="column svelte-5e73jo"><h2 class="svelte-5e73jo"> </h2> <!></div>`);
   var root$4 = /* @__PURE__ */ from_html(`<div class="container svelte-5e73jo"></div>`);
@@ -4943,7 +4943,7 @@ location.reload();
           var node_2 = sibling(node_1, 2);
           {
             var consequent = ($$anchor4) => {
-              var span_1 = root_3$5();
+              var span_1 = root_3$6();
               var text_1 = child(span_1);
               template_effect(() => set_text(text_1, get(item).description));
               append($$anchor4, span_1);
@@ -5232,15 +5232,15 @@ location.reload();
   };
   var root_2$3 = /* @__PURE__ */ from_html(`<img class="svelte-6don7f"/>`);
   var on_input = (_, index2, key, link2) => updatePerformerLink(index2(), { [key()]: link2()[key()] });
-  var root_3$4 = /* @__PURE__ */ from_html(`<input type="text" class="svelte-6don7f"/>`);
+  var root_3$5 = /* @__PURE__ */ from_html(`<input type="text" class="svelte-6don7f"/>`);
   var on_click$3 = (__1, index2) => removePerformerLink(index2());
   var root_4$3 = /* @__PURE__ */ from_html(`<button title="Remove link" class="svelte-6don7f">×</button>`);
-  var root_6$5 = /* @__PURE__ */ from_html(`<div class="item svelte-6don7f"><!> <!> <!> <!></div>`);
-  var root_5$3 = /* @__PURE__ */ from_html(`<div class="container svelte-6don7f"></div>`);
+  var root_6$4 = /* @__PURE__ */ from_html(`<div class="item svelte-6don7f"><!> <!> <!> <!></div>`);
+  var root_5$4 = /* @__PURE__ */ from_html(`<div class="container svelte-6don7f"></div>`);
   function Links($$anchor, $$props) {
     push($$props, true);
     const Input = ($$anchor2, key = noop, link2 = noop, index2 = noop) => {
-      var input = root_3$4();
+      var input = root_3$5();
       input.__input = [on_input, index2, key, link2];
       template_effect(() => {
         set_attribute(input, "name", placeholders[key()]);
@@ -5256,9 +5256,9 @@ location.reload();
     var node_1 = first_child(fragment_1);
     {
       var consequent_1 = ($$anchor2) => {
-        var div = root_5$3();
+        var div = root_5$4();
         each(div, 23, () => store.performerLinks, (link2) => link2.id, ($$anchor3, link2, index2) => {
-          var div_1 = root_6$5();
+          var div_1 = root_6$4();
           var node_2 = child(div_1);
           Favicon(node_2, () => get(link2));
           var node_3 = sibling(node_2, 2);
@@ -5335,10 +5335,10 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  var root_3$3 = /* @__PURE__ */ from_html(`<link rel="prefetch" as="image"/>`);
-  var root_6$4 = /* @__PURE__ */ from_html(`<a class="svelte-m808n"><img class="svelte-m808n"/> </a>`);
+  var root_3$4 = /* @__PURE__ */ from_html(`<link rel="prefetch" as="image"/>`);
+  var root_6$3 = /* @__PURE__ */ from_html(`<a class="svelte-m808n"><img class="svelte-m808n"/> </a>`);
   var root_4$2 = /* @__PURE__ */ from_html(`<div class="container svelte-m808n"><div class="indicator svelte-m808n"></div> <div class="items svelte-m808n"></div></div>`);
-  function Dropdown($$anchor, $$props) {
+  function Dropdown$1($$anchor, $$props) {
     push($$props, true);
     let top = /* @__PURE__ */ state$1(0);
     let left = /* @__PURE__ */ state$1(0);
@@ -5389,7 +5389,7 @@ location.reload();
         var node_1 = first_child(fragment_1);
         {
           var consequent = ($$anchor4) => {
-            var link_1 = root_3$3();
+            var link_1 = root_3$4();
             template_effect(() => set_attribute(link_1, "href", store.favIcons[get(link2).url]));
             append($$anchor4, link_1);
           };
@@ -5412,7 +5412,7 @@ location.reload();
           var node_3 = first_child(fragment_3);
           {
             var consequent_1 = ($$anchor4) => {
-              var a = root_6$4();
+              var a = root_6$3();
               var img = child(a);
               var text2 = sibling(img);
               template_effect(
@@ -5448,79 +5448,97 @@ location.reload();
     append($$anchor, fragment_2);
     pop();
   }
-  var root_6$3 = /* @__PURE__ */ from_html(`<a class="title-item svelte-12bxepp"> </a>`);
-  var root_8 = /* @__PURE__ */ from_html(`<a class="title-item svelte-12bxepp"> </a>`);
-  var on_click$2 = (event2, item) => store.openDropdown(event2, get(item), ["title-item--hover"]);
-  var root_10$1 = /* @__PURE__ */ from_html(`<span class="title-item svelte-12bxepp"> </span>`);
-  var root_12 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"></h1>`);
-  var root_14$2 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"> </h1>`);
-  var root_16 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
-  var root_18$1 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><a class="original-title svelte-12bxepp"> </a></h1>`);
+  const Dropdown = ($$anchor, item = noop) => {
+    var span = root_3$3();
+    span.__click = [on_click$2, item];
+    var text2 = child(span);
+    template_effect(() => set_text(text2, item()));
+    append($$anchor, span);
+  };
+  const Placholder = ($$anchor) => {
+    const items = /* @__PURE__ */ user_derived(() => ["Performer", "Title"]);
+    var fragment_1 = comment();
+    var node_1 = first_child(fragment_1);
+    each(node_1, 17, () => get(items), index, ($$anchor2, item, i) => {
+      var fragment_2 = root_5$3();
+      var text_1 = first_child(fragment_2);
+      text_1.nodeValue = `${i > 0 ? " - " : ""} `;
+      var node_2 = sibling(text_1);
+      Dropdown(node_2, () => get(item));
+      append($$anchor2, fragment_2);
+    });
+    append($$anchor, fragment_1);
+  };
+  var on_click$2 = (event2, item) => store.openDropdown(event2, item(), ["title-item--hover"]);
+  var root_3$3 = /* @__PURE__ */ from_html(`<span class="title-item svelte-12bxepp"> </span>`);
+  var root_5$3 = /* @__PURE__ */ from_html(` <!>`, 1);
+  var root_9$1 = /* @__PURE__ */ from_html(`<a class="title-item svelte-12bxepp"> </a>`);
+  var root_11$1 = /* @__PURE__ */ from_html(`<a class="title-item svelte-12bxepp"> </a>`);
+  var root_15 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
+  var root_17$1 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"> </h1>`);
+  var root_19 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
+  var root_21$1 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><a class="original-title svelte-12bxepp"> </a></h1>`);
   function Title($$anchor, $$props) {
     push($$props, true);
     const ParsedTitle = ($$anchor2, searchTerms2 = noop) => {
       const validLinks = /* @__PURE__ */ user_derived(() => store.performerLinks.filter((link2) => link2.url && link2.label));
-      var fragment_1 = comment();
-      var node_1 = first_child(fragment_1);
-      each(node_1, 17, () => get(items), index, ($$anchor3, item) => {
-        var fragment_2 = comment();
-        var node_2 = first_child(fragment_2);
+      var fragment_3 = comment();
+      var node_3 = first_child(fragment_3);
+      each(node_3, 17, () => get(items), index, ($$anchor3, item) => {
+        var fragment_4 = comment();
+        var node_4 = first_child(fragment_4);
         {
           var consequent_4 = ($$anchor4) => {
-            var fragment_3 = comment();
-            var node_3 = first_child(fragment_3);
+            var fragment_5 = comment();
+            var node_5 = first_child(fragment_5);
             {
               var consequent_1 = ($$anchor5) => {
-                var a_1 = root_6$3();
-                var text2 = child(a_1);
+                var a_1 = root_9$1();
+                var text_2 = child(a_1);
                 template_effect(
                   ($0) => {
                     set_attribute(a_1, "href", `/forum/tracker.php?nm=${$0 ?? ""}`);
-                    set_text(text2, get(item));
+                    set_text(text_2, get(item));
                   },
                   [() => encodeURIComponent(get(item))]
                 );
                 append($$anchor5, a_1);
               };
               var alternate_1 = ($$anchor5) => {
-                var fragment_4 = comment();
-                var node_4 = first_child(fragment_4);
+                var fragment_6 = comment();
+                var node_6 = first_child(fragment_6);
                 {
                   var consequent_2 = ($$anchor6) => {
-                    var a_2 = root_8();
-                    var text_1 = child(a_2);
+                    var a_2 = root_11$1();
+                    var text_3 = child(a_2);
                     template_effect(
                       ($0) => {
                         set_attribute(a_2, "href", $0);
-                        set_text(text_1, get(item));
+                        set_text(text_3, get(item));
                       },
                       [() => getLinkUrl(store.performerLinks[0], get(item))]
                     );
                     append($$anchor6, a_2);
                   };
                   var alternate = ($$anchor6) => {
-                    var fragment_5 = comment();
-                    var node_5 = first_child(fragment_5);
+                    var fragment_7 = comment();
+                    var node_7 = first_child(fragment_7);
                     {
                       var consequent_3 = ($$anchor7) => {
-                        var span = root_10$1();
-                        span.__click = [on_click$2, item];
-                        var text_2 = child(span);
-                        template_effect(() => set_text(text_2, get(item)));
-                        append($$anchor7, span);
+                        Dropdown($$anchor7, () => get(item));
                       };
                       if_block(
-                        node_5,
+                        node_7,
                         ($$render) => {
                           if (get(validLinks).length > 1) $$render(consequent_3);
                         },
                         true
                       );
                     }
-                    append($$anchor6, fragment_5);
+                    append($$anchor6, fragment_7);
                   };
                   if_block(
-                    node_4,
+                    node_6,
                     ($$render) => {
                       if (get(validLinks).length === 1 && store.performerLinks[0]) $$render(consequent_2);
                       else $$render(alternate, false);
@@ -5528,28 +5546,28 @@ location.reload();
                     true
                   );
                 }
-                append($$anchor5, fragment_4);
+                append($$anchor5, fragment_6);
               };
-              if_block(node_3, ($$render) => {
+              if_block(node_5, ($$render) => {
                 if (get(validLinks).length === 0 || !get(performerLinks)) $$render(consequent_1);
                 else $$render(alternate_1, false);
               });
             }
-            append($$anchor4, fragment_3);
+            append($$anchor4, fragment_5);
           };
           var alternate_2 = ($$anchor4) => {
-            var text_3 = text();
-            template_effect(() => set_text(text_3, get(item)));
-            append($$anchor4, text_3);
+            var text_4 = text();
+            template_effect(() => set_text(text_4, get(item)));
+            append($$anchor4, text_4);
           };
-          if_block(node_2, ($$render) => {
+          if_block(node_4, ($$render) => {
             if (get(item) && searchTerms2().includes(get(item))) $$render(consequent_4);
             else $$render(alternate_2, false);
           });
         }
-        append($$anchor3, fragment_2);
+        append($$anchor3, fragment_4);
       });
-      append($$anchor2, fragment_1);
+      append($$anchor2, fragment_3);
     };
     let incognito = /* @__PURE__ */ user_derived(() => getSettings("incognito"));
     let parseTitle = /* @__PURE__ */ user_derived(() => getSettings("parseTitle"));
@@ -5612,7 +5630,7 @@ location.reload();
         return document.title;
       }
     );
-    var fragment_7 = comment();
+    var fragment_10 = comment();
     head(($$anchor2) => {
       var fragment = comment();
       var node = first_child(fragment);
@@ -5626,62 +5644,63 @@ location.reload();
       }
       append($$anchor2, fragment);
     });
-    var node_6 = first_child(fragment_7);
+    var node_8 = first_child(fragment_10);
     {
       var consequent_5 = ($$anchor2) => {
-        var h1 = root_12();
-        h1.textContent = "Performer - Title";
+        var h1 = root_15();
+        var node_9 = child(h1);
+        Placholder(node_9);
         append($$anchor2, h1);
       };
       var alternate_5 = ($$anchor2) => {
-        var fragment_8 = comment();
-        var node_7 = first_child(fragment_8);
+        var fragment_11 = comment();
+        var node_10 = first_child(fragment_11);
         {
           var consequent_6 = ($$anchor3) => {
-            var h1_1 = root_14$2();
-            var text_4 = child(h1_1);
-            template_effect(() => set_text(text_4, get(firstTag)));
+            var h1_1 = root_17$1();
+            var text_5 = child(h1_1);
+            template_effect(() => set_text(text_5, get(firstTag)));
             append($$anchor3, h1_1);
           };
           var alternate_4 = ($$anchor3) => {
-            var fragment_9 = comment();
-            var node_8 = first_child(fragment_9);
+            var fragment_12 = comment();
+            var node_11 = first_child(fragment_12);
             {
               var consequent_7 = ($$anchor4) => {
-                var h1_2 = root_16();
-                var node_9 = child(h1_2);
-                ParsedTitle(node_9, () => get(searchTerms));
+                var h1_2 = root_19();
+                var node_12 = child(h1_2);
+                ParsedTitle(node_12, () => get(searchTerms));
                 append($$anchor4, h1_2);
               };
               var alternate_3 = ($$anchor4) => {
-                var fragment_10 = comment();
-                var node_10 = first_child(fragment_10);
+                var fragment_13 = comment();
+                var node_13 = first_child(fragment_13);
                 {
                   var consequent_8 = ($$anchor5) => {
-                    var h1_3 = root_18$1();
+                    var h1_3 = root_21$1();
                     var a_3 = child(h1_3);
-                    var text_5 = child(a_3);
+                    var text_6 = child(a_3);
                     template_effect(
                       ($0) => {
                         set_attribute(a_3, "href", `/forum/tracker.php?nm=${$0 ?? ""}`);
-                        set_text(text_5, get(original));
+                        set_text(text_6, get(original));
                       },
                       [() => encodeURIComponent(get(original))]
                     );
                     append($$anchor5, h1_3);
                   };
                   if_block(
-                    node_10,
+                    node_13,
                     ($$render) => {
                       if (get(original)) $$render(consequent_8);
                     },
                     true
                   );
                 }
-                append($$anchor4, fragment_10);
+                append($$anchor4, fragment_13);
               };
               if_block(
-                node_8,
+                node_11,
                 ($$render) => {
                   if (get(parseTitle) && get(title) && get(searchTerms)) $$render(consequent_7);
                   else $$render(alternate_3, false);
@@ -5689,10 +5708,10 @@ location.reload();
                 true
               );
             }
-            append($$anchor3, fragment_9);
+            append($$anchor3, fragment_12);
           };
           if_block(
-            node_7,
+            node_10,
             ($$render) => {
               if (get(firstTag)) $$render(consequent_6);
               else $$render(alternate_4, false);
@@ -5700,14 +5719,14 @@ location.reload();
             true
           );
         }
-        append($$anchor2, fragment_8);
+        append($$anchor2, fragment_11);
       };
-      if_block(node_6, ($$render) => {
+      if_block(node_8, ($$render) => {
         if (get(incognito)) $$render(consequent_5);
         else $$render(alternate_5, false);
       });
     }
-    append($$anchor, fragment_7);
+    append($$anchor, fragment_10);
     pop();
   }
   delegate(["click"]);
@@ -6381,8 +6400,13 @@ location.reload();
   }
   async function imagetwist(href, src) {
     let imgSrc;
+    const extRegex = /\.([\w]{2,4})(\?|$)/;
+    const hrefExt = href.match(extRegex)?.[1];
     if (src && src.includes("/th/")) {
       imgSrc = src.replace("/th/", "/i/");
+      if (hrefExt) {
+        imgSrc = imgSrc.replace(extRegex, `.${hrefExt}$2`);
+      }
     } else {
       imgSrc = await generic(href, "img.pic");
       if (!imgSrc) {
@@ -6497,17 +6521,6 @@ location.reload();
     const selector = "#imageid";
     return generic(href, selector);
   }
-  async function vipr(href, src) {
-    if (src && src.includes("/th/")) {
-      const imgSrc = src.replace("/th/", "/i/");
-      const response = await GM_fetch("HEAD", imgSrc, "text");
-      const imgError = /content-length:\s*8183/i.test(response.responseHeaders);
-      if (!imgError) return imgSrc;
-    }
-    console.warn(`failed to load image ${href} trying fallback`);
-    const selector = "#body > a > img";
-    return generic(href, selector);
-  }
   const HANDLERS = {
     "fastpic.": (href) => generic(href, "#imglink > img.image.img-fluid"),
     "imgsto.com": (href) => generic(href, ".main-content-image > img"),
@@ -6516,6 +6529,7 @@ location.reload();
     "imagenimage.com": (href, src) => imagenimage(href, src),
     "imagetwist.com": (href, src) => imagetwist(href, src),
     "picturelol.com": (href, src) => imagetwist(href, src),
+    "vipr.im": (href, src) => imagetwist(href, src),
     "imagevenue.com": (href) => generic(href, "#main-image"),
     "imgbase.ru": (href, src) => imgbase(href, src),
     "picclick.ru": (href, src) => imgbase(href, src),
@@ -6533,8 +6547,7 @@ location.reload();
     "imgclick.ru": (href) => picforall(href),
     "freescreens.ru": (href) => picforall(href),
     "picshick.com": (href, src) => picshick(href, src),
-    "turboimagehost.com": (href) => turboimagehost(href),
-    "vipr.im": (href, src) => vipr(href, src)
+    "turboimagehost.com": (href) => turboimagehost(href)
   };
   function updateStatus(imageId, data2) {
     store.upgradeImgData[imageId] = {
@@ -7400,7 +7413,7 @@ location.reload();
         var node_4 = sibling(node_3, 2);
         Float(node_4, {});
         var node_5 = sibling(node_4, 2);
-        Dropdown(node_5, {});
+        Dropdown$1(node_5, {});
         var node_6 = sibling(node_5, 2);
         Title(node_6, {});
         var node_7 = sibling(node_6, 2);
@@ -7435,6 +7448,8 @@ location.reload();
     append($$anchor, fragment);
     pop();
   }
+  const appCss = "html{--border-radius-large: 8px;--border-radius-small: 4px;--tag-color: rgb(255, 255, 255);--content-margin: 1rem;--highlighted: rgb(180 99 0)}html[data-theme=dark]{--main-bg: rgb(18, 18, 18);--post-bg: rgb(40, 40, 40);--post-date-color: rgb(135, 179, 223);--post-border-color: rgb(85, 85, 85);--post-odd-bg: rgb(55, 55, 55);--link-color: rgb(156, 206, 255);--tag-bg: rgb(50 50 50);--search-color: rgb(255, 255, 255);--overlay-bg: rgb(32, 32, 32, .75);--input-bg: rgb(28, 27, 27);--incognito-filter: brightness(0);--button-color: rgb(40, 74, 134);--seed-color: rgb(51, 185, 51);--leech-color: rgb(255, 84, 84)}html[data-theme=light]{--main-bg: rgb(255, 255, 255);--post-bg: rgb(239, 239, 239);--post-date-color: rgb(52, 93, 164);--post-border-color: rgb(202, 202, 202);--post-odd-bg: rgb(227, 227, 227);--link-color: rgb(52, 93, 164);--tag-bg: var(--link-color);--search-color: rgb(0, 0, 0);--overlay-bg: rgba(255, 255, 255, .75);--input-bg: rgb(250, 250, 250);--incognito-filter: brightness(0) invert(1);--button-color: rgb(70, 119, 204);--seed-color: rgb(0, 102, 0);--leech-color: rgb(153, 0, 0)}#ultra{display:flex;flex-direction:column;padding:1.5rem 2.5rem;font-family:system-ui;background-color:var(--main-bg)}#ultra .section{background-color:var(--post-bg);border-radius:var(--border-radius-large);overflow:hidden;border:1px solid var(--post-border-color)}#ultra img{filter:unset}body{min-width:unset!important}";
+  importCSS(appCss);
   if (userscriptDisabled()) {
     if (document.readyState === "loading") {
       on(document, "DOMContentLoaded", appendUserscriptEnableButton, {
