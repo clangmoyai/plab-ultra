@@ -37,7 +37,7 @@
 It's built using [vite-plugin-monkey](https://github.com/lisonge/vite-plugin-monkey) and [Svelte](https://svelte.dev/). You can read the source code and build it yourself ([see below](#development)).
 
 **I've selected "Upgrade images", why doesn't it work sometimes?**  
-Some file hosts are not implemented yet. Enable **Settings → Debug images** to troubleshoot and open an [issue](https://github.com/clangmoyai/plab-ultra/issues).
+Some file hosts are not implemented yet. Enable **Settings → Debug upgrade** to troubleshoot. Then open an [issue](https://github.com/clangmoyai/plab-ultra/issues) or alternatively post feedback on [sleazyfork](https://sleazyfork.org/en/scripts/546450-plab-ultra/feedback).
 
 **Can I back up my settings?**  
 Yes, **Settings → Export** downloads a text file. Paste its contents into your browser console to restore.
