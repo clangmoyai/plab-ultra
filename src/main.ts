@@ -32,14 +32,12 @@ else {
 
   if (document.body) {
     mountApp();
+    const body_container = document.getElementById("body_container");
+    if (body_container) body_container.style.display = "none";
   } else {
     const targetNode = document.documentElement;
-    const config = { childList: true };
+    const config = { childList: true, subtree: true };
 
-    /**
-     * Called on mutations of `<html>`’s direct children.
-     * When a `<body>` node appears, mount the app and stop observing.
-     */
     const callback: MutationCallback = (
       mutationList: MutationRecord[],
       observer: MutationObserver
@@ -50,9 +48,11 @@ else {
             if (node.nodeName === "HEAD" && !CSP)
               CSP = prependContentSecurityPolicy();
 
-            if (node.nodeName === "BODY") {
+            if (node.nodeName === "BODY") mountApp();
+
+            if (node instanceof HTMLElement && node.id === "body_container") {
+              node.style.display = "none";
               observer.disconnect();
-              mountApp();
             }
           }
         }
