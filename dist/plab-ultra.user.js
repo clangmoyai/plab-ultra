@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2025.08.19
+// @version      2025.08.21
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -4146,7 +4146,6 @@
   function handleData() {
     const sel = Object.fromEntries(Object.entries({
       title: "a#topic-title",
-      posts: "#topic_main div.post-user-message",
       images: "#topic_main > tbody:nth-of-type(2) div.sp-wrap var.postImg",
       user: "div.topmenu td a",
       messages: "div.topmenu a.new-pm-link",
@@ -4165,7 +4164,7 @@
     }).map(([key, value]) => [key, document.querySelectorAll(value)]));
     return {
       title: handleTitle(sel?.["title"]?.[0]),
-      posts: handlePosts(sel?.["posts"]),
+      posts: [],
       images: handleImages(sel["images"]),
       user: handleUser(sel?.["user"]?.[0]),
       messages: sel["messages"]?.[0],
@@ -7361,10 +7360,18 @@ location.reload();
         store.resizeWidth = loadResize();
         const startParam = new URLSearchParams(location.search).get("start");
         set(firstPage, startParam === null || Number(startParam) === 0, true);
-        Array.from(document.body.children).forEach((child2) => {
-          if (child2 !== app()) child2.remove();
-        });
-        app().style.height = "auto";
+        setTimeout(
+          () => {
+            const selector = "#topic_main div.post-user-message";
+            const posts = document.querySelectorAll(selector);
+            data.posts = handlePosts(posts);
+            Array.from(document.body.children).forEach((child2) => {
+              if (child2 !== app()) child2.remove();
+            });
+            app().style.height = "auto";
+          },
+          0
+        );
       }
     }
     user_effect(
@@ -7456,18 +7463,21 @@ location.reload();
     }
     if (document.body) {
       mountApp();
+      const body_container = document.getElementById("body_container");
+      if (body_container) body_container.style.display = "none";
     } else {
       const targetNode = document.documentElement;
-      const config = { childList: true };
+      const config = { childList: true, subtree: true };
       const callback = (mutationList, observer22) => {
         for (const mutation of mutationList) {
           if (mutation.type === "childList") {
             for (const node of mutation.addedNodes) {
               if (node.nodeName === "HEAD" && !CSP)
                 CSP = prependContentSecurityPolicy();
-              if (node.nodeName === "BODY") {
+              if (node.nodeName === "BODY") mountApp();
+              if (node instanceof HTMLElement && node.id === "body_container") {
+                node.style.display = "none";
                 observer22.disconnect();
-                mountApp();
               }
             }
           }
