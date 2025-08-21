@@ -16,7 +16,6 @@ Renders (parsed) post title
   let title = $derived(data.title?.parsed);
   let searchTerms = $derived(data.title?.searchTerms);
   let original = $derived(data.title?.original);
-  const placeholder = "Performer - Title";
 
   let firstTag = $derived.by(
     /**
@@ -94,6 +93,26 @@ Renders (parsed) post title
 
 <!-- -------------------------------------------------- -->
 
+{#snippet Dropdown(item: string)}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <span
+    class="title-item"
+    onclick={(event): void =>
+      store.openDropdown(event, item, ["title-item--hover"])}
+  >
+    {item}
+  </span>
+{/snippet}
+
+{#snippet Placholder()}
+  {@const items = ["Performer", "Title"]}
+  {#each items as item, i (i)}
+    {i > 0 ? " - " : ""}
+    {@render Dropdown(item)}
+  {/each}
+{/snippet}
+
 {#snippet ParsedTitle(searchTerms: string[])}
   {@const validLinks = store.performerLinks.filter(
     (link) => link.url && link.label
@@ -113,15 +132,7 @@ Renders (parsed) post title
           {item}
         </a>
       {:else if validLinks.length > 1}
-        <!-- svelte-ignore a11y_click_events_have_key_events -->
-        <!-- svelte-ignore a11y_no_static_element_interactions -->
-        <span
-          class="title-item"
-          onclick={(event): void =>
-            store.openDropdown(event, item, ["title-item--hover"])}
-        >
-          {item}
-        </span>
+        {@render Dropdown(item)}
       {/if}
     {:else}
       <!-- separators -->
@@ -133,7 +144,7 @@ Renders (parsed) post title
 <!-- -------------------------------------------------- -->
 
 {#if incognito}
-  <h1 id="x-title">{placeholder}</h1>
+  <h1 id="x-title">{@render Placholder()}</h1>
 {:else if firstTag}
   <h1 id="x-title">{firstTag}</h1>
 {:else if parseTitle && title && searchTerms}
