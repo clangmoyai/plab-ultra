@@ -12,7 +12,6 @@ import { piccash } from "../domains/piccash";
 import { picforall } from "../domains/picforall";
 import { picshick } from "../domains/picshick";
 import { turboimagehost } from "../domains/turboimagehost";
-import { vipr } from "../domains/vipr";
 import { store, type ImgData } from "./store.svelte";
 import { getCache, setCache } from "./handleCache";
 import { getSettings } from "../settings/handleSettings";
@@ -32,6 +31,7 @@ const HANDLERS: Record<
   "imagenimage.com": (href, src) => imagenimage(href, src),
   "imagetwist.com": (href, src) => imagetwist(href, src),
   "picturelol.com": (href, src) => imagetwist(href, src),
+  "vipr.im": (href, src) => imagetwist(href, src),
   "imagevenue.com": (href) => generic(href, "#main-image"),
   "imgbase.ru": (href, src) => imgbase(href, src),
   "picclick.ru": (href, src) => imgbase(href, src),
@@ -50,7 +50,6 @@ const HANDLERS: Record<
   "freescreens.ru": (href) => picforall(href),
   "picshick.com": (href, src) => picshick(href, src),
   "turboimagehost.com": (href) => turboimagehost(href),
-  "vipr.im": (href, src) => vipr(href, src),
 };
 
 /**
