@@ -9,7 +9,7 @@ const icon = `${repo}/raw/main/src/assets/logo64.png`;
 const userscript: MonkeyUserScript = {
   name: "plab-ultra",
   namespace: repo,
-  version: "2025.08.19",
+  version: "2025.08.21",
   author: "clangmoyai",
   description: "Userscript for PornoLab.Net",
   license: "MIT",
