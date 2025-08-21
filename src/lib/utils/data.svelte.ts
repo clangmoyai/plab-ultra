@@ -1,6 +1,5 @@
 import {
   handleTitle,
-  handlePosts,
   handleImages,
   handleDate,
   handleTimes,
@@ -67,7 +66,6 @@ export function handleData(): Data {
   const sel = Object.fromEntries(
     Object.entries({
       title: "a#topic-title",
-      posts: "#topic_main div.post-user-message",
       images: "#topic_main > tbody:nth-of-type(2) div.sp-wrap var.postImg",
       user: "div.topmenu td a",
       messages: "div.topmenu a.new-pm-link",
@@ -88,7 +86,7 @@ export function handleData(): Data {
 
   return {
     title: handleTitle(sel?.["title"]?.[0]),
-    posts: handlePosts(sel?.["posts"]),
+    posts: [],
     images: handleImages(sel["images"]),
     user: handleUser(sel?.["user"]?.[0]),
     messages: sel["messages"]?.[0],

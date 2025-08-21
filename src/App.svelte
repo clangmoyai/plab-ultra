@@ -12,6 +12,7 @@ App component mounted from `main.ts`
   import { loadPerformerLinks } from "./lib/settings/handleLinks";
   import { loadResize } from "./lib/utils/handleResize";
   import { forumDisabled } from "./lib/utils/handleUserscript";
+  import { handlePosts } from "./lib/utils/handleParse";
   import Events from "./lib/Events.svelte";
   import Header from "./lib/Header.svelte";
   import Settings from "./lib/settings/Settings.svelte";
@@ -54,13 +55,20 @@ App component mounted from `main.ts`
       const startParam = new URLSearchParams(location.search).get("start");
       firstPage = startParam === null || Number(startParam) === 0;
 
-      // cleanup other elements
-      Array.from(document.body.children).forEach((child) => {
-        if (child !== app) child.remove();
-      });
+      // queue task (race condition)
+      setTimeout(() => {
+        const selector = "#topic_main div.post-user-message";
+        const posts = document.querySelectorAll(selector);
+        data.posts = handlePosts(posts);
 
-      // done
-      app.style.height = "auto";
+        // cleanup other elements
+        Array.from(document.body.children).forEach((child) => {
+          if (child !== app) child.remove();
+        });
+
+        // done
+        app.style.height = "auto";
+      }, 0);
     }
   }
 
