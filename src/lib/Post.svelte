@@ -53,15 +53,26 @@ Renders post and comments
 {#snippet Forumline(forumline: Element)}
   {@const infoHeader = forumline?.querySelector("th")?.textContent}
   {@const infoBody = forumline?.querySelector("td")?.innerHTML}
+
+  {@const errorMessages = {
+    "Тема находится в мусорке": "The topic is in the trash",
+    "Тема не найдена": "Topic not found",
+    "Раздача ожидает проверки":
+      "Distribution is awaiting moderator approval<br /><br />Viewing is currently unavailable",
+  }}
+
+  {@const currentError = Object.keys(errorMessages).find((key) =>
+    forumline?.textContent?.includes(key)
+  ) as keyof typeof errorMessages}
+
   <div class="forumline">
-    {#if forumline?.textContent?.includes("Тема находится в мусорке")}
-      <!-- handle trash -->
-      <p>The topic is in the trash</p>
+    {#if currentError}
+      <!-- handled error message -->
+      <h3>Information</h3>
       <br />
-      <a href="/forum/index.php">Return to home page</a>
-    {:else if forumline?.textContent?.includes("Тема не найдена")}
-      <!-- handle not found -->
-      <p>Topic not found</p>
+      <p style:text-align="center">
+        {@html errorMessages[currentError]}
+      </p>
       <br />
       <a href="/forum/index.php">Return to home page</a>
     {:else if infoHeader && infoBody}
