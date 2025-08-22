@@ -5,46 +5,59 @@ import { execSync } from "node:child_process";
 import { createInterface } from "node:readline/promises";
 import { stdin, stdout } from "node:process";
 
-const rl = createInterface({ input: stdin, output: stdout });
+let prevCommand: string | null = null;
 
 /**
  * Main
  */
 async function main(): Promise<void> {
+  const readline = createInterface({ input: stdin, output: stdout });
   try {
-    let packageJson: { version: string; [key: string]: unknown };
+    const packageJson = loadFile("package.json");
 
-    try {
-      packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-    } catch (error) {
-      console.error("❌ Failed to read package.json:", error.message);
-      process.exit(1);
+    const userscriptJson = loadFile("userscript.json");
+
+    if (!packageJson.version) {
+      handleError(
+        "Version not found in package.json",
+        new Error("Version missing")
+      );
     }
 
-    const currentVersion = packageJson.version;
-    if (!currentVersion) {
-      console.error("❌ Package version not found in package.json");
-      process.exit(1);
+    if (!userscriptJson.version) {
+      handleError(
+        "Version not found in userscript.json",
+        new Error("Version missing")
+      );
     }
 
-    const input = await rl.question(
-      `Enter new version (empty to keep ${currentVersion}): `
+    if (packageJson.version !== userscriptJson.version) {
+      handleError(
+        "Version mismatch between files",
+        new Error(
+          `package.json: ${packageJson.version}, userscript.json: ${userscriptJson.version}`
+        )
+      );
+    }
+
+    const userInput = await readline.question(
+      `Enter new version (empty to keep ${packageJson.version}): `
     );
 
-    const newVersion = input.trim() || currentVersion;
+    const newVersion = userInput.trim() || packageJson.version;
 
-    if (newVersion && newVersion !== currentVersion) {
-      writeVersion(newVersion, packageJson);
+    if (newVersion && newVersion !== packageJson.version) {
+      writeVersion(newVersion, packageJson, userscriptJson);
     } else {
       console.log("\n✅ Keeping current version");
     }
 
-    pnpmVersion();
-    pnpxSvCheck();
-    pnpmLint();
-    pnpmKnip();
-    pnpmUp();
-    pnpmBuild();
+    run("pnpm --version");
+    run("pnpx sv check", "🔍 Running svelte-check");
+    run("pnpm lint", "🔍 Running lint");
+    run("pnpm knip", "🔍 Running knip.");
+    run("pnpm up", "🔄 Updating dependencies");
+    run("pnpm build", "🔧 Building project");
 
     console.log("\n🎉 Process completed\n");
     console.log(
@@ -54,10 +67,9 @@ async function main(): Promise<void> {
       "• Create a new GitHub release to trigger the Sleazy Fork webhook"
     );
   } catch (error) {
-    console.error("\n❌ An error occurred:", error.message);
-    process.exit(1);
+    handleError("An unexpected error occurred", error);
   } finally {
-    rl.close();
+    readline.close();
   }
 }
 
@@ -68,101 +80,60 @@ main();
  */
 function writeVersion(
   version: string,
-  packageJson: { version: string; [key: string]: unknown }
+  packageJson: { version: string; [key: string]: unknown },
+  userscriptJson: { version: string; [key: string]: unknown }
 ): void {
   try {
-    // Update package.json
+    // package.json
     packageJson.version = version;
     writeFileSync("package.json", JSON.stringify(packageJson, null, 2) + "\n");
-    console.log(`\n✅ Updated package.json`);
+    console.log("✅ Updated package.json");
 
-    // Update userscript.json
-    const userscriptJson = JSON.parse(readFileSync("userscript.json", "utf8"));
+    // userscript.json
     userscriptJson.version = version;
     writeFileSync(
       "userscript.json",
       JSON.stringify(userscriptJson, null, 2) + "\n"
     );
-    console.log(`✅ Updated userscript.json`);
+    console.log("✅ Updated userscript.json");
   } catch (error) {
-    console.error("❌ Failed to update version files:", error.message);
-    process.exit(1);
+    handleError("Failed to update version files", error);
   }
 }
 
 /**
- * pnpm --version
+ * Generic command runner
  */
-function pnpmVersion(): void {
+function run(command: string, message?: string): void {
   try {
-    execSync("pnpm --version", { stdio: "pipe" });
-  } catch {
-    console.error("\n❌ pnpm not found\n");
-    process.exit(1);
+    const newLine = prevCommand === "pnpm lint" ? "" : "\n";
+    if (message) console.log(`${newLine}${message}...`);
+    execSync(command, { stdio: message ? "inherit" : "pipe" });
+    prevCommand = command;
+  } catch (error) {
+    handleError("Failed to run command", error);
   }
 }
 
 /**
- * pnpx sv check
+ * Load and parse JSON file
  */
-function pnpxSvCheck(): void {
-  console.log("\n🔍 Running svelte-check...");
+function loadFile(filepath: string): {
+  [key: string]: unknown;
+  version: string;
+} {
   try {
-    execSync("pnpx sv check", { stdio: "inherit" });
+    return JSON.parse(readFileSync(filepath, "utf8"));
   } catch (error) {
-    console.error("\n❌ Svelte check failed:", error);
-    process.exit(1);
+    handleError(`Failed to read ${filepath}`, error);
   }
 }
 
 /**
- * pnpm lint
+ * Generic error handler
  */
-function pnpmLint(): void {
-  console.log("\n🔍 Running lint...");
-  try {
-    execSync("pnpm lint", { stdio: "inherit" });
-  } catch (error) {
-    console.error("❌ Linting failed:", error);
-    process.exit(1);
-  }
-}
-
-/**
- * pnpm knip
- */
-function pnpmKnip(): void {
-  console.log("🔍 Running knip...");
-  try {
-    execSync("pnpm knip", { stdio: "inherit" });
-  } catch (error) {
-    console.error("\n❌ Knip found issues:", error);
-    process.exit(1);
-  }
-}
-
-/**
- * pnpm up
- */
-function pnpmUp(): void {
-  console.log("\n🔄 Updating dependencies...\n");
-  try {
-    execSync("pnpm up", { stdio: "inherit" });
-  } catch (error) {
-    console.error("\n❌ Failed to update dependencies:", error.message);
-    process.exit(1);
-  }
-}
-
-/**
- * pnpm build
- */
-function pnpmBuild(): void {
-  console.log("\n🔧 Building project...");
-  try {
-    execSync("pnpm build", { stdio: "inherit" });
-  } catch (error) {
-    console.error("\n❌ Build failed:", error);
-    process.exit(1);
-  }
+function handleError(message: string, error: unknown): never {
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  console.error(`\n❌ ${message}:`, errorMessage);
+  process.exit(1);
 }
