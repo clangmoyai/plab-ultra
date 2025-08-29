@@ -118,10 +118,6 @@ Attaches event listeners to window and document:
 
     if (validImgRefs.length === 0) return;
 
-    if (getSettings("lastImageFirst") && validImgRefs.length > 1) {
-      validImgRefs.unshift(validImgRefs.pop()!);
-    }
-
     if (scrollY < containerTop) {
       if (!event.shiftKey) {
         event.preventDefault();
