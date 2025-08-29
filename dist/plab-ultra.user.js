@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2025.08.22
+// @version      2025.08.29
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -204,8 +204,7 @@
   }
   function pop(component) {
     var context = (
-      /** @type {ComponentContext} */
-      component_context
+component_context
     );
     var effects = context.e;
     if (effects !== null) {
@@ -216,14 +215,13 @@
     }
     component_context = context.p;
     return (
-      /** @type {T} */
-      {}
+{}
     );
   }
   function is_runes() {
     return !legacy_mode_flag || component_context !== null && component_context.l === null;
   }
-  const adjustments = /* @__PURE__ */ new WeakMap();
+  const adjustments = new WeakMap();
   function handle_error(error) {
     var effect2 = active_effect;
     if (effect2 === null) {
@@ -298,8 +296,7 @@
   }
   function get_pending_boundary() {
     var boundary = (
-      /** @type {Effect} */
-      active_effect.b
+active_effect.b
     );
     while (boundary !== null && !boundary.has_pending_snippet()) {
       boundary = boundary.parent;
@@ -309,12 +306,10 @@
     }
     return boundary;
   }
-  // @__NO_SIDE_EFFECTS__
-  function derived(fn) {
+function derived(fn) {
     var flags = DERIVED | DIRTY;
     var parent_derived = active_reaction !== null && (active_reaction.f & DERIVED) !== 0 ? (
-      /** @type {Derived} */
-      active_reaction
+active_reaction
     ) : null;
     if (active_effect === null || parent_derived !== null && (parent_derived.f & UNOWNED) !== 0) {
       flags |= UNOWNED;
@@ -331,8 +326,7 @@
       reactions: null,
       rv: 0,
       v: (
-        /** @type {V} */
-        UNINITIALIZED
+UNINITIALIZED
       ),
       wv: 0,
       parent: parent_derived ?? active_effect,
@@ -340,33 +334,30 @@
     };
     return signal;
   }
-  // @__NO_SIDE_EFFECTS__
-  function async_derived(fn, location2) {
+function async_derived(fn, location2) {
     let parent = (
-      /** @type {Effect | null} */
-      active_effect
+active_effect
     );
     if (parent === null) {
       async_derived_orphan();
     }
     var boundary = (
-      /** @type {Boundary} */
-      parent.b
+parent.b
     );
     var promise = (
-      /** @type {Promise<V>} */
-      /** @type {unknown} */
-      void 0
+
+void 0
     );
     var signal = source(
-      /** @type {V} */
-      UNINITIALIZED
+UNINITIALIZED
     );
     var prev = null;
     var should_suspend = !active_reaction;
     async_effect(() => {
       try {
         var p = fn();
+        if (prev) Promise.resolve(p).catch(() => {
+        });
       } catch (error) {
         p = Promise.reject(error);
       }
@@ -374,8 +365,7 @@
       promise = prev?.then(r2, r2) ?? Promise.resolve(p);
       prev = promise;
       var batch = (
-        /** @type {Batch} */
-        current_batch
+current_batch
       );
       var pending = boundary.pending;
       if (should_suspend) {
@@ -423,15 +413,13 @@
       next(promise);
     });
   }
-  // @__NO_SIDE_EFFECTS__
-  function user_derived(fn) {
-    const d = /* @__PURE__ */ derived(fn);
+function user_derived(fn) {
+    const d = derived(fn);
     push_reaction_value(d);
     return d;
   }
-  // @__NO_SIDE_EFFECTS__
-  function derived_safe_equal(fn) {
-    const signal = /* @__PURE__ */ derived(fn);
+function derived_safe_equal(fn) {
+    const signal = derived(fn);
     signal.equals = safe_equals;
     return signal;
   }
@@ -441,8 +429,7 @@
       derived2.effects = null;
       for (var i = 0; i < effects.length; i += 1) {
         destroy_effect(
-          /** @type {Effect} */
-          effects[i]
+effects[i]
         );
       }
     }
@@ -452,8 +439,7 @@
     while (parent !== null) {
       if ((parent.f & DERIVED) === 0) {
         return (
-          /** @type {Effect} */
-          parent
+parent
         );
       }
       parent = parent.parent;
@@ -483,9 +469,7 @@
     if (is_destroying_effect) {
       return;
     }
-    if (batch_deriveds !== null) {
-      batch_deriveds.set(derived2, derived2.v);
-    } else {
+    {
       var status = (skip_reaction || (derived2.f & UNOWNED) !== 0) && derived2.deps !== null ? MAYBE_DIRTY : CLEAN;
       set_signal_status(derived2, status);
     }
@@ -498,12 +482,11 @@
     }
     var batch = current_batch;
     var parent = (
-      /** @type {Effect} */
-      active_effect
+active_effect
     );
     var restore = capture();
     var boundary = get_pending_boundary();
-    Promise.all(async.map((expression) => /* @__PURE__ */ async_derived(expression))).then((result) => {
+    Promise.all(async.map((expression) => async_derived(expression))).then((result) => {
       batch?.activate();
       restore();
       try {
@@ -523,10 +506,12 @@
     var previous_effect = active_effect;
     var previous_reaction = active_reaction;
     var previous_component_context = component_context;
+    var previous_batch2 = current_batch;
     return function restore() {
       set_active_effect(previous_effect);
       set_active_reaction(previous_reaction);
       set_component_context(previous_component_context);
+      previous_batch2?.activate();
     };
   }
   function unset_context() {
@@ -534,16 +519,14 @@
     set_active_reaction(null);
     set_component_context(null);
   }
-  const batches = /* @__PURE__ */ new Set();
+  const batches = new Set();
   let current_batch = null;
   let previous_batch = null;
-  let batch_deriveds = null;
-  let effect_pending_updates = /* @__PURE__ */ new Set();
+  let effect_pending_updates = new Set();
   let tasks = [];
   function dequeue() {
     const task = (
-      /** @type {() => void} */
-      tasks.shift()
+tasks.shift()
     );
     if (tasks.length > 0) {
       queueMicrotask(dequeue);
@@ -555,110 +538,23 @@
   let is_flushing = false;
   let is_flushing_sync = false;
   class Batch {
-    /**
-     * The current values of any sources that are updated in this batch
-     * They keys of this map are identical to `this.#previous`
-     * @type {Map<Source, any>}
-     */
-    current = /* @__PURE__ */ new Map();
-    /**
-     * The values of any sources that are updated in this batch _before_ those updates took place.
-     * They keys of this map are identical to `this.#current`
-     * @type {Map<Source, any>}
-     */
-    #previous = /* @__PURE__ */ new Map();
-    /**
-     * When the batch is committed (and the DOM is updated), we need to remove old branches
-     * and append new ones by calling the functions added inside (if/each/key/etc) blocks
-     * @type {Set<() => void>}
-     */
-    #callbacks = /* @__PURE__ */ new Set();
-    /**
-     * The number of async effects that are currently in flight
-     */
-    #pending = 0;
-    /**
-     * A deferred that resolves when the batch is committed, used with `settled()`
-     * TODO replace with Promise.withResolvers once supported widely enough
-     * @type {{ promise: Promise<void>, resolve: (value?: any) => void, reject: (reason: unknown) => void } | null}
-     */
-    #deferred = null;
-    /**
-     * True if an async effect inside this batch resolved and
-     * its parent branch was already deleted
-     */
-    #neutered = false;
-    /**
-     * Async effects (created inside `async_derived`) encountered during processing.
-     * These run after the rest of the batch has updated, since they should
-     * always have the latest values
-     * @type {Effect[]}
-     */
-    #async_effects = [];
-    /**
-     * The same as `#async_effects`, but for effects inside a newly-created
-     * `<svelte:boundary>` — these do not prevent the batch from committing
-     * @type {Effect[]}
-     */
-    #boundary_async_effects = [];
-    /**
-     * Template effects and `$effect.pre` effects, which run when
-     * a batch is committed
-     * @type {Effect[]}
-     */
-    #render_effects = [];
-    /**
-     * The same as `#render_effects`, but for `$effect` (which runs after)
-     * @type {Effect[]}
-     */
-    #effects = [];
-    /**
-     * Block effects, which may need to re-run on subsequent flushes
-     * in order to update internal sources (e.g. each block items)
-     * @type {Effect[]}
-     */
-    #block_effects = [];
-    /**
-     * Deferred effects (which run after async work has completed) that are DIRTY
-     * @type {Effect[]}
-     */
-    #dirty_effects = [];
-    /**
-     * Deferred effects that are MAYBE_DIRTY
-     * @type {Effect[]}
-     */
-    #maybe_dirty_effects = [];
-    /**
-     * A set of branches that still exist, but will be destroyed when this batch
-     * is committed — we skip over these during `process`
-     * @type {Set<Effect>}
-     */
-    skipped_effects = /* @__PURE__ */ new Set();
-    /**
-     *
-     * @param {Effect[]} root_effects
-     */
-    process(root_effects) {
+current = new Map();
+#previous = new Map();
+#callbacks = new Set();
+#pending = 0;
+#deferred = null;
+#neutered = false;
+#async_effects = [];
+#boundary_async_effects = [];
+#render_effects = [];
+#effects = [];
+#block_effects = [];
+#dirty_effects = [];
+#maybe_dirty_effects = [];
+skipped_effects = new Set();
+process(root_effects) {
       queued_root_effects = [];
       previous_batch = null;
-      var current_values = null;
-      if (batches.size > 1) {
-        current_values = /* @__PURE__ */ new Map();
-        batch_deriveds = /* @__PURE__ */ new Map();
-        for (const [source2, current] of this.current) {
-          current_values.set(source2, { v: source2.v, wv: source2.wv });
-          source2.v = current;
-        }
-        for (const batch of batches) {
-          if (batch === this) continue;
-          for (const [source2, previous] of batch.#previous) {
-            if (!current_values.has(source2)) {
-              current_values.set(source2, { v: source2.v, wv: source2.wv });
-              source2.v = previous;
-            }
-          }
-        }
-      }
       for (const root2 of root_effects) {
         this.#traverse_effect_tree(root2);
       }
@@ -684,14 +580,6 @@
         this.#defer_effects(this.#effects);
         this.#defer_effects(this.#block_effects);
       }
-      if (current_values) {
-        for (const [source2, { v, wv }] of current_values) {
-          if (source2.wv <= wv) {
-            source2.v = v;
-          }
-        }
-        batch_deriveds = null;
-      }
       for (const effect2 of this.#async_effects) {
         update_effect(effect2);
       }
@@ -701,12 +589,7 @@
       this.#async_effects = [];
       this.#boundary_async_effects = [];
     }
-    /**
-     * Traverse the effect tree, executing effects or stashing
-     * them for later execution as appropriate
-     * @param {Effect} root
-     */
-    #traverse_effect_tree(root2) {
+#traverse_effect_tree(root2) {
       root2.f ^= CLEAN;
       var effect2 = root2.first;
       while (effect2 !== null) {
@@ -742,10 +625,7 @@
         }
       }
     }
-    /**
-     * @param {Effect[]} effects
-     */
-    #defer_effects(effects) {
+#defer_effects(effects) {
       for (const e of effects) {
         const target = (e.f & DIRTY) !== 0 ? this.#dirty_effects : this.#maybe_dirty_effects;
         target.push(e);
@@ -753,13 +633,7 @@
       }
       effects.length = 0;
     }
-    /**
-     * Associate a change to a given source with the current
-     * batch, noting its previous and current values
-     * @param {Source} source
-     * @param {any} value
-     */
-    capture(source2, value) {
+capture(source2, value) {
       if (!this.#previous.has(source2)) {
         this.#previous.set(source2, value);
       }
@@ -796,10 +670,7 @@
       }
       this.deactivate();
     }
-    /**
-     * Append and remove branches to/from the DOM
-     */
-    #commit() {
+#commit() {
       if (!this.#neutered) {
         for (const fn of this.#callbacks) {
           fn();
@@ -828,8 +699,7 @@
         this.deactivate();
       }
     }
-    /** @param {() => void} fn */
-    add_callback(fn) {
+add_callback(fn) {
       this.#callbacks.add(fn);
     }
     settled() {
@@ -850,8 +720,7 @@
       }
       return current_batch;
     }
-    /** @param {() => void} task */
-    static enqueue(task) {
+static enqueue(task) {
       if (tasks.length === 0) {
         queueMicrotask(dequeue);
       }
@@ -871,8 +740,7 @@
           if (queued_root_effects.length === 0) {
             last_scheduled_effect = null;
             return (
-              /** @type {T} */
-              result
+result
             );
           }
         }
@@ -928,7 +796,7 @@
             effect2.fn = null;
           }
         }
-        if (eager_block_effects.length > 0) {
+        if (eager_block_effects?.length > 0) {
           old_values.clear();
           for (const e of eager_block_effects) {
             update_effect(e);
@@ -954,12 +822,11 @@
     }
     queued_root_effects.push(effect2);
   }
-  const old_values = /* @__PURE__ */ new Map();
+  const old_values = new Map();
   function source(v, stack) {
     var signal = {
       f: 0,
-      // TODO ideally we could skip this altogether, but it causes type errors
-      v,
+v,
       reactions: null,
       equals,
       rv: 0,
@@ -967,14 +834,12 @@
     };
     return signal;
   }
-  // @__NO_SIDE_EFFECTS__
-  function state$1(v, stack) {
+function state$1(v, stack) {
     const s = source(v);
     push_reaction_value(s);
     return s;
   }
-  // @__NO_SIDE_EFFECTS__
-  function mutable_source(initial_value, immutable = false, trackable = true) {
+function mutable_source(initial_value, immutable = false, trackable = true) {
     const s = source(initial_value);
     if (!immutable) {
       s.equals = safe_equals;
@@ -985,9 +850,9 @@
     return s;
   }
   function set(source2, value, should_proxy = false) {
-    if (active_reaction !== null && // since we are untracking the function inside `$inspect.with` we need to add this check
-    // to ensure we error if state is set inside an inspect effect
-    (!untracking || (active_reaction.f & INSPECT_EFFECT) !== 0) && is_runes() && (active_reaction.f & (DERIVED | BLOCK_EFFECT | ASYNC | INSPECT_EFFECT)) !== 0 && !current_sources?.includes(source2)) {
+    if (active_reaction !== null &&
+
+(!untracking || (active_reaction.f & INSPECT_EFFECT) !== 0) && is_runes() && (active_reaction.f & (DERIVED | BLOCK_EFFECT | ASYNC | INSPECT_EFFECT)) !== 0 && !current_sources?.includes(source2)) {
       state_unsafe_mutation();
     }
     let new_value = should_proxy ? proxy(value) : value;
@@ -1007,8 +872,7 @@
       if ((source2.f & DERIVED) !== 0) {
         if ((source2.f & DIRTY) !== 0) {
           execute_derived(
-            /** @type {Derived} */
-            source2
+source2
           );
         }
         set_signal_status(source2, (source2.f & UNOWNED) === 0 ? CLEAN : MAYBE_DIRTY);
@@ -1043,22 +907,19 @@
       }
       if ((flags & DERIVED) !== 0) {
         mark_reactions(
-          /** @type {Derived} */
-          reaction,
+reaction,
           MAYBE_DIRTY
         );
       } else if (not_dirty) {
         if ((flags & BLOCK_EFFECT) !== 0) {
           if (eager_block_effects !== null) {
             eager_block_effects.push(
-              /** @type {Effect} */
-              reaction
+reaction
             );
           }
         }
         schedule_effect(
-          /** @type {Effect} */
-          reaction
+reaction
         );
       }
     }
@@ -1071,9 +932,9 @@
     if (prototype !== object_prototype && prototype !== array_prototype) {
       return value;
     }
-    var sources = /* @__PURE__ */ new Map();
+    var sources = new Map();
     var is_proxied_array = is_array(value);
-    var version = /* @__PURE__ */ state$1(0);
+    var version = state$1(0);
     var parent_version = update_version;
     var with_parent = (fn) => {
       if (update_version === parent_version) {
@@ -1089,14 +950,12 @@
       return result;
     };
     if (is_proxied_array) {
-      sources.set("length", /* @__PURE__ */ state$1(
-        /** @type {any[]} */
-        value.length
+      sources.set("length", state$1(
+value.length
       ));
     }
     return new Proxy(
-      /** @type {any} */
-      value,
+value,
       {
         defineProperty(_, prop2, descriptor) {
           if (!("value" in descriptor) || descriptor.configurable === false || descriptor.enumerable === false || descriptor.writable === false) {
@@ -1105,7 +964,7 @@
           var s = sources.get(prop2);
           if (s === void 0) {
             s = with_parent(() => {
-              var s2 = /* @__PURE__ */ state$1(descriptor.value);
+              var s2 = state$1(descriptor.value);
               sources.set(prop2, s2);
               return s2;
             });
@@ -1118,7 +977,7 @@
           var s = sources.get(prop2);
           if (s === void 0) {
             if (prop2 in target) {
-              const s2 = with_parent(() => /* @__PURE__ */ state$1(UNINITIALIZED));
+              const s2 = with_parent(() => state$1(UNINITIALIZED));
               sources.set(prop2, s2);
               increment(version);
             }
@@ -1137,7 +996,7 @@
           if (s === void 0 && (!exists || get_descriptor(target, prop2)?.writable)) {
             s = with_parent(() => {
               var p = proxy(exists ? target[prop2] : UNINITIALIZED);
-              var s2 = /* @__PURE__ */ state$1(p);
+              var s2 = state$1(p);
               return s2;
             });
             sources.set(prop2, s);
@@ -1177,7 +1036,7 @@
             if (s === void 0) {
               s = with_parent(() => {
                 var p = has ? proxy(target[prop2]) : UNINITIALIZED;
-                var s2 = /* @__PURE__ */ state$1(p);
+                var s2 = state$1(p);
                 return s2;
               });
               sources.set(prop2, s);
@@ -1193,20 +1052,20 @@
           var s = sources.get(prop2);
           var has = prop2 in target;
           if (is_proxied_array && prop2 === "length") {
-            for (var i = value2; i < /** @type {Source<number>} */
-            s.v; i += 1) {
+            for (var i = value2; i <
+s.v; i += 1) {
               var other_s = sources.get(i + "");
               if (other_s !== void 0) {
                 set(other_s, UNINITIALIZED);
               } else if (i in target) {
-                other_s = with_parent(() => /* @__PURE__ */ state$1(UNINITIALIZED));
+                other_s = with_parent(() => state$1(UNINITIALIZED));
                 sources.set(i + "", other_s);
               }
             }
           }
           if (s === void 0) {
             if (!has || get_descriptor(target, prop2)?.writable) {
-              s = with_parent(() => /* @__PURE__ */ state$1(void 0));
+              s = with_parent(() => state$1(void 0));
               set(s, proxy(value2));
               sources.set(prop2, s);
             }
@@ -1222,8 +1081,7 @@
           if (!has) {
             if (is_proxied_array && typeof prop2 === "string") {
               var ls = (
-                /** @type {Source<number>} */
-                sources.get("length")
+sources.get("length")
               );
               var n = Number(prop2);
               if (Number.isInteger(n) && n >= ls.v) {
@@ -1284,37 +1142,35 @@
   function create_text(value = "") {
     return document.createTextNode(value);
   }
-  // @__NO_SIDE_EFFECTS__
-  function get_first_child(node) {
+function get_first_child(node) {
     return first_child_getter.call(node);
   }
-  // @__NO_SIDE_EFFECTS__
-  function get_next_sibling(node) {
+function get_next_sibling(node) {
     return next_sibling_getter.call(node);
   }
   function child(node, is_text) {
     {
-      return /* @__PURE__ */ get_first_child(node);
+      return get_first_child(node);
     }
   }
   function first_child(fragment, is_text) {
     {
       var first = (
-        /** @type {DocumentFragment} */
-        /* @__PURE__ */ get_first_child(
-          /** @type {Node} */
-          fragment
+
+get_first_child(
+fragment
         )
       );
-      if (first instanceof Comment && first.data === "") return /* @__PURE__ */ get_next_sibling(first);
+      if (first instanceof Comment && first.data === "") return get_next_sibling(first);
       return first;
     }
   }
   function sibling(node, count = 1, is_text = false) {
     let next_sibling = node;
     while (count--) {
-      next_sibling = /** @type {TemplateNode} */
-      /* @__PURE__ */ get_next_sibling(next_sibling);
+      next_sibling =
+
+get_next_sibling(next_sibling);
     }
     {
       return next_sibling;
@@ -1334,16 +1190,14 @@
             if (!evt.defaultPrevented) {
               for (
                 const e of
-                /**@type {HTMLFormElement} */
-                evt.target.elements
+evt.target.elements
               ) {
                 e.__on_r?.();
               }
             }
           });
         },
-        // In the capture phase to guarantee we get noticed of it (no possiblity of stopPropagation)
-        { capture: true }
+{ capture: true }
       );
     }
   }
@@ -1420,24 +1274,30 @@
       try {
         update_effect(effect2);
         effect2.f |= EFFECT_RAN;
-      } catch (e) {
+      } catch (e2) {
         destroy_effect(effect2);
-        throw e;
+        throw e2;
       }
     } else if (fn !== null) {
       schedule_effect(effect2);
     }
-    var inert = sync && effect2.deps === null && effect2.first === null && effect2.nodes_start === null && effect2.teardown === null && (effect2.f & EFFECT_PRESERVED) === 0;
-    if (!inert && push2) {
-      if (parent !== null) {
-        push_effect(effect2, parent);
+    if (push2) {
+      var e = effect2;
+      if (sync && e.deps === null && e.teardown === null && e.nodes_start === null && e.first === e.last &&
+(e.f & EFFECT_PRESERVED) === 0) {
+        e = e.first;
       }
-      if (active_reaction !== null && (active_reaction.f & DERIVED) !== 0 && (type & ROOT_EFFECT) === 0) {
-        var derived2 = (
-          /** @type {Derived} */
-          active_reaction
-        );
-        (derived2.effects ??= []).push(effect2);
+      if (e !== null) {
+        e.parent = parent;
+        if (parent !== null) {
+          push_effect(e, parent);
+        }
+        if (active_reaction !== null && (active_reaction.f & DERIVED) !== 0 && (type & ROOT_EFFECT) === 0) {
+          var derived2 = (
+active_reaction
+          );
+          (derived2.effects ??= []).push(e);
+        }
       }
     }
     return effect2;
@@ -1451,14 +1311,12 @@
   function user_effect(fn) {
     validate_effect();
     var flags = (
-      /** @type {Effect} */
-      active_effect.f
+active_effect.f
     );
     var defer = !active_reaction && (flags & BRANCH_EFFECT) !== 0 && (flags & EFFECT_RAN) === 0;
     if (defer) {
       var context = (
-        /** @type {ComponentContext} */
-        component_context
+component_context
       );
       (context.e ??= []).push(fn);
     } else {
@@ -1474,7 +1332,7 @@
   }
   function component_root(fn) {
     Batch.ensure();
-    const effect2 = create_effect(ROOT_EFFECT, fn, true);
+    const effect2 = create_effect(ROOT_EFFECT | EFFECT_PRESERVED, fn, true);
     return (options = {}) => {
       return new Promise((fulfil) => {
         if (options.outro) {
@@ -1508,7 +1366,7 @@
     return effect2;
   }
   function branch(fn, push2 = true) {
-    return create_effect(BRANCH_EFFECT, fn, true, push2);
+    return create_effect(BRANCH_EFFECT | EFFECT_PRESERVED, fn, true, push2);
   }
   function execute_effect_teardown(effect2) {
     var teardown2 = effect2.teardown;
@@ -1559,8 +1417,7 @@
     if ((remove_dom || (effect2.f & HEAD_EFFECT) !== 0) && effect2.nodes_start !== null && effect2.nodes_end !== null) {
       remove_effect_dom(
         effect2.nodes_start,
-        /** @type {TemplateNode} */
-        effect2.nodes_end
+effect2.nodes_end
       );
       removed = true;
     }
@@ -1583,8 +1440,8 @@
   function remove_effect_dom(node, end) {
     while (node !== null) {
       var next = node === end ? null : (
-        /** @type {TemplateNode} */
-        /* @__PURE__ */ get_next_sibling(node)
+
+get_next_sibling(node)
       );
       node.remove();
       node = next;
@@ -1722,8 +1579,7 @@
         var length = dependencies.length;
         if ((is_disconnected || is_unowned_connected) && (active_effect === null || (active_effect.f & DESTROYED) === 0)) {
           var derived2 = (
-            /** @type {Derived} */
-            reaction
+reaction
           );
           var parent = derived2.parent;
           for (i = 0; i < length; i++) {
@@ -1742,12 +1598,10 @@
         for (i = 0; i < length; i++) {
           dependency = dependencies[i];
           if (is_dirty(
-            /** @type {Derived} */
-            dependency
+dependency
           )) {
             update_derived(
-              /** @type {Derived} */
-              dependency
+dependency
             );
           }
           if (dependency.wv > reaction.wv) {
@@ -1771,8 +1625,7 @@
       var reaction = reactions[i];
       if ((reaction.f & DERIVED) !== 0) {
         schedule_possible_effect_self_invalidation(
-          /** @type {Derived} */
-          reaction,
+reaction,
           effect2,
           false
         );
@@ -1783,8 +1636,7 @@
           set_signal_status(reaction, MAYBE_DIRTY);
         }
         schedule_effect(
-          /** @type {Effect} */
-          reaction
+reaction
         );
       }
     }
@@ -1800,8 +1652,8 @@
     var previous_untracking = untracking;
     var previous_update_version = update_version;
     var flags = reaction.f;
-    new_deps = /** @type {null | Value[]} */
-    null;
+    new_deps =
+null;
     skipped_deps = 0;
     untracked_writes = null;
     skip_reaction = (flags & UNOWNED) !== 0 && (untracking || !is_updating_effect || active_reaction === null);
@@ -1819,8 +1671,7 @@
     try {
       reaction.f |= REACTION_IS_UPDATING;
       var fn = (
-        /** @type {Function} */
-        reaction.fn
+reaction.fn
       );
       var result = fn();
       var deps = reaction.deps;
@@ -1835,9 +1686,9 @@
         } else {
           reaction.deps = deps = new_deps;
         }
-        if (!skip_reaction || // Deriveds that already have reactions can cleanup, so we still add them as reactions
-        (flags & DERIVED) !== 0 && /** @type {import('#client').Derived} */
-        reaction.reactions !== null) {
+        if (!skip_reaction ||
+(flags & DERIVED) !== 0 &&
+reaction.reactions !== null) {
           for (i = skipped_deps; i < deps.length; i++) {
             (deps[i].reactions ??= []).push(reaction);
           }
@@ -1847,12 +1698,11 @@
         deps.length = skipped_deps;
       }
       if (is_runes() && untracked_writes !== null && !untracking && deps !== null && (reaction.f & (DERIVED | MAYBE_DIRTY | DIRTY)) === 0) {
-        for (i = 0; i < /** @type {Source[]} */
-        untracked_writes.length; i++) {
+        for (i = 0; i <
+untracked_writes.length; i++) {
           schedule_possible_effect_self_invalidation(
             untracked_writes[i],
-            /** @type {Effect} */
-            reaction
+reaction
           );
         }
       }
@@ -1862,8 +1712,8 @@
           if (previous_untracked_writes === null) {
             previous_untracked_writes = untracked_writes;
           } else {
-            previous_untracked_writes.push(.../** @type {Source[]} */
-            untracked_writes);
+            previous_untracked_writes.push(...
+untracked_writes);
           }
         }
       }
@@ -1900,21 +1750,19 @@
         }
       }
     }
-    if (reactions === null && (dependency.f & DERIVED) !== 0 && // Destroying a child effect while updating a parent effect can cause a dependency to appear
-    // to be unused, when in fact it is used by the currently-updating parent. Checking `new_deps`
-    // allows us to skip the expensive work of disconnecting and immediately reconnecting it
-    (new_deps === null || !new_deps.includes(dependency))) {
+    if (reactions === null && (dependency.f & DERIVED) !== 0 &&
+
+
+(new_deps === null || !new_deps.includes(dependency))) {
       set_signal_status(dependency, MAYBE_DIRTY);
       if ((dependency.f & (UNOWNED | DISCONNECTED)) === 0) {
         dependency.f ^= DISCONNECTED;
       }
       destroy_derived_effects(
-        /** @type {Derived} **/
-        dependency
+dependency
       );
       remove_reactions(
-        /** @type {Derived} **/
-        dependency,
+dependency,
         0
       );
     }
@@ -1953,6 +1801,10 @@
       active_effect = previous_effect;
     }
   }
+  async function tick() {
+    await Promise.resolve();
+    flushSync();
+  }
   function get(signal) {
     var flags = signal.f;
     var is_derived = (flags & DERIVED) !== 0;
@@ -1981,12 +1833,11 @@
           }
         }
       }
-    } else if (is_derived && /** @type {Derived} */
-    signal.deps === null && /** @type {Derived} */
-    signal.effects === null) {
+    } else if (is_derived &&
+signal.deps === null &&
+signal.effects === null) {
       var derived2 = (
-        /** @type {Derived} */
-        signal
+signal
       );
       var parent = derived2.parent;
       if (parent !== null && (parent.f & UNOWNED) === 0) {
@@ -1998,8 +1849,8 @@
         return old_values.get(signal);
       }
       if (is_derived) {
-        derived2 = /** @type {Derived} */
-        signal;
+        derived2 =
+signal;
         var value = derived2.v;
         if ((derived2.f & CLEAN) === 0 && derived2.reactions !== null || depends_on_old_values(derived2)) {
           value = execute_derived(derived2);
@@ -2008,11 +1859,8 @@
         return value;
       }
     } else if (is_derived) {
-      derived2 = /** @type {Derived} */
-      signal;
-      if (batch_deriveds?.has(derived2)) {
-        return batch_deriveds.get(derived2);
-      }
+      derived2 =
+signal;
       if (is_dirty(derived2)) {
         update_derived(derived2);
       }
@@ -2030,8 +1878,7 @@
         return true;
       }
       if ((dep.f & DERIVED) !== 0 && depends_on_old_values(
-        /** @type {Derived} */
-        dep
+dep
       )) {
         return true;
       }
@@ -2066,9 +1913,9 @@
       }
     }
   }
-  function deep_read(value, visited = /* @__PURE__ */ new Set()) {
-    if (typeof value === "object" && value !== null && // We don't want to traverse DOM elements
-    !(value instanceof EventTarget) && !visited.has(value)) {
+  function deep_read(value, visited = new Set()) {
+    if (typeof value === "object" && value !== null &&
+!(value instanceof EventTarget) && !visited.has(value)) {
       visited.add(value);
       if (value instanceof Date) {
         value.getTime();
@@ -2098,8 +1945,8 @@
   function is_passive_event(name) {
     return PASSIVE_EVENTS.includes(name);
   }
-  const all_registered_events = /* @__PURE__ */ new Set();
-  const root_event_handles = /* @__PURE__ */ new Set();
+  const all_registered_events = new Set();
+  const root_event_handles = new Set();
   function create_event(event_name, dom, handler, options = {}) {
     function target_handler(event2) {
       if (!options.capture) {
@@ -2129,10 +1976,10 @@
   function event(event_name, dom, handler, capture2, passive) {
     var options = { capture: capture2, passive };
     var target_handler = create_event(event_name, dom, handler, options);
-    if (dom === document.body || // @ts-ignore
-    dom === window || // @ts-ignore
-    dom === document || // Firefox has quirky behavior, it can happen that we still get "canplay" events when the element is already removed
-    dom instanceof HTMLMediaElement) {
+    if (dom === document.body ||
+dom === window ||
+dom === document ||
+dom instanceof HTMLMediaElement) {
       teardown(() => {
         dom.removeEventListener(event_name, target_handler, options);
       });
@@ -2150,22 +1997,20 @@
   function handle_event_propagation(event2) {
     var handler_element = this;
     var owner_document = (
-      /** @type {Node} */
-      handler_element.ownerDocument
+handler_element.ownerDocument
     );
     var event_name = event2.type;
     var path = event2.composedPath?.() || [];
     var current_target = (
-      /** @type {null | Element} */
-      path[0] || event2.target
+path[0] || event2.target
     );
     last_propagated_event = event2;
     var path_idx = 0;
     var handled_at = last_propagated_event === event2 && event2.__root;
     if (handled_at) {
       var at_idx = path.indexOf(handled_at);
-      if (at_idx !== -1 && (handler_element === document || handler_element === /** @type {any} */
-      window)) {
+      if (at_idx !== -1 && (handler_element === document || handler_element ===
+window)) {
         event2.__root = handler_element;
         return;
       }
@@ -2177,8 +2022,8 @@
         path_idx = at_idx;
       }
     }
-    current_target = /** @type {Element} */
-    path[path_idx] || event2.target;
+    current_target =
+path[path_idx] || event2.target;
     if (current_target === handler_element) return;
     define_property(event2, "currentTarget", {
       configurable: true,
@@ -2194,14 +2039,14 @@
       var throw_error;
       var other_errors = [];
       while (current_target !== null) {
-        var parent_element = current_target.assignedSlot || current_target.parentNode || /** @type {any} */
-        current_target.host || null;
+        var parent_element = current_target.assignedSlot || current_target.parentNode ||
+current_target.host || null;
         try {
           var delegated = current_target["__" + event_name];
-          if (delegated != null && (!/** @type {any} */
-          current_target.disabled || // DOM could've been updated already by the time this is reached, so we check this as well
-          // -> the target could not have been disabled because it emits the event in the first place
-          event2.target === current_target)) {
+          if (delegated != null && (!
+current_target.disabled ||
+
+event2.target === current_target)) {
             if (is_array(delegated)) {
               var [fn, ...data2] = delegated;
               fn.apply(current_target, [event2, ...data2]);
@@ -2253,16 +2098,14 @@
   }
   function assign_nodes(start, end) {
     var effect2 = (
-      /** @type {Effect} */
-      active_effect
+active_effect
     );
     if (effect2.nodes_start === null) {
       effect2.nodes_start = start;
       effect2.nodes_end = end;
     }
   }
-  // @__NO_SIDE_EFFECTS__
-  function from_html(content, flags) {
+function from_html(content, flags) {
     var is_fragment = (flags & TEMPLATE_FRAGMENT) !== 0;
     var use_import_node = (flags & TEMPLATE_USE_IMPORT_NODE) !== 0;
     var node;
@@ -2270,21 +2113,20 @@
     return () => {
       if (node === void 0) {
         node = create_fragment_from_html(has_start ? content : "<!>" + content);
-        if (!is_fragment) node = /** @type {Node} */
-        /* @__PURE__ */ get_first_child(node);
+        if (!is_fragment) node =
+
+get_first_child(node);
       }
       var clone = (
-        /** @type {TemplateNode} */
-        use_import_node || is_firefox ? document.importNode(node, true) : node.cloneNode(true)
+use_import_node || is_firefox ? document.importNode(node, true) : node.cloneNode(true)
       );
       if (is_fragment) {
         var start = (
-          /** @type {TemplateNode} */
-          /* @__PURE__ */ get_first_child(clone)
+
+get_first_child(clone)
         );
         var end = (
-          /** @type {TemplateNode} */
-          clone.lastChild
+clone.lastChild
         );
         assign_nodes(start, end);
       } else {
@@ -2293,29 +2135,27 @@
       return clone;
     };
   }
-  // @__NO_SIDE_EFFECTS__
-  function from_namespace(content, flags, ns = "svg") {
+function from_namespace(content, flags, ns = "svg") {
     var has_start = !content.startsWith("<!>");
     var wrapped = `<${ns}>${has_start ? content : "<!>" + content}</${ns}>`;
     var node;
     return () => {
       if (!node) {
         var fragment = (
-          /** @type {DocumentFragment} */
-          create_fragment_from_html(wrapped)
+create_fragment_from_html(wrapped)
         );
         var root2 = (
-          /** @type {Element} */
-          /* @__PURE__ */ get_first_child(fragment)
+
+get_first_child(fragment)
         );
         {
-          node = /** @type {Element} */
-          /* @__PURE__ */ get_first_child(root2);
+          node =
+
+get_first_child(root2);
         }
       }
       var clone = (
-        /** @type {TemplateNode} */
-        node.cloneNode(true)
+node.cloneNode(true)
       );
       {
         assign_nodes(clone, clone);
@@ -2323,9 +2163,8 @@
       return clone;
     };
   }
-  // @__NO_SIDE_EFFECTS__
-  function from_svg(content, flags) {
-    return /* @__PURE__ */ from_namespace(content, flags, "svg");
+function from_svg(content, flags) {
+    return from_namespace(content, flags, "svg");
   }
   function text(value = "") {
     {
@@ -2347,8 +2186,7 @@
       return;
     }
     anchor.before(
-      /** @type {Node} */
-      dom
+dom
     );
   }
   let should_intro = true;
@@ -2362,10 +2200,10 @@
   function mount(component, options) {
     return _mount(component, options);
   }
-  const document_listeners = /* @__PURE__ */ new Map();
+  const document_listeners = new Map();
   function _mount(Component, { target, anchor, props = {}, events, context, intro = true }) {
     init_operations();
-    var registered_events = /* @__PURE__ */ new Set();
+    var registered_events = new Set();
     var event_handle = (events2) => {
       for (var i = 0; i < events2.length; i++) {
         var event_name = events2[i];
@@ -2391,8 +2229,7 @@
         if (context) {
           push({});
           var ctx = (
-            /** @type {ComponentContext} */
-            component_context
+component_context
           );
           ctx.c = context;
         }
@@ -2410,8 +2247,7 @@
         for (var event_name of registered_events) {
           target.removeEventListener(event_name, handle_event_propagation);
           var n = (
-            /** @type {number} */
-            document_listeners.get(event_name)
+document_listeners.get(event_name)
           );
           if (--n === 0) {
             document.removeEventListener(event_name, handle_event_propagation);
@@ -2429,7 +2265,7 @@
     mounted_components.set(component, unmount);
     return component;
   }
-  let mounted_components = /* @__PURE__ */ new WeakMap();
+  let mounted_components = new WeakMap();
   const PENDING = 0;
   const THEN = 1;
   const CATCH = 2;
@@ -2442,15 +2278,13 @@
     var then_effect;
     var catch_effect;
     var input_source = runes ? source(
-      /** @type {V} */
-      void 0
-    ) : /* @__PURE__ */ mutable_source(
-      /** @type {V} */
-      void 0,
+void 0
+    ) : mutable_source(
+void 0,
       false,
       false
     );
-    var error_source = runes ? source(void 0) : /* @__PURE__ */ mutable_source(void 0, false, false);
+    var error_source = runes ? source(void 0) : mutable_source(void 0, false, false);
     var resolved = false;
     function update(state2, restore) {
       resolved = true;
@@ -2576,14 +2410,12 @@
     var is_controlled = length > 0 && transitions.length === 0 && controlled_anchor !== null;
     if (is_controlled) {
       var parent_node = (
-        /** @type {Element} */
-        /** @type {Element} */
-        controlled_anchor.parentNode
+
+controlled_anchor.parentNode
       );
       clear_text_content(parent_node);
       parent_node.append(
-        /** @type {Element} */
-        controlled_anchor
+controlled_anchor
       );
       items_map.clear();
       link(state2, items[0].prev, items[length - 1].next);
@@ -2601,19 +2433,18 @@
   }
   function each(node, flags, get_collection, get_key, render_fn, fallback_fn = null) {
     var anchor = node;
-    var state2 = { flags, items: /* @__PURE__ */ new Map(), first: null };
+    var state2 = { flags, items: new Map(), first: null };
     var is_controlled = (flags & EACH_IS_CONTROLLED) !== 0;
     if (is_controlled) {
       var parent_node = (
-        /** @type {Element} */
-        node
+node
       );
       anchor = parent_node.appendChild(create_text());
     }
     var fallback = null;
     var was_empty = false;
-    var offscreen_items = /* @__PURE__ */ new Map();
-    var each_array = /* @__PURE__ */ derived_safe_equal(() => {
+    var offscreen_items = new Map();
+    var each_array = derived_safe_equal(() => {
       var collection = get_collection();
       return is_array(collection) ? collection : collection == null ? [] : array_from(collection);
     });
@@ -2646,10 +2477,10 @@
       }
     }
     block(() => {
-      each_effect ??= /** @type {Effect} */
-      active_effect;
-      array = /** @type {V[]} */
-      get(each_array);
+      each_effect ??=
+active_effect;
+      array =
+get(each_array);
       var length = array.length;
       if (was_empty && length === 0) {
         return;
@@ -2686,7 +2517,7 @@
         item = items.get(key);
         if (item !== void 0) {
           item.a?.measure();
-          (to_animate ??= /* @__PURE__ */ new Set()).add(item);
+          (to_animate ??= new Set()).add(item);
         }
       }
     }
@@ -2706,8 +2537,7 @@
           prev = pending;
         } else {
           var child_anchor = current ? (
-            /** @type {TemplateNode} */
-            current.e.nodes_start
+current.e.nodes_start
           ) : anchor;
           prev = create_item(
             child_anchor,
@@ -2735,7 +2565,7 @@
         resume_effect(item.e);
         if (is_animated) {
           item.a?.unfix();
-          (to_animate ??= /* @__PURE__ */ new Set()).delete(item);
+          (to_animate ??= new Set()).delete(item);
         }
       }
       if (item !== current) {
@@ -2774,7 +2604,7 @@
         stashed = [];
         while (current !== null && current.k !== key) {
           if ((current.e.f & INERT) === 0) {
-            (seen ??= /* @__PURE__ */ new Set()).add(current);
+            (seen ??= new Set()).add(current);
           }
           stashed.push(current);
           current = current.next;
@@ -2831,8 +2661,7 @@
     }
     if ((type & EACH_INDEX_REACTIVE) !== 0) {
       internal_set(
-        /** @type {Value<number>} */
-        item.i,
+item.i,
         index2
       );
     } else {
@@ -2842,15 +2671,14 @@
   function create_item(anchor, state2, prev, next, value, key, index2, render_fn, flags, get_collection, deferred2) {
     var reactive = (flags & EACH_ITEM_REACTIVE) !== 0;
     var mutable = (flags & EACH_ITEM_IMMUTABLE) === 0;
-    var v = reactive ? mutable ? /* @__PURE__ */ mutable_source(value, false, false) : source(value) : value;
+    var v = reactive ? mutable ? mutable_source(value, false, false) : source(value) : value;
     var i = (flags & EACH_INDEX_REACTIVE) === 0 ? index2 : source(index2);
     var item = {
       i,
       v,
       k: key,
       a: null,
-      // @ts-expect-error
-      e: null,
+e: null,
       prev,
       next
     };
@@ -2860,8 +2688,7 @@
         fragment.append(anchor = create_text());
       }
       item.e = branch(() => render_fn(
-        /** @type {Node} */
-        anchor,
+anchor,
         v,
         i,
         get_collection
@@ -2886,21 +2713,18 @@
   }
   function move(item, next, anchor) {
     var end = item.next ? (
-      /** @type {TemplateNode} */
-      item.next.e.nodes_start
+item.next.e.nodes_start
     ) : anchor;
     var dest = next ? (
-      /** @type {TemplateNode} */
-      next.e.nodes_start
+next.e.nodes_start
     ) : anchor;
     var node = (
-      /** @type {TemplateNode} */
-      item.e.nodes_start
+item.e.nodes_start
     );
     while (node !== null && node !== end) {
       var next_node = (
-        /** @type {TemplateNode} */
-        /* @__PURE__ */ get_next_sibling(node)
+
+get_next_sibling(node)
       );
       dest.before(node);
       node = next_node;
@@ -2923,8 +2747,7 @@
     var value = "";
     template_effect(() => {
       var effect2 = (
-        /** @type {Effect} */
-        active_effect
+active_effect
       );
       if (value === (value = get_value() ?? "")) {
         return;
@@ -2932,8 +2755,7 @@
       if (effect2.nodes_start !== null) {
         remove_effect_dom(
           effect2.nodes_start,
-          /** @type {TemplateNode} */
-          effect2.nodes_end
+effect2.nodes_end
         );
         effect2.nodes_start = effect2.nodes_end = null;
       }
@@ -2943,20 +2765,20 @@
       else if (mathml) html2 = `<math>${html2}</math>`;
       var node2 = create_fragment_from_html(html2);
       if (svg || mathml) {
-        node2 = /** @type {Element} */
-        /* @__PURE__ */ get_first_child(node2);
+        node2 =
+
+get_first_child(node2);
       }
       assign_nodes(
-        /** @type {TemplateNode} */
-        /* @__PURE__ */ get_first_child(node2),
-        /** @type {TemplateNode} */
-        node2.lastChild
+
+get_first_child(node2),
+node2.lastChild
       );
       if (svg || mathml) {
-        while (/* @__PURE__ */ get_first_child(node2)) {
+        while ( get_first_child(node2)) {
           anchor.before(
-            /** @type {Node} */
-            /* @__PURE__ */ get_first_child(node2)
+
+get_first_child(node2)
           );
         }
       } else {
@@ -2975,8 +2797,7 @@
         snippet_effect = null;
       }
       snippet_effect = branch(() => (
-        /** @type {SnippetFn} */
-        snippet2(anchor, ...args)
+snippet2(anchor, ...args)
       ));
     }, EFFECT_TRANSPARENT);
   }
@@ -2992,8 +2813,7 @@
         if (fn) {
           e = branch(() => {
             effect(() => (
-              /** @type {(node: Element) => void} */
-              fn(node)
+fn(node)
             ));
           });
         }
@@ -3153,19 +2973,19 @@
   }
   function get_attributes(element) {
     return (
-      /** @type {Record<string | symbol, unknown>} **/
-      // @ts-expect-error
-      element.__attributes ??= {
+
+element.__attributes ??= {
         [IS_CUSTOM_ELEMENT]: element.nodeName.includes("-"),
         [IS_HTML]: element.namespaceURI === NAMESPACE_HTML
       }
     );
   }
-  var setters_cache = /* @__PURE__ */ new Map();
+  var setters_cache = new Map();
   function get_setters(element) {
-    var setters = setters_cache.get(element.nodeName);
+    var cache_key = element.getAttribute("is") || element.nodeName;
+    var setters = setters_cache.get(cache_key);
     if (setters) return setters;
-    setters_cache.set(element.nodeName, setters = []);
+    setters_cache.set(cache_key, setters = []);
     var descriptors;
     var proto = element;
     var element_proto = Element.prototype;
@@ -3182,15 +3002,13 @@
   }
   const now = () => performance.now();
   const raf = {
-    // don't access requestAnimationFrame eagerly outside method
-    // this allows basic testing of user code without JSDOM
-    // bunder will eval and remove ternary when the user's app is built
-    tick: (
-      /** @param {any} _ */
-      (_) => requestAnimationFrame(_)
+
+
+tick: (
+(_) => requestAnimationFrame(_)
     ),
     now: () => now(),
-    tasks: /* @__PURE__ */ new Set()
+    tasks: new Set()
   };
   function run_tasks() {
     const now2 = raf.now();
@@ -3230,8 +3048,7 @@
     const parts = style.split("-");
     if (parts.length === 1) return parts[0];
     return parts[0] + parts.slice(1).map(
-      /** @param {any} word */
-      (word) => word[0].toUpperCase() + word.slice(1)
+(word) => word[0].toUpperCase() + word.slice(1)
     ).join("");
   }
   function css_to_keyframe(css) {
@@ -3259,8 +3076,8 @@
     var outro;
     function get_options() {
       return without_reactive_context(() => {
-        return current_options ??= get_fn()(element, get_params?.() ?? /** @type {P} */
-        {}, {
+        return current_options ??= get_fn()(element, get_params?.() ??
+{}, {
           direction
         });
       });
@@ -3304,16 +3121,14 @@
       }
     };
     var e = (
-      /** @type {Effect} */
-      active_effect
+active_effect
     );
     (e.transitions ??= []).push(transition2);
     if (is_intro && should_intro) {
       var run2 = is_global;
       if (!run2) {
         var block2 = (
-          /** @type {Effect | null} */
-          e.parent
+e.parent
         );
         while (block2 && (block2.f & EFFECT_TRANSPARENT) !== 0) {
           while (block2 = block2.parent) {
@@ -3359,11 +3174,11 @@
         t: () => t2
       };
     }
-    const { delay = 0, css, tick, easing = linear$1 } = options;
+    const { delay = 0, css, tick: tick2, easing = linear$1 } = options;
     var keyframes = [];
     if (is_intro && counterpart === void 0) {
-      if (tick) {
-        tick(0, 1);
+      if (tick2) {
+        tick2(0, 1);
       }
       if (css) {
         var styles = css_to_keyframe(css(0, 1));
@@ -3378,8 +3193,7 @@
       counterpart?.abort();
       var delta = t2 - t1;
       var duration = (
-        /** @type {number} */
-        options.duration * Math.abs(delta)
+options.duration * Math.abs(delta)
       );
       var keyframes2 = [];
       if (duration > 0) {
@@ -3398,17 +3212,16 @@
         }
         get_t = () => {
           var time = (
-            /** @type {number} */
-            /** @type {globalThis.Animation} */
-            animation.currentTime
+
+animation.currentTime
           );
           return t1 + delta * easing(time / duration);
         };
-        if (tick) {
+        if (tick2) {
           loop(() => {
             if (animation.playState !== "running") return false;
             var t3 = get_t();
-            tick(t3, 1 - t3);
+            tick2(t3, 1 - t3);
             return true;
           });
         }
@@ -3416,7 +3229,7 @@
       animation = element.animate(keyframes2, { duration, fill: "forwards" });
       animation.onfinish = () => {
         get_t = () => t2;
-        tick?.(t2, 1 - t2);
+        tick2?.(t2, 1 - t2);
         on_finish();
       };
     };
@@ -3433,23 +3246,23 @@
       },
       reset: () => {
         if (t2 === 0) {
-          tick?.(1, 0);
+          tick2?.(1, 0);
         }
       },
       t: () => get_t()
     };
   }
   function bind_value(input, get2, set2 = get2) {
-    var runes = is_runes();
-    var batches2 = /* @__PURE__ */ new WeakSet();
-    listen_to_event_and_reset_event(input, "input", (is_reset) => {
+    var batches2 = new WeakSet();
+    listen_to_event_and_reset_event(input, "input", async (is_reset) => {
       var value = is_reset ? input.defaultValue : input.value;
       value = is_numberlike_input(input) ? to_number(value) : value;
       set2(value);
       if (current_batch !== null) {
         batches2.add(current_batch);
       }
-      if (runes && value !== (value = get2())) {
+      await tick();
+      if (value !== (value = get2())) {
         var start = input.selectionStart;
         var end = input.selectionEnd;
         input.value = value ?? "";
@@ -3460,11 +3273,10 @@
       }
     });
     if (
-      // If we are hydrating and the value has since changed,
-      // then use the updated value from the input instead.
-      // If defaultValue is set, then value == defaultValue
-      // TODO Svelte 6: remove input.value check and set to empty string?
-      untrack(get2) == null && input.value
+
+
+
+untrack(get2) == null && input.value
     ) {
       set2(is_numberlike_input(input) ? to_number(input.value) : input.value);
       if (current_batch !== null) {
@@ -3475,8 +3287,7 @@
       var value = get2();
       if (input === document.activeElement) {
         var batch = (
-          /** @type {Batch} */
-          previous_batch ?? current_batch
+previous_batch ?? current_batch
         );
         if (batches2.has(batch)) {
           return;
@@ -3499,10 +3310,9 @@
       set2(value);
     });
     if (
-      // If we are hydrating and the value has since changed,
-      // then use the update value from the input instead.
-      // If defaultChecked is set, then checked == defaultChecked
-      untrack(get2) == null
+
+
+untrack(get2) == null
     ) {
       set2(input.checked);
     }
@@ -3519,24 +3329,15 @@
     return value === "" ? null : +value;
   }
   class ResizeObserverSingleton {
-    /** */
-    #listeners = /* @__PURE__ */ new WeakMap();
-    /** @type {ResizeObserver | undefined} */
-    #observer;
-    /** @type {ResizeObserverOptions} */
-    #options;
-    /** @static */
-    static entries = /* @__PURE__ */ new WeakMap();
-    /** @param {ResizeObserverOptions} options */
-    constructor(options) {
+#listeners = new WeakMap();
+#observer;
+#options;
+static entries = new WeakMap();
+constructor(options) {
       this.#options = options;
     }
-    /**
-     * @param {Element} element
-     * @param {(entry: ResizeObserverEntry) => any} listener
-     */
-    observe(element, listener) {
-      var listeners = this.#listeners.get(element) || /* @__PURE__ */ new Set();
+observe(element, listener) {
+      var listeners = this.#listeners.get(element) || new Set();
       listeners.add(listener);
       this.#listeners.set(element, listeners);
       this.#getObserver().observe(element, this.#options);
@@ -3551,8 +3352,7 @@
     }
     #getObserver() {
       return this.#observer ?? (this.#observer = new ResizeObserver(
-        /** @param {any} entries */
-        (entries) => {
+(entries) => {
           for (var entry of entries) {
             ResizeObserverSingleton.entries.set(entry.target, entry);
             for (var listener of this.#listeners.get(entry.target) || []) {
@@ -3563,7 +3363,7 @@
       ));
     }
   }
-  var resize_observer_border_box = /* @__PURE__ */ new ResizeObserverSingleton({
+  var resize_observer_border_box = new ResizeObserverSingleton({
     box: "border-box"
   });
   function bind_element_size(element, type, set2) {
@@ -3604,8 +3404,7 @@
   }
   function init(immutable = false) {
     const context = (
-      /** @type {ComponentContextLegacy} */
-      component_context
+component_context
     );
     const callbacks = context.l.u;
     if (!callbacks) return;
@@ -3613,10 +3412,9 @@
     if (immutable) {
       let version = 0;
       let prev = (
-        /** @type {Record<string, any>} */
-        {}
+{}
       );
-      const d = /* @__PURE__ */ derived(() => {
+      const d = derived(() => {
         let changed = false;
         const props2 = context.s;
         for (const key in props2) {
@@ -3686,19 +3484,16 @@
     var bindable = (flags & PROPS_IS_BINDABLE) !== 0;
     var lazy = (flags & PROPS_IS_LAZY_INITIAL) !== 0;
     var fallback_value = (
-      /** @type {V} */
-      fallback
+fallback
     );
     var fallback_dirty = true;
     var get_fallback = () => {
       if (fallback_dirty) {
         fallback_dirty = false;
         fallback_value = lazy ? untrack(
-          /** @type {() => V} */
-          fallback
+fallback
         ) : (
-          /** @type {V} */
-          fallback
+fallback
         );
       }
       return fallback_value;
@@ -3712,19 +3507,17 @@
     var is_store_sub = false;
     if (bindable) {
       [initial_value, is_store_sub] = capture_store_binding(() => (
-        /** @type {V} */
-        props[key]
+props[key]
       ));
     } else {
-      initial_value = /** @type {V} */
-      props[key];
+      initial_value =
+props[key];
     }
     var getter;
     if (runes) {
       getter = () => {
         var value = (
-          /** @type {V} */
-          props[key]
+props[key]
         );
         if (value === void 0) return get_fallback();
         fallback_dirty = true;
@@ -3733,12 +3526,11 @@
     } else {
       getter = () => {
         var value = (
-          /** @type {V} */
-          props[key]
+props[key]
         );
         if (value !== void 0) {
-          fallback_value = /** @type {V} */
-          void 0;
+          fallback_value =
+void 0;
         }
         return value === void 0 ? fallback_value : value;
       };
@@ -3749,8 +3541,7 @@
     if (setter) {
       var legacy_parent = props.$$legacy;
       return (
-        /** @type {() => V} */
-        (function(value, mutation) {
+(function(value, mutation) {
           if (arguments.length > 0) {
             if (!runes || !mutation || legacy_parent || is_store_sub) {
               setter(mutation ? getter() : value);
@@ -3768,12 +3559,10 @@
     });
     if (bindable) get(d);
     var parent_effect = (
-      /** @type {Effect} */
-      active_effect
+active_effect
     );
     return (
-      /** @type {() => V} */
-      (function(value, mutation) {
+(function(value, mutation) {
         if (arguments.length > 0) {
           const new_value = mutation ? get(d) : runes && bindable ? proxy(value) : value;
           set(d, new_value);
@@ -3800,8 +3589,7 @@
       user_effect(() => {
         const cleanup = untrack(fn);
         if (typeof cleanup === "function") return (
-          /** @type {() => void} */
-          cleanup
+cleanup
         );
       });
     }
@@ -3814,14 +3602,13 @@
   }
   function init_update_callbacks(context) {
     var l = (
-      /** @type {ComponentContextLegacy} */
-      context.l
+context.l
     );
     return l.u ??= { a: [], b: [], m: [] };
   }
   const PUBLIC_VERSION = "5";
   if (typeof window !== "undefined") {
-    ((window.__svelte ??= {}).v ??= /* @__PURE__ */ new Set()).add(PUBLIC_VERSION);
+    ((window.__svelte ??= {}).v ??= new Set()).add(PUBLIC_VERSION);
   }
   function cubicOut(t) {
     const f = t - 1;
@@ -4089,8 +3876,8 @@
     return "";
   }
   function handleThankList(element) {
-    if (!element) return /* @__PURE__ */ new Set();
-    const userIds = /* @__PURE__ */ new Set();
+    if (!element) return new Set();
+    const userIds = new Set();
     const uElements = element.querySelectorAll("u");
     uElements.forEach((uElement) => {
       const uid = uElement.textContent;
@@ -4130,14 +3917,12 @@
     SEPARATORS.map((str) => {
       const escaped = str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
       switch (str) {
-        // require whitespace around separators
-        case "-":
+case "-":
         case "—":
         case "/":
         case "aka":
           return `(?<=\\s)${escaped}(?=\\s)`;
-        // standard separators
-        default:
+default:
           return escaped;
       }
     }).join("|"),
@@ -4187,7 +3972,7 @@
     };
   }
   const data = proxy({});
-  var _GM_xmlhttpRequest = /* @__PURE__ */ (() => typeof GM_xmlhttpRequest != "undefined" ? GM_xmlhttpRequest : void 0)();
+  var _GM_xmlhttpRequest = (() => typeof GM_xmlhttpRequest != "undefined" ? GM_xmlhttpRequest : void 0)();
   function GM_fetch(method, url, responseType, headers, data2) {
     return new Promise((resolve, reject) => {
       _GM_xmlhttpRequest({
@@ -4388,6 +4173,65 @@
     localStorage.setItem(RESIZE_KEY, DEFAULT_WIDTH.toString());
     store.resizeWidth = DEFAULT_WIDTH;
   }
+  const parser$3 = new DOMParser();
+  const decoder = new TextDecoder("windows-1251");
+  const regex = /\b\d+[pk]\b/gi;
+  async function getRelated(title) {
+    const query = stripResolution(title);
+    const cache2 = getCache();
+    if (cache2[query]) return cache2[query];
+    const elements = await handleSearch(query);
+    const results = [];
+    elements.forEach((element) => {
+      if (element instanceof HTMLAnchorElement && element.href && element.textContent) {
+        const resolution = getResolution(element.textContent);
+        if (resolution) {
+          results.push({
+            href: element.href,
+            textContent: element.textContent,
+            resolution
+          });
+        }
+      }
+    });
+    cache2[query] = results;
+    setCache(cache2);
+    return results;
+  }
+  async function handleSearch(searchQuery) {
+    const headers = { "Content-Type": "application/x-www-form-urlencoded" };
+    const body = `max=1&to=1&nm=${encodeURIComponent(searchQuery)}`;
+    const response = await fetch("/forum/tracker.php", {
+      method: "POST",
+      headers,
+      body
+    });
+    const buffer = await response.arrayBuffer();
+    const result = decoder.decode(buffer);
+    const doc = parser$3.parseFromString(result, "text/html");
+    const nothingFound = doc.querySelector(".info_msg_wrap");
+    if (nothingFound) return [];
+    const related = doc.querySelectorAll(".med.tLink.bold");
+    return Array.from(related);
+  }
+  function stripResolution(title) {
+    return title.replace(regex, "").replace(/ ,/g, "").replace(/\s*,\s*(?=\])/g, "").replace(/\[\]/g, "");
+  }
+  function getResolution(title) {
+    const match = title.match(regex);
+    return match?.[0];
+  }
+  const CACHE_KEY = "related-cache";
+  function getCache() {
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    return cached ? JSON.parse(cached) : {};
+  }
+  function setCache(cache2) {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache2));
+  }
+  function restoreRelated() {
+    sessionStorage.removeItem(CACHE_KEY);
+  }
   const SETTINGS_KEY = "show-settings";
   function getSettings(key) {
     const setting = Object.values(store.options).flat().find((opt) => opt.key === key);
@@ -4421,6 +4265,7 @@
     restoreOptions();
     restorePerformerLinks();
     restoreResize();
+    restoreRelated();
     clearCache();
   }
   const SYNC_TRIGGER_KEY = "sync-trigger";
@@ -4476,7 +4321,7 @@ location.reload();
     const url = URL.createObjectURL(blob);
     const a = Object.assign(document.createElement("a"), {
       href: url,
-      download: `data-${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}.txt`
+      download: `data-${( new Date()).toISOString().split("T")[0]}.txt`
     });
     document.body.appendChild(a);
     a.click();
@@ -4644,9 +4489,6 @@ location.reload();
       if (containerTop >= scrollY + window.innerHeight || containerBottom <= scrollY) return;
       let validImgRefs = $$_import_store().imgRefs.filter((el) => el.dataset["broken"] !== "true");
       if (validImgRefs.length === 0) return;
-      if (getSettings("lastImageFirst") && validImgRefs.length > 1) {
-        validImgRefs.unshift(validImgRefs.pop());
-      }
       if (scrollY < containerTop) {
         if (!event2.shiftKey) {
           event2.preventDefault();
@@ -4725,7 +4567,7 @@ location.reload();
     append($$anchor, div);
   };
   const Messages = ($$anchor) => {
-    const href = /* @__PURE__ */ user_derived(() => "/forum/privmsg.php?folder=inbox");
+    const href = user_derived(() => "/forum/privmsg.php?folder=inbox");
     var a_2 = root_7$3();
     set_attribute(a_2, "href", get(href));
     var i = child(a_2);
@@ -4748,15 +4590,15 @@ location.reload();
     event2.preventDefault();
     setUserscript(true);
   }
-  var root_1$d = /* @__PURE__ */ from_html(`<div class="item svelte-14s75i7"><!></div>`);
-  var root_5$5 = /* @__PURE__ */ from_html(`<a>Profile</a>`);
-  var root_6$5 = /* @__PURE__ */ from_html(`<a href="/">Login</a>`);
-  var root_7$3 = /* @__PURE__ */ from_html(`<a aria-label="inbox"><i></i></a>`);
-  var root_9$2 = /* @__PURE__ */ from_html(`<span class="themeIcon svelte-14s75i7"></span>`);
-  var root_10$1 = /* @__PURE__ */ from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
-  var root_11$2 = /* @__PURE__ */ from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
-  var root_12 = /* @__PURE__ */ from_html(`<a href="#disable">Disable</a>`);
-  var root$5 = /* @__PURE__ */ from_html(`<div id="x-header"><div class="logo svelte-14s75i7"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-14s75i7"><div class="container svelte-14s75i7"><div class="links svelte-14s75i7"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-14s75i7"><input type="text" name="search" placeholder="Search…" class="svelte-14s75i7"/> <button class="svelte-14s75i7">»</button></div></div></div></div>`);
+  var root_1$d = from_html(`<div class="item svelte-14s75i7"><!></div>`);
+  var root_5$5 = from_html(`<a>Profile</a>`);
+  var root_6$5 = from_html(`<a href="/">Login</a>`);
+  var root_7$3 = from_html(`<a aria-label="inbox"><i></i></a>`);
+  var root_9$2 = from_html(`<span class="themeIcon svelte-14s75i7"></span>`);
+  var root_10 = from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
+  var root_11$2 = from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
+  var root_12$1 = from_html(`<a href="#disable">Disable</a>`);
+  var root$5 = from_html(`<div id="x-header"><div class="logo svelte-14s75i7"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-14s75i7"><div class="container svelte-14s75i7"><div class="links svelte-14s75i7"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-14s75i7"><input type="text" name="search" placeholder="Search…" class="svelte-14s75i7"/> <button class="svelte-14s75i7">»</button></div></div></div></div>`);
   function Header($$anchor, $$props) {
     push($$props, true);
     const Profile = ($$anchor2) => {
@@ -4811,8 +4653,8 @@ location.reload();
           append($$anchor3, span);
         };
         var alternate_2 = ($$anchor3) => {
-          const darkMode = /* @__PURE__ */ user_derived(() => data.theme?.darkmode);
-          var a_3 = root_10$1();
+          const darkMode = user_derived(() => data.theme?.darkmode);
+          var a_3 = root_10();
           var i_1 = child(a_3);
           template_effect(() => set_class(i_1, 1, clsx([
             "fas",
@@ -4829,14 +4671,14 @@ location.reload();
       append($$anchor2, fragment_2);
     };
     const Disable = ($$anchor2) => {
-      var a_6 = root_12();
+      var a_6 = root_12$1();
       a_6.__click = [disableUserscript];
       append($$anchor2, a_6);
     };
-    let incognito = /* @__PURE__ */ user_derived(() => getSettings("incognito"));
-    let floatingDownload = /* @__PURE__ */ user_derived(() => getSettings("floatingDownload"));
-    let messagesTitle = /* @__PURE__ */ user_derived(() => data.messages ? "Unread" : "Messages");
-    let searchQuery = /* @__PURE__ */ state$1("");
+    let incognito = user_derived(() => getSettings("incognito"));
+    let floatingDownload = user_derived(() => getSettings("floatingDownload"));
+    let messagesTitle = user_derived(() => data.messages ? "Unread" : "Messages");
+    let searchQuery = state$1("");
     function handleSearch2() {
       const url = "/forum/tracker.php?search_id=&nm=";
       window.location.href = `${url}${encodeURIComponent(get(searchQuery))}`;
@@ -4909,13 +4751,13 @@ location.reload();
   var on_click$4 = (event2) => {
     event2.currentTarget?.blur();
   };
-  var root_3$6 = /* @__PURE__ */ from_html(`<span class="description svelte-5e73jo"> </span>`);
-  var root_2$5 = /* @__PURE__ */ from_html(`<label><input type="checkbox" class="svelte-5e73jo"/> <span class="svelte-5e73jo"><!> <!></span></label>`);
-  var root_1$c = /* @__PURE__ */ from_html(`<div class="column svelte-5e73jo"><h2 class="svelte-5e73jo"> </h2> <!></div>`);
-  var root$4 = /* @__PURE__ */ from_html(`<div class="container svelte-5e73jo"></div>`);
+  var root_3$6 = from_html(`<span class="description svelte-5e73jo"> </span>`);
+  var root_2$5 = from_html(`<label><input type="checkbox" class="svelte-5e73jo"/> <span class="svelte-5e73jo"><!> <!></span></label>`);
+  var root_1$c = from_html(`<div class="column svelte-5e73jo"><h2 class="svelte-5e73jo"> </h2> <!></div>`);
+  var root$4 = from_html(`<div class="container svelte-5e73jo"></div>`);
   function Options($$anchor, $$props) {
     push($$props, true);
-    let parseTitle = /* @__PURE__ */ user_derived(() => getSettings("parseTitle"));
+    let parseTitle = user_derived(() => getSettings("parseTitle"));
     var div = root$4();
     each(
       div,
@@ -4923,7 +4765,7 @@ location.reload();
       () => Object.entries(store.options),
       ([title, items]) => title,
       ($$anchor2, $$item) => {
-        var $$array = /* @__PURE__ */ user_derived(() => to_array(get($$item), 2));
+        var $$array = user_derived(() => to_array(get($$item), 2));
         let title = () => get($$array)[0];
         let items = () => get($$array)[1];
         var div_1 = root_1$c();
@@ -4931,7 +4773,7 @@ location.reload();
         var text2 = child(h2);
         var node = sibling(h2, 2);
         each(node, 17, items, (item) => item.key, ($$anchor3, item, $$index) => {
-          const disabled = /* @__PURE__ */ user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags"));
+          const disabled = user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags"));
           var label = root_2$5();
           let classes;
           var input = child(label);
@@ -4993,8 +4835,7 @@ location.reload();
     const secondary_properties = axis === "y" ? ["top", "bottom"] : ["left", "right"];
     const capitalized_secondary_properties = secondary_properties.map(
       (e) => (
-        /** @type {'Left' | 'Right' | 'Top' | 'Bottom'} */
-        `${e[0].toUpperCase()}${e.slice(1)}`
+`${e[0].toUpperCase()}${e.slice(1)}`
       )
     );
     const padding_start_value = parseFloat(style[`padding${capitalized_secondary_properties[0]}`]);
@@ -5034,17 +4875,17 @@ location.reload();
     $$props.onclick?.();
     handleTransition();
   }
-  var root_1$b = /* @__PURE__ */ from_html(`<span><!></span>`);
-  var root_2$4 = /* @__PURE__ */ from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-ig1se8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-ig1se8"></path></svg>`);
-  var root$3 = /* @__PURE__ */ from_html(`<button class="svelte-ig1se8"><!></button>`);
+  var root_1$b = from_html(`<span><!></span>`);
+  var root_2$4 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-ig1se8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-ig1se8"></path></svg>`);
+  var root$3 = from_html(`<button class="svelte-ig1se8"><!></button>`);
   function Checkmark($$anchor, $$props) {
     push($$props, true);
     const DURATION = 1e3;
-    let clicked = /* @__PURE__ */ state$1(false);
+    let clicked = state$1(false);
     let timeout;
-    let clientWidth = /* @__PURE__ */ state$1(0);
-    let clientHeight = /* @__PURE__ */ state$1(0);
-    let opts = /* @__PURE__ */ user_derived(() => ({ ...store.transition, start: 0.6 }));
+    let clientWidth = state$1(0);
+    let clientHeight = state$1(0);
+    let opts = user_derived(() => ({ ...store.transition, start: 0.6 }));
     function handleTransition() {
       set(clicked, true);
       if (timeout) clearTimeout(timeout);
@@ -5101,15 +4942,15 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  var root$2 = /* @__PURE__ */ from_html(`<div class="container svelte-d5217q"><!> <div class="align-right svelte-d5217q"><!> <!> <!></div></div>`);
+  var root$2 = from_html(`<div class="container svelte-d5217q"><!> <div class="align-right svelte-d5217q"><!> <!> <!></div></div>`);
   function Actions($$anchor, $$props) {
     push($$props, true);
-    let parseTitle = /* @__PURE__ */ user_derived(() => getSettings("parseTitle"));
-    let performerLinks = /* @__PURE__ */ user_derived(() => getSettings("performerLinks"));
+    let parseTitle = user_derived(() => getSettings("parseTitle"));
+    let performerLinks = user_derived(() => getSettings("performerLinks"));
     var div = root$2();
     var node = child(div);
     {
-      let $0 = /* @__PURE__ */ user_derived(() => !get(parseTitle) || !get(performerLinks));
+      let $0 = user_derived(() => !get(parseTitle) || !get(performerLinks));
       Checkmark(node, {
         get onclick() {
           return addPerformerLink;
@@ -5172,32 +5013,25 @@ location.reload();
     const primary_property_value = parseFloat(style[primary_property]);
     const secondary_properties = axis === "y" ? ["top", "bottom"] : ["left", "right"];
     const capitalized_secondary_properties = secondary_properties.map(
-      // @ts-expect-error - Object is possibly 'undefined'
-      (e) => `${e[0].toUpperCase()}${e.slice(1)}`
+(e) => `${e[0].toUpperCase()}${e.slice(1)}`
     );
     const padding_start_value = parseFloat(
-      // @ts-expect-error - Element implicitly has an 'any' type ...
-      style[`padding${capitalized_secondary_properties[0]}`]
+style[`padding${capitalized_secondary_properties[0]}`]
     );
     const padding_end_value = parseFloat(
-      // @ts-expect-error - Element implicitly has an 'any' type ...
-      style[`padding${capitalized_secondary_properties[1]}`]
+style[`padding${capitalized_secondary_properties[1]}`]
     );
     const margin_start_value = parseFloat(
-      // @ts-expect-error - Element implicitly has an 'any' type ...
-      style[`margin${capitalized_secondary_properties[0]}`]
+style[`margin${capitalized_secondary_properties[0]}`]
     );
     const margin_end_value = parseFloat(
-      // @ts-expect-error - Element implicitly has an 'any' type ...
-      style[`margin${capitalized_secondary_properties[1]}`]
+style[`margin${capitalized_secondary_properties[1]}`]
     );
     const border_width_start_value = parseFloat(
-      // @ts-expect-error - Element implicitly has an 'any' type ...
-      style[`border${capitalized_secondary_properties[0]}Width`]
+style[`border${capitalized_secondary_properties[0]}Width`]
     );
     const border_width_end_value = parseFloat(
-      // @ts-expect-error - Element implicitly has an 'any' type ...
-      style[`border${capitalized_secondary_properties[1]}Width`]
+style[`border${capitalized_secondary_properties[1]}Width`]
     );
     return {
       delay,
@@ -5207,7 +5041,7 @@ location.reload();
     };
   }
   const Favicon = ($$anchor, link2 = noop) => {
-    const src = /* @__PURE__ */ user_derived(() => getFaviconUrl(link2().url));
+    const src = user_derived(() => getFaviconUrl(link2().url));
     var fragment = comment();
     var node = first_child(fragment);
     {
@@ -5230,13 +5064,13 @@ location.reload();
     button.__click = [on_click$3, index2];
     append($$anchor, button);
   };
-  var root_2$3 = /* @__PURE__ */ from_html(`<img class="svelte-6don7f"/>`);
+  var root_2$3 = from_html(`<img class="svelte-6don7f"/>`);
   var on_input = (_, index2, key, link2) => updatePerformerLink(index2(), { [key()]: link2()[key()] });
-  var root_3$5 = /* @__PURE__ */ from_html(`<input type="text" class="svelte-6don7f"/>`);
+  var root_3$5 = from_html(`<input type="text" class="svelte-6don7f"/>`);
   var on_click$3 = (__1, index2) => removePerformerLink(index2());
-  var root_4$3 = /* @__PURE__ */ from_html(`<button title="Remove link" class="svelte-6don7f">×</button>`);
-  var root_6$4 = /* @__PURE__ */ from_html(`<div class="item svelte-6don7f"><!> <!> <!> <!></div>`);
-  var root_5$4 = /* @__PURE__ */ from_html(`<div class="container svelte-6don7f"></div>`);
+  var root_4$3 = from_html(`<button title="Remove link" class="svelte-6don7f">×</button>`);
+  var root_6$4 = from_html(`<div class="item svelte-6don7f"><!> <!> <!> <!></div>`);
+  var root_5$4 = from_html(`<div class="container svelte-6don7f"></div>`);
   function Links($$anchor, $$props) {
     push($$props, true);
     const Input = ($$anchor2, key = noop, link2 = noop, index2 = noop) => {
@@ -5250,8 +5084,8 @@ location.reload();
       append($$anchor2, input);
     };
     const placeholders = { id: "ID", label: "Label", url: "URL" };
-    let parseTitle = /* @__PURE__ */ user_derived(() => getSettings("parseTitle"));
-    let performerLinks = /* @__PURE__ */ user_derived(() => getSettings("performerLinks"));
+    let parseTitle = user_derived(() => getSettings("parseTitle"));
+    let performerLinks = user_derived(() => getSettings("performerLinks"));
     var fragment_1 = comment();
     var node_1 = first_child(fragment_1);
     {
@@ -5281,7 +5115,7 @@ location.reload();
     pop();
   }
   delegate(["input", "click"]);
-  var root_1$a = /* @__PURE__ */ from_html(`<div class="svelte-rmjlst"><button class="svelte-rmjlst">×</button> <!> <!> <!></div>`);
+  var root_1$a = from_html(`<div class="svelte-rmjlst"><button class="svelte-rmjlst">×</button> <!> <!> <!></div>`);
   function Settings($$anchor, $$props) {
     push($$props, false);
     init();
@@ -5311,10 +5145,10 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  var root_1$9 = /* @__PURE__ */ from_html(`<div class="svelte-hyxnps"><button class="ic--sharp-download svelte-hyxnps" title="Download" aria-label="Download"></button></div>`);
+  var root_1$9 = from_html(`<div class="svelte-hyxnps"><button class="ic--sharp-download svelte-hyxnps" title="Download" aria-label="Download"></button></div>`);
   function Float($$anchor, $$props) {
     push($$props, true);
-    let floatingDownload = /* @__PURE__ */ user_derived(() => getSettings("floatingDownload"));
+    let floatingDownload = user_derived(() => getSettings("floatingDownload"));
     var fragment = comment();
     var node = first_child(fragment);
     {
@@ -5335,21 +5169,17 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  var root_3$4 = /* @__PURE__ */ from_html(`<link rel="prefetch" as="image"/>`);
-  var root_6$3 = /* @__PURE__ */ from_html(`<a class="svelte-m808n"><img class="svelte-m808n"/> </a>`);
-  var root_4$2 = /* @__PURE__ */ from_html(`<div class="container svelte-m808n"><div class="indicator svelte-m808n"></div> <div class="items svelte-m808n"></div></div>`);
+  var root_3$4 = from_html(`<link rel="prefetch" as="image"/>`);
+  var root_6$3 = from_html(`<a class="svelte-m808n"><img class="svelte-m808n"/> </a>`);
+  var root_4$2 = from_html(`<div class="container svelte-m808n"><div class="indicator svelte-m808n"></div> <div class="items svelte-m808n"></div></div>`);
   function Dropdown$1($$anchor, $$props) {
     push($$props, true);
-    let top = /* @__PURE__ */ state$1(0);
-    let left = /* @__PURE__ */ state$1(0);
-    let container = /* @__PURE__ */ state$1(null);
-    let currentTarget = /* @__PURE__ */ user_derived(() => store.dropdown?.currentTarget);
+    let top = state$1(0);
+    let left = state$1(0);
+    let container = state$1(null);
+    let currentTarget = user_derived(() => store.dropdown?.currentTarget);
     user_effect(
-      /**
-       * Updates dropdown position with adjusted mouseX/Y,
-       * adds class and event listener to clicked element
-       */
-      () => {
+() => {
         if (!store.dropdown?.clientX || !store.dropdown?.clientY || !get(currentTarget)) return;
         const rect = getClickedRect(store.dropdown.clientX, store.dropdown.clientY);
         if (!rect) return;
@@ -5456,7 +5286,7 @@ location.reload();
     append($$anchor, span);
   };
   const Placholder = ($$anchor) => {
-    const items = /* @__PURE__ */ user_derived(() => ["Performer", "Title"]);
+    const items = user_derived(() => ["Performer", "Title"]);
     var fragment_1 = comment();
     var node_1 = first_child(fragment_1);
     each(node_1, 17, () => get(items), index, ($$anchor2, item, i) => {
@@ -5470,18 +5300,18 @@ location.reload();
     append($$anchor, fragment_1);
   };
   var on_click$2 = (event2, item) => store.openDropdown(event2, item(), ["title-item--hover"]);
-  var root_3$3 = /* @__PURE__ */ from_html(`<span class="title-item svelte-12bxepp"> </span>`);
-  var root_5$3 = /* @__PURE__ */ from_html(` <!>`, 1);
-  var root_9$1 = /* @__PURE__ */ from_html(`<a class="title-item svelte-12bxepp"> </a>`);
-  var root_11$1 = /* @__PURE__ */ from_html(`<a class="title-item svelte-12bxepp"> </a>`);
-  var root_15 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
-  var root_17$1 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"> </h1>`);
-  var root_19 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
-  var root_21$1 = /* @__PURE__ */ from_html(`<h1 id="x-title" class="svelte-12bxepp"><a class="original-title svelte-12bxepp"> </a></h1>`);
+  var root_3$3 = from_html(`<span class="title-item svelte-12bxepp"> </span>`);
+  var root_5$3 = from_html(` <!>`, 1);
+  var root_9$1 = from_html(`<a class="title-item svelte-12bxepp"> </a>`);
+  var root_11$1 = from_html(`<a class="title-item svelte-12bxepp"> </a>`);
+  var root_15$1 = from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
+  var root_17 = from_html(`<h1 id="x-title" class="svelte-12bxepp"> </h1>`);
+  var root_19$1 = from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
+  var root_21 = from_html(`<h1 id="x-title" class="svelte-12bxepp"><a class="original-title svelte-12bxepp"> </a></h1>`);
   function Title($$anchor, $$props) {
     push($$props, true);
     const ParsedTitle = ($$anchor2, searchTerms2 = noop) => {
-      const validLinks = /* @__PURE__ */ user_derived(() => store.performerLinks.filter((link2) => link2.url && link2.label));
+      const validLinks = user_derived(() => store.performerLinks.filter((link2) => link2.url && link2.label));
       var fragment_3 = comment();
       var node_3 = first_child(fragment_3);
       each(node_3, 17, () => get(items), index, ($$anchor3, item) => {
@@ -5569,23 +5399,19 @@ location.reload();
       });
       append($$anchor2, fragment_3);
     };
-    let incognito = /* @__PURE__ */ user_derived(() => getSettings("incognito"));
-    let parseTitle = /* @__PURE__ */ user_derived(() => getSettings("parseTitle"));
-    let performerLinks = /* @__PURE__ */ user_derived(() => getSettings("performerLinks"));
-    let title = /* @__PURE__ */ user_derived(() => data.title?.parsed);
-    let searchTerms = /* @__PURE__ */ user_derived(() => data.title?.searchTerms);
-    let original = /* @__PURE__ */ user_derived(() => data.title?.original);
-    let firstTag = /* @__PURE__ */ user_derived(() => {
+    let incognito = user_derived(() => getSettings("incognito"));
+    let parseTitle = user_derived(() => getSettings("parseTitle"));
+    let performerLinks = user_derived(() => getSettings("performerLinks"));
+    let title = user_derived(() => data.title?.parsed);
+    let searchTerms = user_derived(() => data.title?.searchTerms);
+    let original = user_derived(() => data.title?.original);
+    let firstTag = user_derived(() => {
       const tag = data.title?.tags?.[0];
       if (get(searchTerms)?.length === 0 && tag) return tag;
       return;
     });
-    let items = /* @__PURE__ */ user_derived(
-      /**
-       * Splits title into parts, separating search terms from rest of the title,
-       * search terms are sorted by length (longest first) to handle any overlapping
-       */
-      () => {
+    let items = user_derived(
+() => {
         if (!get(title) || !get(searchTerms)?.length) return [get(title)];
         const sortedTerms = [...get(searchTerms)].sort((a, b) => b.length - a.length);
         const parts = [];
@@ -5612,14 +5438,8 @@ location.reload();
         return parts.filter((part) => part !== "");
       }
     );
-    let documentTitle = /* @__PURE__ */ user_derived(
-      /**
-       * Returns:
-       * - first tag if title is empty
-       * - parsed title
-       * - document title
-       */
-      () => {
+    let documentTitle = user_derived(
+() => {
         if (get(parseTitle)) {
           if (get(firstTag)) {
             return get(firstTag);
@@ -5647,7 +5467,7 @@ location.reload();
     var node_8 = first_child(fragment_10);
     {
       var consequent_5 = ($$anchor2) => {
-        var h1 = root_15();
+        var h1 = root_15$1();
         var node_9 = child(h1);
         Placholder(node_9);
         append($$anchor2, h1);
@@ -5657,7 +5477,7 @@ location.reload();
         var node_10 = first_child(fragment_11);
         {
           var consequent_6 = ($$anchor3) => {
-            var h1_1 = root_17$1();
+            var h1_1 = root_17();
             var text_5 = child(h1_1);
             template_effect(() => set_text(text_5, get(firstTag)));
             append($$anchor3, h1_1);
@@ -5667,7 +5487,7 @@ location.reload();
             var node_11 = first_child(fragment_12);
             {
               var consequent_7 = ($$anchor4) => {
-                var h1_2 = root_19();
+                var h1_2 = root_19$1();
                 var node_12 = child(h1_2);
                 ParsedTitle(node_12, () => get(searchTerms));
                 append($$anchor4, h1_2);
@@ -5677,7 +5497,7 @@ location.reload();
                 var node_13 = first_child(fragment_13);
                 {
                   var consequent_8 = ($$anchor5) => {
-                    var h1_3 = root_21$1();
+                    var h1_3 = root_21();
                     var a_3 = child(h1_3);
                     var text_6 = child(a_3);
                     template_effect(
@@ -5730,71 +5550,14 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  const parser$3 = new DOMParser();
-  const decoder = new TextDecoder("windows-1251");
-  const regex = /\b\d+[pk]\b/gi;
-  async function getRelated(title) {
-    const query = stripResolution(title);
-    const cache2 = getCache();
-    if (cache2[query]) return cache2[query];
-    const elements = await handleSearch(query);
-    const results = [];
-    elements.forEach((element) => {
-      if (element instanceof HTMLAnchorElement && element.href && element.textContent) {
-        const resolution = getResolution(element.textContent);
-        if (resolution) {
-          results.push({
-            href: element.href,
-            textContent: element.textContent,
-            resolution
-          });
-        }
-      }
-    });
-    cache2[query] = results;
-    setCache(cache2);
-    return results;
-  }
-  async function handleSearch(searchQuery) {
-    const headers = { "Content-Type": "application/x-www-form-urlencoded" };
-    const body = `max=1&to=1&nm=${encodeURIComponent(searchQuery)}`;
-    const response = await fetch("/forum/tracker.php", {
-      method: "POST",
-      headers,
-      body
-    });
-    const buffer = await response.arrayBuffer();
-    const result = decoder.decode(buffer);
-    const doc = parser$3.parseFromString(result, "text/html");
-    return doc.querySelectorAll(".med.tLink.bold");
-  }
-  function stripResolution(title) {
-    return title.replace(regex, "").replace(/ ,/g, "").replace(/\s*,\s*(?=\])/g, "").replace(/\[\]/g, "");
-  }
-  function getResolution(title) {
-    const match = title.match(regex);
-    return match?.[0];
-  }
-  const CACHE_KEY = "related-cache";
-  function getCache() {
-    const cached = sessionStorage.getItem(CACHE_KEY);
-    return cached ? JSON.parse(cached) : {};
-  }
-  function setCache(cache2) {
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache2));
-  }
-  var root_1$8 = /* @__PURE__ */ from_html(`<button class="item svelte-1ilvoyd" aria-label="thank"></button>`);
+  var root_1$8 = from_html(`<button class="item svelte-1ilvoyd" aria-label="thank"></button>`);
   function Thank($$anchor, $$props) {
     push($$props, true);
     let observer2;
-    let clicked = /* @__PURE__ */ state$1(false);
-    let success = /* @__PURE__ */ state$1(false);
-    let disabled = /* @__PURE__ */ user_derived(
-      /**
-       * Checks if user id is in thanked
-       * list or early return on success
-       */
-      () => {
+    let clicked = state$1(false);
+    let success = state$1(false);
+    let disabled = user_derived(
+() => {
         if (get(success)) return true;
         if (!data.thank?.list) return false;
         const userLink = data.user?.link;
@@ -5804,11 +5567,8 @@ location.reload();
         return data.thank?.list.has(userId);
       }
     );
-    let title = /* @__PURE__ */ user_derived(
-      /**
-       * Button title
-       */
-      () => {
+    let title = user_derived(
+() => {
         if (get(disabled)) return "Already thanked";
         return;
       }
@@ -5920,36 +5680,30 @@ location.reload();
     }
     store.toggleFileList();
   }
-  var root_2$2 = /* @__PURE__ */ from_html(`<div class="item svelte-7pdkl5"><span class="title"> </span> <span> </span></div>`);
-  var root_4$1 = /* @__PURE__ */ from_html(`<div class="item svelte-7pdkl5"><span class="title"> </span> <span class="error svelte-7pdkl5">N/A</span></div>`);
-  var root_6$2 = /* @__PURE__ */ from_html(`<button class="item svelte-7pdkl5"><span class="title">Date:</span> <!></button>`);
-  var root_14$1 = /* @__PURE__ */ from_html(`<span class="item svelte-7pdkl5"><!></span>`);
-  var root_22 = /* @__PURE__ */ from_html(`<a>.torrent</a>`);
-  var root_18 = /* @__PURE__ */ from_html(`<button class="item svelte-7pdkl5"><span class="title">Download:</span> <!></button>`);
-  var root_27 = /* @__PURE__ */ from_html(`<span><a> </a> </span>`);
-  var root_26 = /* @__PURE__ */ from_html(`<div class="item svelte-7pdkl5"><span class="title">Related:</span> <!></div>`);
-  var root_5$2 = /* @__PURE__ */ from_html(`<div id="x-stats" class="svelte-7pdkl5"><!> <!> <!> <!> <button class="item svelte-7pdkl5"><span class="title">Files:</span> <!></button> <!> <!> <!> <!></div>`);
+  var root_2$2 = from_html(`<div class="item svelte-7pdkl5"><span class="title"> </span> <span> </span></div>`);
+  var root_4$1 = from_html(`<div class="item svelte-7pdkl5"><span class="title"> </span> <span class="error svelte-7pdkl5">N/A</span></div>`);
+  var root_6$2 = from_html(`<button class="item svelte-7pdkl5"><span class="title">Date:</span> <!></button>`);
+  var root_14 = from_html(`<span class="item svelte-7pdkl5"><!></span>`);
+  var root_22 = from_html(`<a>.torrent</a>`);
+  var root_18 = from_html(`<button class="item svelte-7pdkl5"><span class="title">Download:</span> <!></button>`);
+  var root_27 = from_html(`<span><a> </a> </span>`);
+  var root_26 = from_html(`<div class="item svelte-7pdkl5"><span class="title">Related:</span> <!></div>`);
+  var root_5$2 = from_html(`<div id="x-stats" class="svelte-7pdkl5"><!> <!> <!> <!> <button class="item svelte-7pdkl5"><span class="title">Files:</span> <!></button> <!> <!> <!> <!></div>`);
   function Stats($$anchor, $$props) {
     push($$props, true);
-    let showFullDate = /* @__PURE__ */ state$1(false);
-    let expandFiles = /* @__PURE__ */ user_derived(() => getSettings("expandFiles"));
-    let fileListState = /* @__PURE__ */ state$1("idle");
+    let showFullDate = state$1(false);
+    let expandFiles = user_derived(() => getSettings("expandFiles"));
+    let fileListState = state$1("idle");
     let downloadState = "idle";
     onMount(
-      /**
-       * Toggles file list from option `expandFiles`
-       */
-      () => {
+() => {
         if (get(expandFiles)) {
           store.toggleFileList();
         }
       }
     );
     user_effect(
-      /**
-       * Updates fileListState
-       */
-      () => {
+() => {
         if (!store.showFileList) {
           set(fileListState, "idle");
         }
@@ -6040,7 +5794,7 @@ location.reload();
         var node_9 = sibling(button_1, 2);
         {
           var consequent_5 = ($$anchor3) => {
-            var span_3 = root_14$1();
+            var span_3 = root_14();
             var node_10 = child(span_3);
             Thank(node_10, {});
             append($$anchor3, span_3);
@@ -6056,7 +5810,7 @@ location.reload();
         var node_11 = sibling(node_9, 2);
         {
           var consequent_6 = ($$anchor3) => {
-            const format = /* @__PURE__ */ user_derived(() => new Intl.NumberFormat("en-US").format(data.torrent.times));
+            const format = user_derived(() => new Intl.NumberFormat("en-US").format(data.torrent.times));
             Item$1($$anchor3, () => "Downloads", () => get(format));
           };
           var alternate_6 = ($$anchor3) => {
@@ -6113,11 +5867,11 @@ location.reload();
         var node_15 = sibling(node_12, 2);
         {
           var consequent_11 = ($$anchor3) => {
-            const max = /* @__PURE__ */ user_derived(() => 5);
+            const max = user_derived(() => 5);
             var fragment_12 = comment();
             var node_16 = first_child(fragment_12);
             await_block(node_16, () => getRelated(data.title.original), null, ($$anchor4, related) => {
-              const results = /* @__PURE__ */ user_derived(() => get(related).filter((result) => result.textContent !== data.title?.original));
+              const results = user_derived(() => get(related).filter((result) => result.textContent !== data.title?.original));
               var fragment_13 = comment();
               var node_17 = first_child(fragment_13);
               {
@@ -6154,31 +5908,25 @@ location.reload();
         append($$anchor2, div_2);
       };
       if_block(node_1, ($$render) => {
-        if (!data.forumline) $$render(consequent_12);
+        if (data.user && !data.forumline) $$render(consequent_12);
       });
     }
     append($$anchor, fragment_2);
     pop();
   }
   delegate(["click"]);
-  var root_3$2 = /* @__PURE__ */ from_html(`<a> </a>`);
-  var root_6$1 = /* @__PURE__ */ from_html(`<a> </a>`);
+  var root_3$2 = from_html(`<a> </a>`);
+  var root_6$1 = from_html(`<a> </a>`);
   var on_click$1 = (event2, item) => store.openDropdown(event2, get(item), ["tag-item--hover"]);
-  var root_7$2 = /* @__PURE__ */ from_html(`<span> </span>`);
-  var root_1$7 = /* @__PURE__ */ from_html(`<div id="x-tags" class="svelte-hxarl5"></div>`);
+  var root_7$2 = from_html(`<span> </span>`);
+  var root_1$7 = from_html(`<div id="x-tags" class="svelte-hxarl5"></div>`);
   function Tags($$anchor, $$props) {
     push($$props, true);
-    let parseTitle = /* @__PURE__ */ user_derived(() => getSettings("parseTitle"));
-    let showTags = /* @__PURE__ */ user_derived(() => getSettings("showTags"));
-    let performerLinks = /* @__PURE__ */ user_derived(() => getSettings("performerLinks"));
-    let derivedTags = /* @__PURE__ */ user_derived(
-      /**
-       * Returns:
-       * - placeholder tags
-       * - empty array
-       * - deduplicated title tags
-       */
-      () => {
+    let parseTitle = user_derived(() => getSettings("parseTitle"));
+    let showTags = user_derived(() => getSettings("showTags"));
+    let performerLinks = user_derived(() => getSettings("performerLinks"));
+    let derivedTags = user_derived(
+() => {
         if (getSettings("incognito")) return ["tag1", "tag2", "tag3", "tag4", "tag5"];
         const tags = data?.title?.tags || [];
         return [...new Set(tags)];
@@ -6193,7 +5941,7 @@ location.reload();
       var consequent_3 = ($$anchor2) => {
         var div = root_1$7();
         each(div, 21, () => get(derivedTags), index, ($$anchor3, item) => {
-          const classList = /* @__PURE__ */ user_derived(() => ["tag-item", resTag(get(item)) && "tag-res"]);
+          const classList = user_derived(() => ["tag-item", resTag(get(item)) && "tag-res"]);
           var fragment_1 = comment();
           var node_1 = first_child(fragment_1);
           {
@@ -6215,7 +5963,7 @@ location.reload();
               var node_2 = first_child(fragment_2);
               {
                 var consequent_2 = ($$anchor5) => {
-                  const link2 = /* @__PURE__ */ user_derived(() => store.performerLinks[0]);
+                  const link2 = user_derived(() => store.performerLinks[0]);
                   var fragment_3 = comment();
                   var node_3 = first_child(fragment_3);
                   {
@@ -6277,7 +6025,7 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  var root_1$6 = /* @__PURE__ */ from_html(`<div class="filelist svelte-eqeghx"><!></div>`);
+  var root_1$6 = from_html(`<div class="filelist svelte-eqeghx"><!></div>`);
   function FileList($$anchor, $$props) {
     push($$props, true);
     function humanSize(bytes) {
@@ -6331,10 +6079,7 @@ location.reload();
       }
     }
     user_effect(
-      /**
-       * Only fetch data if `store.fileListData` isn't set
-       */
-      () => {
+() => {
         if (!store.fileListData && store.showFileList) {
           getFileList();
         }
@@ -6400,9 +6145,9 @@ location.reload();
   }
   async function imagetwist(href, src) {
     let imgSrc;
-    const extRegex = /\.([\w]{2,4})(\?|$)/;
-    const hrefExt = href.match(extRegex)?.[1];
     if (src && src.includes("/th/")) {
+      const extRegex = /\.([\w]{2,4})(\?|$)/;
+      const hrefExt = href.match(extRegex)?.[1];
       imgSrc = src.replace("/th/", "/i/");
       if (hrefExt) {
         imgSrc = imgSrc.replace(extRegex, `.${hrefExt}$2`);
@@ -6670,10 +6415,9 @@ location.reload();
       }
     });
   }
-  const observed = /* @__PURE__ */ new WeakSet();
+  const observed = new WeakSet();
   const observer = new IntersectionObserver(onIntersect, {
-    // start upgrading images when they come within 10 viewports below the visible area
-    rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
+rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
   });
   async function observeImg(imgRefs) {
     const unobserved = imgRefs.filter((img) => {
@@ -6688,15 +6432,15 @@ location.reload();
       observer.observe(img);
     });
   }
-  var root$1 = /* @__PURE__ */ from_html(`<div><!></div>`);
+  var root$1 = from_html(`<div><!></div>`);
   function Resize($$anchor, $$props) {
     push($$props, true);
     let clicked = prop($$props, "clicked", 15), resized = prop($$props, "resized", 15);
-    let dragResize = /* @__PURE__ */ user_derived(() => getSettings("dragResize"));
-    let clientX = /* @__PURE__ */ state$1(0);
-    let prevResizeWidth = /* @__PURE__ */ state$1(0);
-    let draggedEl = /* @__PURE__ */ state$1(null);
-    let draggedElCenter = /* @__PURE__ */ state$1(0);
+    let dragResize = user_derived(() => getSettings("dragResize"));
+    let clientX = state$1(0);
+    let prevResizeWidth = state$1(0);
+    let draggedEl = state$1(null);
+    let draggedElCenter = state$1(0);
     function getElementCenter(element) {
       const rect = element.getBoundingClientRect();
       return rect.top + rect.height / 2;
@@ -6768,7 +6512,7 @@ location.reload();
     pop();
   }
   delegate(["pointerdown"]);
-  var root_1$5 = /* @__PURE__ */ from_html(`<div class="loader svelte-10rouec"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="svelte-10rouec"><path d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" class="svelte-10rouec"></path><path class="animate svelte-10rouec" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"></path></svg></div>`);
+  var root_1$5 = from_html(`<div class="loader svelte-10rouec"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="svelte-10rouec"><path d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" class="svelte-10rouec"></path><path class="animate svelte-10rouec" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"></path></svg></div>`);
   function Loader($$anchor, $$props) {
     push($$props, true);
     var fragment = comment();
@@ -6849,16 +6593,16 @@ location.reload();
     });
     append($$anchor, p);
   };
-  var root_2$1 = /* @__PURE__ */ from_html(`<a class="svelte-zizdl6"> </a>`);
-  var root_4 = /* @__PURE__ */ from_html(`<span class="error svelte-zizdl6">null</span>`);
-  var root_6 = /* @__PURE__ */ from_html(`<span class="error svelte-zizdl6"> </span>`);
-  var root_5$1 = /* @__PURE__ */ from_html(` <!>`, 1);
-  var root_1$4 = /* @__PURE__ */ from_html(`<p><strong> </strong>: <!></p>`);
-  var root_7$1 = /* @__PURE__ */ from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-zizdl6"><path d="M17 9H7V7h10m0 6H7v-2h10m-3 6H7v-2h7M12 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" class="svelte-zizdl6"></path></svg>`);
-  var root = /* @__PURE__ */ from_html(`<div class="debug svelte-zizdl6"><!> <!> <!> <!> <div class="copy svelte-zizdl6"><!></div></div>`);
+  var root_2$1 = from_html(`<a class="svelte-zizdl6"> </a>`);
+  var root_4 = from_html(`<span class="error svelte-zizdl6">null</span>`);
+  var root_6 = from_html(`<span class="error svelte-zizdl6"> </span>`);
+  var root_5$1 = from_html(` <!>`, 1);
+  var root_1$4 = from_html(`<p><strong> </strong>: <!></p>`);
+  var root_7$1 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-zizdl6"><path d="M17 9H7V7h10m0 6H7v-2h10m-3 6H7v-2h7M12 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" class="svelte-zizdl6"></path></svg>`);
+  var root = from_html(`<div class="debug svelte-zizdl6"><!> <!> <!> <!> <div class="copy svelte-zizdl6"><!></div></div>`);
   function Debug($$anchor, $$props) {
     push($$props, true);
-    let data2 = /* @__PURE__ */ user_derived(() => store.upgradeImgData?.[$$props.img.id] || {});
+    let data2 = user_derived(() => store.upgradeImgData?.[$$props.img.id] || {});
     async function copyToClipboard(data3) {
       try {
         const dataWithoutId = Object.fromEntries(Object.entries(data3).filter(([key]) => key !== "id"));
@@ -6898,17 +6642,17 @@ location.reload();
     append($$anchor, div);
     pop();
   }
-  var root_3$1 = /* @__PURE__ */ from_html(`<div class="container svelte-ojhdzd"><!> <a target="_blank"><img/> <!></a></div>`);
-  var root_1$3 = /* @__PURE__ */ from_html(`<div id="x-images"><!></div>`);
+  var root_3$1 = from_html(`<div class="container svelte-ojhdzd"><!> <a target="_blank"><img/> <!></a></div>`);
+  var root_1$3 = from_html(`<div id="x-images"><!></div>`);
   function Images($$anchor, $$props) {
     push($$props, true);
-    let clicked = /* @__PURE__ */ state$1(false);
-    let resized = /* @__PURE__ */ state$1(false);
-    let containerWidth = /* @__PURE__ */ state$1(0);
-    let upgradeImages = /* @__PURE__ */ user_derived(() => getSettings("upgradeImages"));
-    let incognito = /* @__PURE__ */ user_derived(() => getSettings("incognito"));
-    let lastImageFirst = /* @__PURE__ */ user_derived(() => getSettings("lastImageFirst"));
-    let debugImgs = /* @__PURE__ */ user_derived(() => getSettings("debugImgs"));
+    let clicked = state$1(false);
+    let resized = state$1(false);
+    let containerWidth = state$1(0);
+    let upgradeImages = user_derived(() => getSettings("upgradeImages"));
+    let incognito = user_derived(() => getSettings("incognito"));
+    let lastImageFirst = user_derived(() => getSettings("lastImageFirst"));
+    let debugImgs = user_derived(() => getSettings("debugImgs"));
     function onerror(event2) {
       const img = event2.currentTarget;
       img.dataset["broken"] = "true";
@@ -6920,16 +6664,7 @@ location.reload();
       return;
     }
     user_effect(
-      /**
-       * Observes `store.imgRefs` and upgrades their sources:
-       * - only if `upgradeImages` is `true`
-       * - keeps track of images with:
-       *
-       * ```js
-       * const observed = new WeakSet<HTMLImageElement>()
-       * ```
-       */
-      () => {
+() => {
         if (get(upgradeImages) && store.imgRefs.length) {
           observeImg(store.imgRefs);
         }
@@ -6963,8 +6698,8 @@ location.reload();
             var fragment_1 = comment();
             var node_2 = first_child(fragment_1);
             each(node_2, 19, () => data.images, (img) => img.id, ($$anchor4, img, i) => {
-              const gif = /* @__PURE__ */ user_derived(() => get(img)?.src?.toLowerCase()?.includes(".gif"));
-              const loading = /* @__PURE__ */ user_derived(() => get(img)?.href ? "eager" : "lazy");
+              const gif = user_derived(() => get(img)?.src?.toLowerCase()?.includes(".gif"));
+              const loading = user_derived(() => get(img)?.href ? "eager" : "lazy");
               var div_1 = root_3$1();
               let styles;
               var node_3 = child(div_1);
@@ -6989,7 +6724,7 @@ location.reload();
               {
                 var consequent_1 = ($$anchor5) => {
                   {
-                    let $0 = /* @__PURE__ */ user_derived(() => get(upgradeImages) && store.upgradeImgData?.[get(img).id]?.status === "loading");
+                    let $0 = user_derived(() => get(upgradeImages) && store.upgradeImgData?.[get(img).id]?.status === "loading");
                     Loader($$anchor5, {
                       get loading() {
                         return get($0);
@@ -7046,58 +6781,49 @@ location.reload();
     append($$anchor, div);
   };
   const Forumline = ($$anchor, forumline = noop) => {
-    const infoHeader = /* @__PURE__ */ user_derived(() => forumline()?.querySelector("th")?.textContent);
-    const infoBody = /* @__PURE__ */ user_derived(() => forumline()?.querySelector("td")?.innerHTML);
+    const infoHeader = user_derived(() => forumline()?.querySelector("th")?.textContent);
+    const infoBody = user_derived(() => forumline()?.querySelector("td")?.innerHTML);
+    const errorMessages = user_derived(() => ({
+      "Тема находится в мусорке": "The topic is in the trash",
+      "Тема не найдена": "Topic not found",
+      "Раздача ожидает проверки": "Distribution is awaiting moderator approval<br /><br />Viewing is currently unavailable"
+    }));
+    const currentError = user_derived(() => Object.keys(get(errorMessages)).find((key) => forumline()?.textContent?.includes(key)));
     var div_1 = root_2();
     var node = child(div_1);
     {
       var consequent = ($$anchor2) => {
         var fragment = root_3();
+        var p = sibling(first_child(fragment), 4);
+        set_style(p, "", {}, { "text-align": "center" });
+        var node_1 = child(p);
+        html(node_1, () => get(errorMessages)[get(currentError)]);
         append($$anchor2, fragment);
       };
-      var alternate_2 = ($$anchor2) => {
+      var alternate_1 = ($$anchor2) => {
         var fragment_1 = comment();
-        var node_1 = first_child(fragment_1);
+        var node_2 = first_child(fragment_1);
         {
           var consequent_1 = ($$anchor3) => {
             var fragment_2 = root_5();
+            var h3 = first_child(fragment_2);
+            var text2 = child(h3);
+            var node_3 = sibling(h3, 2);
+            html(node_3, () => get(infoBody));
+            template_effect(() => set_text(text2, get(infoHeader)));
             append($$anchor3, fragment_2);
           };
-          var alternate_1 = ($$anchor3) => {
+          var alternate = ($$anchor3) => {
             var fragment_3 = comment();
-            var node_2 = first_child(fragment_3);
-            {
-              var consequent_2 = ($$anchor4) => {
-                var fragment_4 = root_7();
-                var h3 = first_child(fragment_4);
-                var text2 = child(h3);
-                var node_3 = sibling(h3, 2);
-                html(node_3, () => get(infoBody));
-                template_effect(() => set_text(text2, get(infoHeader)));
-                append($$anchor4, fragment_4);
-              };
-              var alternate = ($$anchor4) => {
-                var fragment_5 = comment();
-                var node_4 = first_child(fragment_5);
-                html(node_4, () => forumline()?.innerHTML);
-                append($$anchor4, fragment_5);
-              };
-              if_block(
-                node_2,
-                ($$render) => {
-                  if (get(infoHeader) && get(infoBody)) $$render(consequent_2);
-                  else $$render(alternate, false);
-                },
-                true
-              );
-            }
+            var node_4 = first_child(fragment_3);
+            html(node_4, () => forumline()?.innerHTML);
             append($$anchor3, fragment_3);
           };
           if_block(
-            node_1,
+            node_2,
             ($$render) => {
-              if (forumline()?.textContent?.includes("Тема не найдена")) $$render(consequent_1);
-              else $$render(alternate_1, false);
+              if (get(infoHeader) && get(infoBody)) $$render(consequent_1);
+              else $$render(alternate, false);
             },
             true
           );
@@ -7105,47 +6831,47 @@ location.reload();
         append($$anchor2, fragment_1);
       };
       if_block(node, ($$render) => {
-        if (forumline()?.textContent?.includes("Тема находится в мусорке")) $$render(consequent);
-        else $$render(alternate_2, false);
+        if (get(currentError)) $$render(consequent);
+        else $$render(alternate_1, false);
       });
     }
     append($$anchor, div_1);
   };
   const Avatar = ($$anchor, avatar = noop, nick = noop, link2 = noop) => {
-    var a_1 = root_9();
+    var a_1 = root_7();
     var node_5 = child(a_1);
     {
-      var consequent_3 = ($$anchor2) => {
-        var img = root_10();
+      var consequent_2 = ($$anchor2) => {
+        var img = root_8();
         template_effect(() => {
           set_attribute(img, "src", avatar());
           set_attribute(img, "alt", nick());
         });
         append($$anchor2, img);
       };
-      var alternate_3 = ($$anchor2) => {
-        var svg = root_11();
+      var alternate_2 = ($$anchor2) => {
+        var svg = root_9();
         append($$anchor2, svg);
       };
       if_block(node_5, ($$render) => {
-        if (avatar()) $$render(consequent_3);
-        else $$render(alternate_3, false);
+        if (avatar()) $$render(consequent_2);
+        else $$render(alternate_2, false);
       });
     }
     template_effect(() => set_attribute(a_1, "href", link2()));
     append($$anchor, a_1);
   };
   const Nick = ($$anchor, nick = noop, link2 = noop) => {
-    var fragment_6 = comment();
-    var node_6 = first_child(fragment_6);
+    var fragment_4 = comment();
+    var node_6 = first_child(fragment_4);
     {
-      var consequent_5 = ($$anchor2) => {
-        const content = /* @__PURE__ */ user_derived(() => nick() === "Гость" ? "Guest" : nick());
-        var span = root_13();
+      var consequent_4 = ($$anchor2) => {
+        const content = user_derived(() => nick() === "Гость" ? "Guest" : nick());
+        var span = root_11();
         var node_7 = child(span);
         {
-          var consequent_4 = ($$anchor3) => {
-            var a_2 = root_14();
+          var consequent_3 = ($$anchor3) => {
+            var a_2 = root_12();
             var text_1 = child(a_2);
             template_effect(() => {
               set_attribute(a_2, "href", link2());
@@ -7153,78 +6879,77 @@ location.reload();
             });
             append($$anchor3, a_2);
           };
-          var alternate_4 = ($$anchor3) => {
+          var alternate_3 = ($$anchor3) => {
             var text_2 = text();
             template_effect(() => set_text(text_2, get(content)));
             append($$anchor3, text_2);
           };
           if_block(node_7, ($$render) => {
-            if (link2()) $$render(consequent_4);
-            else $$render(alternate_4, false);
+            if (link2()) $$render(consequent_3);
+            else $$render(alternate_3, false);
           });
         }
         append($$anchor2, span);
       };
       if_block(node_6, ($$render) => {
-        if (nick()) $$render(consequent_5);
+        if (nick()) $$render(consequent_4);
       });
     }
-    append($$anchor, fragment_6);
+    append($$anchor, fragment_4);
   };
   var on_click = (event2) => {
     event2.preventDefault();
     updateOption("incognito", false);
   };
-  var root_1$2 = /* @__PURE__ */ from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-14j3c1y">turn off incognito</a></div>`);
-  var root_3 = /* @__PURE__ */ from_html(`<p>The topic is in the trash</p> <br/> <a href="/forum/index.php" class="svelte-14j3c1y">Return to home page</a>`, 1);
-  var root_5 = /* @__PURE__ */ from_html(`<p>Topic not found</p> <br/> <a href="/forum/index.php" class="svelte-14j3c1y">Return to home page</a>`, 1);
-  var root_7 = /* @__PURE__ */ from_html(`<h3> </h3> <!>`, 1);
-  var root_2 = /* @__PURE__ */ from_html(`<div class="forumline svelte-14j3c1y"><!></div>`);
-  var root_10 = /* @__PURE__ */ from_html(`<img class="svelte-14j3c1y"/>`);
-  var root_11 = /* @__PURE__ */ from_svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-14j3c1y"><path fill="currentcolor" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd"></path></svg>`);
-  var root_9 = /* @__PURE__ */ from_html(`<a class="no-avatar svelte-14j3c1y"><!></a>`);
-  var root_14 = /* @__PURE__ */ from_html(`<a class="svelte-14j3c1y"> </a>`);
-  var root_13 = /* @__PURE__ */ from_html(`<span class="nick svelte-14j3c1y"><!></span>`);
+  var root_1$2 = from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-14j3c1y">turn off incognito</a></div>`);
+  var root_3 = from_html(`<h3>Information</h3> <br/> <p><!></p> <br/> <a href="/forum/index.php" class="svelte-14j3c1y">Return to home page</a>`, 1);
+  var root_5 = from_html(`<h3> </h3> <!>`, 1);
+  var root_2 = from_html(`<div class="forumline svelte-14j3c1y"><!></div>`);
+  var root_8 = from_html(`<img class="svelte-14j3c1y"/>`);
+  var root_9 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-14j3c1y"><path fill="currentcolor" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd"></path></svg>`);
+  var root_7 = from_html(`<a class="no-avatar svelte-14j3c1y"><!></a>`);
+  var root_12 = from_html(`<a class="svelte-14j3c1y"> </a>`);
+  var root_11 = from_html(`<span class="nick svelte-14j3c1y"><!></span>`);
   var on_click_1 = (_, toggleFullDate, i) => toggleFullDate(i());
-  var root_17 = /* @__PURE__ */ from_html(`<button class="date svelte-14j3c1y"><!></button>`);
-  var root_25 = /* @__PURE__ */ from_html(`<div class="post svelte-14j3c1y"><div class="avatar svelte-14j3c1y"><!></div> <div class="content svelte-14j3c1y"><div class="header svelte-14j3c1y"><!> <!></div> <div class="message svelte-14j3c1y"></div></div></div>`);
-  var root_21 = /* @__PURE__ */ from_html(`<div id="x-post"><!></div>`);
+  var root_15 = from_html(`<button class="date svelte-14j3c1y"><!></button>`);
+  var root_23 = from_html(`<div class="post svelte-14j3c1y"><div class="avatar svelte-14j3c1y"><!></div> <div class="content svelte-14j3c1y"><div class="header svelte-14j3c1y"><!> <!></div> <div class="message svelte-14j3c1y"></div></div></div>`);
+  var root_19 = from_html(`<div id="x-post"><!></div>`);
   function Post($$anchor, $$props) {
     push($$props, true);
     const Date2 = ($$anchor2, date = noop, i = noop) => {
-      var fragment_8 = comment();
-      var node_8 = first_child(fragment_8);
+      var fragment_6 = comment();
+      var node_8 = first_child(fragment_6);
       {
-        var consequent_7 = ($$anchor3) => {
-          const paredDate = /* @__PURE__ */ user_derived(() => handleDate(date()));
-          var button = root_17();
+        var consequent_6 = ($$anchor3) => {
+          const paredDate = user_derived(() => handleDate(date()));
+          var button = root_15();
           button.__click = [on_click_1, toggleFullDate, i];
           var node_9 = child(button);
           {
-            var consequent_6 = ($$anchor4) => {
+            var consequent_5 = ($$anchor4) => {
               var text_3 = text();
               template_effect(($0) => set_text(text_3, $0), [() => get(paredDate)?.toLocaleString()]);
               append($$anchor4, text_3);
             };
-            var alternate_5 = ($$anchor4) => {
+            var alternate_4 = ($$anchor4) => {
               var text_4 = text();
               template_effect(($0) => set_text(text_4, $0), [() => handleRelativeDate(get(paredDate))]);
               append($$anchor4, text_4);
             };
             if_block(node_9, ($$render) => {
-              if (showFullDate[i()]) $$render(consequent_6);
-              else $$render(alternate_5, false);
+              if (showFullDate[i()]) $$render(consequent_5);
+              else $$render(alternate_4, false);
             });
           }
           append($$anchor3, button);
         };
         if_block(node_8, ($$render) => {
-          if (date()) $$render(consequent_7);
+          if (date()) $$render(consequent_6);
         });
       }
-      append($$anchor2, fragment_8);
+      append($$anchor2, fragment_6);
     };
-    let incognito = /* @__PURE__ */ user_derived(() => getSettings("incognito"));
+    let incognito = user_derived(() => getSettings("incognito"));
     let showFullDate = proxy({});
     function toggleFullDate(index2) {
       showFullDate[index2] = !showFullDate[index2];
@@ -7235,34 +6960,34 @@ location.reload();
         return () => message.remove();
       };
     }
-    var fragment_11 = comment();
-    var node_10 = first_child(fragment_11);
+    var fragment_9 = comment();
+    var node_10 = first_child(fragment_9);
     {
-      var consequent_8 = ($$anchor2) => {
+      var consequent_7 = ($$anchor2) => {
         Incognito($$anchor2);
       };
-      var alternate_7 = ($$anchor2) => {
-        var div_2 = root_21();
+      var alternate_6 = ($$anchor2) => {
+        var div_2 = root_19();
         let classes;
         var node_11 = child(div_2);
         {
-          var consequent_9 = ($$anchor3) => {
+          var consequent_8 = ($$anchor3) => {
             Forumline($$anchor3, () => data.forumline);
           };
-          var alternate_6 = ($$anchor3) => {
-            var fragment_14 = comment();
-            var node_12 = first_child(fragment_14);
+          var alternate_5 = ($$anchor3) => {
+            var fragment_12 = comment();
+            var node_12 = first_child(fragment_12);
             {
-              var consequent_10 = ($$anchor4) => {
-                var fragment_15 = comment();
-                var node_13 = first_child(fragment_15);
+              var consequent_9 = ($$anchor4) => {
+                var fragment_13 = comment();
+                var node_13 = first_child(fragment_13);
                 each(node_13, 17, () => data.posts, index, ($$anchor5, $$item, i) => {
                   let nick = () => get($$item).nick;
                   let link2 = () => get($$item).link;
                   let avatar = () => get($$item).avatar;
                   let date = () => get($$item).date;
                   let message = () => get($$item).message;
-                  var div_3 = root_25();
+                  var div_3 = root_23();
                   var div_4 = child(div_3);
                   var node_14 = child(div_4);
                   Avatar(node_14, avatar, nick, link2);
@@ -7276,21 +7001,21 @@ location.reload();
                   attach(div_7, () => insertPost(message()));
                   append($$anchor5, div_3);
                 });
-                append($$anchor4, fragment_15);
+                append($$anchor4, fragment_13);
               };
               if_block(
                 node_12,
                 ($$render) => {
-                  if (data.posts && data.posts?.length) $$render(consequent_10);
+                  if (data.posts && data.posts?.length) $$render(consequent_9);
                 },
                 true
               );
             }
-            append($$anchor3, fragment_14);
+            append($$anchor3, fragment_12);
           };
           if_block(node_11, ($$render) => {
-            if (data.forumline) $$render(consequent_9);
-            else $$render(alternate_6, false);
+            if (data.forumline) $$render(consequent_8);
+            else $$render(alternate_5, false);
           });
         }
         bind_this(div_2, ($$value) => store.ultraPost = $$value, () => store?.ultraPost);
@@ -7298,15 +7023,15 @@ location.reload();
         append($$anchor2, div_2);
       };
       if_block(node_10, ($$render) => {
-        if (get(incognito)) $$render(consequent_8);
-        else $$render(alternate_7, false);
+        if (get(incognito)) $$render(consequent_7);
+        else $$render(alternate_6, false);
       });
     }
-    append($$anchor, fragment_11);
+    append($$anchor, fragment_9);
     pop();
   }
   delegate(["click"]);
-  var root_1$1 = /* @__PURE__ */ from_html(`<div id="ultra-pagination" class="svelte-13k3ejc"><!></div>`);
+  var root_1$1 = from_html(`<div id="ultra-pagination" class="svelte-13k3ejc"><!></div>`);
   function Pagination($$anchor, $$props) {
     push($$props, true);
     const parser2 = new DOMParser();
@@ -7318,7 +7043,7 @@ location.reload();
       "След.": "Next"
     };
     const regex2 = /Страница|Страницы|из|Пред\.|След\./g;
-    let content = /* @__PURE__ */ user_derived(() => {
+    let content = user_derived(() => {
       if (!data.pagination?.innerHTML) return "";
       const doc = parser2.parseFromString(data.pagination.innerHTML, "text/html");
       const pageSelect = doc.querySelector("a.menu-root");
@@ -7353,11 +7078,11 @@ location.reload();
     append($$anchor, fragment);
     pop();
   }
-  var root_1 = /* @__PURE__ */ from_html(`<!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!>`, 1);
+  var root_1 = from_html(`<!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!>`, 1);
   function App($$anchor, $$props) {
     push($$props, true);
     let app = prop($$props, "app", 7);
-    let firstPage = /* @__PURE__ */ state$1(true);
+    let firstPage = state$1(true);
     if (document.readyState === "loading") {
       on(document, "DOMContentLoaded", parseDOM, { once: true });
     } else {
@@ -7388,15 +7113,10 @@ location.reload();
       }
     }
     user_effect(
-      /**
-       * Side‑effect that applies the current `darkMode` value
-       */
-      () => {
-        const darkMode = data.theme?.darkmode;
-        if (darkMode !== void 0) {
-          document.documentElement.dataset["theme"] = darkMode ? "dark" : "light";
-          sessionStorage.setItem("dark-mode", darkMode.toString());
-        }
+() => {
+        const darkMode = Boolean(data.theme?.darkmode);
+        document.documentElement.dataset["theme"] = darkMode ? "dark" : "light";
+        sessionStorage.setItem("dark-mode", darkMode.toString());
       }
     );
     var fragment = comment();
