@@ -7,6 +7,7 @@ import {
 } from "./handleLinks";
 import { OPTIONS_KEY, restoreOptions, saveOptions } from "./handleOptions";
 import { RESIZE_KEY, restoreResize } from "../utils/handleResize";
+import { restoreRelated } from "../utils/handleRelated";
 import { store } from "../utils/store.svelte";
 
 const SETTINGS_KEY = "show-settings";
@@ -74,6 +75,7 @@ export function restoreDefaultSettings(): void {
   restoreOptions();
   restorePerformerLinks();
   restoreResize();
+  restoreRelated();
   clearCache();
 }
 

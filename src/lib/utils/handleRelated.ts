@@ -46,7 +46,7 @@ export async function getRelated(title: string): Promise<SearchResult[]> {
 /**
  * Handle search
  */
-async function handleSearch(searchQuery: string): Promise<NodeListOf<Element>> {
+async function handleSearch(searchQuery: string): Promise<Element[]> {
   const headers = { "Content-Type": "application/x-www-form-urlencoded" };
   const body = `max=1&to=1&nm=${encodeURIComponent(searchQuery)}`;
 
@@ -60,7 +60,11 @@ async function handleSearch(searchQuery: string): Promise<NodeListOf<Element>> {
   const result = decoder.decode(buffer);
   const doc = parser.parseFromString(result, "text/html");
 
-  return doc.querySelectorAll(".med.tLink.bold");
+  const nothingFound = doc.querySelector(".info_msg_wrap");
+  if (nothingFound) return [];
+
+  const related = doc.querySelectorAll(".med.tLink.bold");
+  return Array.from(related);
 }
 
 /**
@@ -101,4 +105,11 @@ function getCache(): Record<string, SearchResult[]> {
  */
 function setCache(cache: Record<string, SearchResult[]>): void {
   sessionStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+}
+
+/**
+ * Clears the cache from session storage
+ */
+export function restoreRelated(): void {
+  sessionStorage.removeItem(CACHE_KEY);
 }
