@@ -93,7 +93,7 @@ Stats
 
 <!-- -------------------------------------------------- -->
 
-{#if !data.forumline}
+{#if data.user && !data.forumline}
   <div id="x-stats">
     {@render Item("Seeders", data.torrent?.seeders || "0")}
     {@render Item("Leechers", data.torrent?.leechers || "0")}
