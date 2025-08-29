@@ -11,10 +11,7 @@
   "downloadURL": "https://github.com/clangmoyai/plab-ultra/raw/main/dist/plab-ultra.user.js",
   "updateURL": "https://github.com/clangmoyai/plab-ultra/raw/main/dist/plab-ultra.user.js",
   "match": "https://pornolab.net/forum/viewtopic.php*",
-  "tag": [
-    "pornolab",
-    "pornolab.net"
-  ],
+  "tag": ["pornolab", "pornolab.net"],
   "connect": "*",
   "run-at": "document-start"
 }
