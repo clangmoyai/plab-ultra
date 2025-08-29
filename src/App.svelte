@@ -74,13 +74,13 @@ App component mounted from `main.ts`
 
   $effect(
     /**
-     * Side‑effect that applies the current `darkMode` value
+     * Side‑effect that applies the current `darkMode` value.
+     * If `data.theme?.darkmode` is undefined the user is logged out
+     * which in turn means that `darkMode` is `false`
      */ () => {
-      const darkMode = data.theme?.darkmode;
-      if (darkMode !== undefined) {
-        document.documentElement.dataset["theme"] = darkMode ? "dark" : "light";
-        sessionStorage.setItem("dark-mode", darkMode.toString());
-      }
+      const darkMode = Boolean(data.theme?.darkmode);
+      document.documentElement.dataset["theme"] = darkMode ? "dark" : "light";
+      sessionStorage.setItem("dark-mode", darkMode.toString());
     }
   );
 
