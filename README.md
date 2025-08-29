@@ -44,7 +44,7 @@ Yes, **Settings → Export** downloads a text file. Paste its contents into your
 
 ## Development
 
-The dev server doesn't work with Firefox, but Chrome does... ([open issue?](https://github.com/lisonge/vite-plugin-monkey)). On first install open dev server e.g. <http://127.0.0.1:5173> and install userscript. You don't need to redo this unless you make changes to `vite.config.ts`
+The dev server doesn't work with Firefox, but Chrome does... ([open issue?](https://github.com/lisonge/vite-plugin-monkey)). On first install open dev server e.g. <http://127.0.0.1:5173> and install userscript. You don't need to redo this unless you make changes to `userscript.json`
 
 ```bash
 # macOS prerequisites
