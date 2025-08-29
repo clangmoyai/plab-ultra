@@ -96,6 +96,9 @@ function writeVersion(
       JSON.stringify(userscriptJson, null, 2) + "\n"
     );
     console.log("✅ Updated userscript.json");
+
+    // fix formatting
+    run("pnpx prettier --write package.json userscript.json");
   } catch (error) {
     handleError("Failed to update version files", error);
   }
