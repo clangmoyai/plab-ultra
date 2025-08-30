@@ -112,16 +112,23 @@ Attaches event listeners to window and document:
     )
       return;
 
-    let validImgRefs = store.imgRefs.filter(
+    let imgRefs = [...store.imgRefs];
+
+    if (getSettings("lastImageFirst") && imgRefs.length > 1) {
+      const lastImg = imgRefs.pop();
+      if (lastImg) imgRefs.unshift(lastImg);
+    }
+
+    let filteredImgRefs = imgRefs.filter(
       (el): el is HTMLImageElement => el.dataset["broken"] !== "true"
     );
 
-    if (validImgRefs.length === 0) return;
+    if (filteredImgRefs.length === 0) return;
 
     if (scrollY < containerTop) {
       if (!event.shiftKey) {
         event.preventDefault();
-        validImgRefs[0]?.scrollIntoView({ block: "start" });
+        filteredImgRefs[0]?.scrollIntoView({ block: "start" });
       }
       return;
     }
@@ -130,7 +137,7 @@ Attaches event listeners to window and document:
     const threshold = scrollY + (backward ? -10 : 10);
 
     if (backward) {
-      for (const img of validImgRefs.slice().reverse()) {
+      for (const img of filteredImgRefs.slice().reverse()) {
         const imgTop = scrollY + img.getBoundingClientRect().top;
         if (imgTop < threshold) {
           event.preventDefault();
@@ -139,7 +146,7 @@ Attaches event listeners to window and document:
         }
       }
     } else {
-      for (const img of validImgRefs) {
+      for (const img of filteredImgRefs) {
         const imgTop = scrollY + img.getBoundingClientRect().top;
         if (imgTop > threshold) {
           event.preventDefault();
