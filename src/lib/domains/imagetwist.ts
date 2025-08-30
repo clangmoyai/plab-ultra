@@ -1,4 +1,5 @@
 import { generic } from "./generic";
+import { GM_fetch } from "../utils/GM_fetch";
 import { getBlob } from "../utils/handleCache";
 
 /**
@@ -24,11 +25,19 @@ export async function imagetwist(href: string, src?: string): Promise<string> {
     if (hrefExt) {
       imgSrc = imgSrc.replace(extRegex, `.${hrefExt}$2`);
     }
-  } else {
-    imgSrc = await generic(href, "img.pic");
-    if (!imgSrc) {
-      throw new Error(`image not found: ${href}`);
+
+    // check if image is "imagetwist error"
+    const response = await GM_fetch("HEAD", imgSrc, "text");
+    const imgError = /content-length:\s*8183/i.test(response.responseHeaders);
+
+    if (!imgError) {
+      return await getBlob(imgSrc);
     }
+  }
+
+  imgSrc = await generic(href, "img.pic");
+  if (!imgSrc) {
+    throw new Error(`image not found: ${href}`);
   }
 
   return await getBlob(imgSrc);
