@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2025.08.29
+// @version      2025.08.30
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -4487,19 +4487,24 @@ location.reload();
       const containerTop = $$_import_store().ultraImages.offsetTop;
       const containerBottom = containerTop + $$_import_store().ultraImages.offsetHeight;
       if (containerTop >= scrollY + window.innerHeight || containerBottom <= scrollY) return;
-      let validImgRefs = $$_import_store().imgRefs.filter((el) => el.dataset["broken"] !== "true");
-      if (validImgRefs.length === 0) return;
+      let imgRefs = [...$$_import_store().imgRefs];
+      if (getSettings("lastImageFirst") && imgRefs.length > 1) {
+        const lastImg = imgRefs.pop();
+        if (lastImg) imgRefs.unshift(lastImg);
+      }
+      let filteredImgRefs = imgRefs.filter((el) => el.dataset["broken"] !== "true");
+      if (filteredImgRefs.length === 0) return;
       if (scrollY < containerTop) {
         if (!event2.shiftKey) {
           event2.preventDefault();
-          validImgRefs[0]?.scrollIntoView({ block: "start" });
+          filteredImgRefs[0]?.scrollIntoView({ block: "start" });
         }
         return;
       }
       const backward = event2.shiftKey;
       const threshold = scrollY + (backward ? -10 : 10);
       if (backward) {
-        for (const img of validImgRefs.slice().reverse()) {
+        for (const img of filteredImgRefs.slice().reverse()) {
           const imgTop = scrollY + img.getBoundingClientRect().top;
           if (imgTop < threshold) {
             event2.preventDefault();
@@ -4508,7 +4513,7 @@ location.reload();
           }
         }
       } else {
-        for (const img of validImgRefs) {
+        for (const img of filteredImgRefs) {
           const imgTop = scrollY + img.getBoundingClientRect().top;
           if (imgTop > threshold) {
             event2.preventDefault();
@@ -6152,11 +6157,15 @@ style[`border${capitalized_secondary_properties[1]}Width`]
       if (hrefExt) {
         imgSrc = imgSrc.replace(extRegex, `.${hrefExt}$2`);
       }
-    } else {
-      imgSrc = await generic(href, "img.pic");
-      if (!imgSrc) {
-        throw new Error(`image not found: ${href}`);
+      const response = await GM_fetch("HEAD", imgSrc, "text");
+      const imgError = /content-length:\s*8183/i.test(response.responseHeaders);
+      if (!imgError) {
+        return await getBlob(imgSrc);
       }
+    }
+    imgSrc = await generic(href, "img.pic");
+    if (!imgSrc) {
+      throw new Error(`image not found: ${href}`);
     }
     return await getBlob(imgSrc);
   }
