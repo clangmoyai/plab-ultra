@@ -1,4 +1,5 @@
 import { generic } from "./generic";
+import { getBlob } from "../utils/handleCache";
 
 /**
  * Handles imagenimage.com
@@ -10,7 +11,8 @@ export async function imagenimage(href: string, src?: string): Promise<string> {
 
   if (!src || !match) {
     const selector = "#left > a > img";
-    return generic(href, selector);
+    const imgSrc = await generic(href, selector);
+    return await getBlob(imgSrc);
   }
 
   const domain = match[1];
@@ -24,5 +26,5 @@ export async function imagenimage(href: string, src?: string): Promise<string> {
   const filename = linkMatch[1];
   const imgSrc = `${domain}i/${path}.jpg/${filename}`;
 
-  return imgSrc;
+  return await getBlob(imgSrc);
 }
