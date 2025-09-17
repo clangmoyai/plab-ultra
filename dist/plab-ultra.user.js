@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2025.08.30
+// @version      2025.09.18
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -24,7 +24,7 @@
 
   const d=new Set;const importCSS = async e=>{d.has(e)||(d.add(e),(t=>{typeof GM_addStyle=="function"?GM_addStyle(t):document.head.appendChild(document.createElement("style")).append(t);})(e));};
 
-  importCSS(` .ultra-logo.svelte-14s75i7{width:16px;display:inline-flex;vertical-align:top;margin:0 .45rem 0 0}.ultra-logo.svelte-14s75i7:hover{cursor:pointer}#x-header.svelte-14s75i7{--header-height: 4.5rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;margin-bottom:var(--content-margin);min-height:var(--header-height)}.floatingDownload.svelte-14s75i7{padding-right:5rem}.logo.svelte-14s75i7{height:var(--header-height)}.logo.svelte-14s75i7 img:where(.svelte-14s75i7){height:100%;border-radius:var(--border-radius-large)}.align-right.svelte-14s75i7{display:flex;justify-content:flex-end;min-width:0}.container.svelte-14s75i7{display:flex;flex-direction:column;min-width:0;row-gap:1rem}.links.svelte-14s75i7{display:flex;min-width:0;flex-wrap:nowrap;justify-content:end}.unread.svelte-14s75i7{color:var(--highlighted);filter:brightness(1.25)}.item.svelte-14s75i7{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item.svelte-14s75i7+.item:where(.svelte-14s75i7):before{display:inline-block;content:"|";margin:0 .8rem;color:var(--post-border-color);transform:translateY(-1px)}.search.svelte-14s75i7{display:flex;gap:.5rem}.search.svelte-14s75i7 input:where(.svelte-14s75i7){flex:1 1 auto;min-width:0;border:1px solid var(--post-border-color);color:var(--search-color);background:var(--input-bg)!important;padding:.3rem .5rem .4rem;border-radius:var(--border-radius-small);font-size:.8rem!important;font-family:inherit}.search.svelte-14s75i7 button:where(.svelte-14s75i7){background:var(--input-bg)!important;border:1px solid var(--post-border-color)!important;width:1.75rem;border-radius:var(--border-radius-small)}.incognito.svelte-14s75i7{filter:var(--incognito-filter)!important}.themeIcon.svelte-14s75i7 a,.themeIcon.svelte-14s75i7 a:hover{text-decoration:none!important}@media (max-width: 768px){#x-header.svelte-14s75i7{grid-template-columns:1fr}.logo.svelte-14s75i7{display:none}.container.svelte-14s75i7{width:100%}}.container.svelte-5e73jo{display:flex;gap:1.15rem;justify-content:space-between}.column.svelte-5e73jo{display:flex;flex-direction:column;overflow:hidden;gap:.75rem}h2.svelte-5e73jo{margin:0;margin-bottom:.25rem;font-size:1rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=checkbox].svelte-5e73jo{margin:4px}label.svelte-5e73jo{display:flex;align-items:center;gap:.5rem}.disabled.svelte-5e73jo{text-decoration:line-through;cursor:default}span.svelte-5e73jo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.description.svelte-5e73jo{opacity:.5}input[type=checkbox].svelte-5e73jo:disabled{cursor:default}@media (max-width: 1200px){.container.svelte-5e73jo{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);gap:1rem;justify-content:stretch}.column.svelte-5e73jo{min-width:0}}@media (max-width: 768px){.container.svelte-5e73jo{display:flex;flex-direction:column;gap:1rem}.column.svelte-5e73jo{min-width:0;width:100%}}button.svelte-ig1se8{all:unset;display:flex;justify-content:center;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none;white-space:nowrap;background:var(--button-color)!important;border:none!important;border-radius:var(--border-radius-small);padding:.4rem .5rem;font-family:inherit;font-weight:500;font-size:.8rem;color:#fff;transition:background-color opacity 1.8s ease-in-out}button.svelte-ig1se8:disabled{background-color:var(--post-border-color)!important;opacity:.5;cursor:not-allowed}svg.svelte-ig1se8{position:absolute}svg.svelte-ig1se8 path:where(.svelte-ig1se8){transform-origin:center;fill:#fff}.container.svelte-d5217q{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}.align-right.svelte-d5217q{display:flex;gap:.5rem}.container.svelte-6don7f{display:flex;flex-direction:column;margin-top:1.25rem}.item.svelte-6don7f{display:grid;grid-template-columns:min-content minmax(0,10rem) 1fr auto;align-items:center;gap:.75rem;min-width:0;margin-bottom:.5rem}img.svelte-6don7f{width:.9rem;height:.9rem;flex-shrink:0}input[type=text].svelte-6don7f{padding:.3rem .5rem .4rem;border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:.8rem!important;background:var(--input-bg)!important;color:inherit;font:inherit;min-width:0}button.svelte-6don7f{background:#a62f2fbf!important;border-radius:var(--border-radius-small);font-size:1.2rem;border:none!important;color:#fff!important;display:flex;align-items:center;width:1.5rem;height:1.5rem;align-items:flex-end;justify-content:center;-webkit-user-select:none;user-select:none}button.svelte-6don7f:hover{background:#a62f2f!important}div.svelte-rmjlst{font-size:.8rem;position:relative;background:var(--post-bg);border:1px solid var(--post-border-color);padding:.9rem 1rem 1rem;border-radius:var(--border-radius-large);overflow:hidden;display:flex;flex-flow:column;font-family:inherit;margin-bottom:var(--content-margin)}button.svelte-rmjlst{position:absolute;top:.6rem;right:.6rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0;-webkit-user-select:none;user-select:none}div.svelte-hyxnps{position:fixed;top:1.3rem;right:2.5rem;z-index:9999;border-radius:var(--border-radius-large);padding:.35rem;border:1px solid var(--post-border-color);background-color:#009c3c!important}button.svelte-hyxnps{cursor:pointer;aspect-ratio:1 / 1;--size: 1.7rem;width:var(--size);background-color:#fff!important}.ic--sharp-download.svelte-hyxnps{display:inline-block;--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z'/%3E%3C/svg%3E");background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%}.container.svelte-m808n{position:absolute;z-index:2;transform:translate(-50%);padding-top:.2rem}.indicator.svelte-m808n{position:absolute;left:calc(50% - 8px);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:7px solid var(--post-border-color)}.items.svelte-m808n{margin-top:7px;position:relative;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:var(--border-radius-large);-webkit-user-select:none;user-select:none;border:1px solid var(--post-border-color);box-shadow:#00000040 0 25px 50px -12px;background:var(--overlay-bg);white-space:nowrap}.items.svelte-m808n img:where(.svelte-m808n){width:.9rem;height:1rem;width:1rem;-webkit-user-drag:none}.items.svelte-m808n a:where(.svelte-m808n){display:flex;align-items:center;gap:.75rem;font-size:.9rem;font-weight:500;text-decoration:none;padding:.5rem 1rem;-webkit-user-drag:none}.items.svelte-m808n a:where(.svelte-m808n):hover{color:unset}.items.svelte-m808n a:where(.svelte-m808n):first-of-type{padding-top:.9rem}.items.svelte-m808n a:where(.svelte-m808n):last-of-type{padding-bottom:1rem}#x-title.svelte-12bxepp{font-size:1.375rem;margin-top:0;margin-bottom:var(--content-margin)}.original-title.svelte-12bxepp{text-decoration:none}.title-item.svelte-12bxepp{color:unset;text-decoration:none}.title-item.svelte-12bxepp:hover,.title-item--hover{text-decoration:underline!important;color:var(--link-color)!important;cursor:pointer}button.svelte-1ilvoyd{all:unset;cursor:pointer;background:none!important}button.svelte-1ilvoyd:disabled{cursor:text;-webkit-user-select:text;user-select:text}#thx-btn{all:unset!important}#x-stats.svelte-7pdkl5{display:flex;flex-wrap:wrap;gap:.8rem;font-weight:500;font-size:.8rem;margin-bottom:var(--content-margin)}.item.svelte-7pdkl5:not(:last-child):after{display:inline-block;content:"|";color:var(--post-border-color);margin-left:.8rem;transform:translateY(-1px)}button.svelte-7pdkl5{all:unset;cursor:pointer;background:none!important}button.svelte-7pdkl5:disabled{cursor:text;-webkit-user-select:text;user-select:text}.seeders.svelte-7pdkl5{color:var(--seed-color)}.leechers.svelte-7pdkl5,.error.svelte-7pdkl5{color:var(--leech-color)}#x-tags.svelte-hxarl5{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--content-margin)}.tag-item.svelte-hxarl5{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .6rem .255rem;border-radius:var(--border-radius-small);font-size:.7rem;white-space:nowrap;text-decoration:none;cursor:pointer;font-weight:500;opacity:.75;transition:opacity .1s ease;color:var(--tag-color);background-color:var(--tag-bg);row-gap:.35rem;column-gap:.35rem;transition:opacity .15s ease-in-out}.tag-item.svelte-hxarl5:hover,.tag-item--hover{opacity:1!important;text-decoration:none!important}.tag-res.svelte-hxarl5{background:var(--highlighted)!important;color:#fff!important;opacity:1}.filelist.svelte-eqeghx{background:var(--post-bg);border:1px solid var(--post-border-color);padding:.75rem;border-radius:var(--border-radius-large);margin-bottom:var(--content-margin)}.filelist.svelte-eqeghx i{color:var(--link-color);font-style:normal;font-weight:500}div.svelte-1rhiyed{display:flex;flex-direction:column;gap:1rem;will-change:width;position:relative}.dragging.svelte-1rhiyed{cursor:ew-resize}.loader.svelte-10rouec{width:15%;height:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}svg.svelte-10rouec{width:100%;height:auto;will-change:transform}svg.svelte-10rouec path:where(.svelte-10rouec){fill:#fff}.animate.svelte-10rouec{animation:svelte-10rouec-spin 1s linear infinite;transform-origin:center center}@keyframes svelte-10rouec-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.debug.svelte-zizdl6{position:relative;display:flex;flex-direction:column;font-family:monospace;background:var(--button-color);padding:1rem;width:-webkit-fill-available;color:#fff;-webkit-user-select:text;user-select:text;word-wrap:break-word;gap:.4rem}.debug.svelte-zizdl6 a:where(.svelte-zizdl6){color:#fff;text-decoration:none;display:contents}.error.svelte-zizdl6{color:red}.copy.svelte-zizdl6{position:absolute;top:.5rem;right:.5rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0}svg.svelte-zizdl6 path:where(.svelte-zizdl6){transform-origin:center;fill:#fff;transform:translateY(2px)}.section.svelte-ojhdzd{display:flex;padding:1rem;flex-direction:column;align-items:center;-webkit-user-select:none;user-select:none;margin-bottom:var(--content-margin)}a.svelte-ojhdzd{position:relative;display:block;overflow:hidden}.container.svelte-ojhdzd{border-radius:var(--border-radius-small);overflow:hidden}img.svelte-ojhdzd{width:100%;height:auto;border:none;flex:1 0 100%;-webkit-user-select:none;user-select:none;will-change:width;display:block}a.gif.svelte-ojhdzd{width:fit-content}img.gif.svelte-ojhdzd{width:auto;max-width:100%}.incognito.svelte-ojhdzd{filter:var(--incognito-filter)!important}.dragging.svelte-ojhdzd a:where(.svelte-ojhdzd),.dragging.svelte-ojhdzd img:where(.svelte-ojhdzd){pointer-events:none}.forumline.svelte-14j3c1y{padding:1rem;position:relative;display:flex;flex-direction:column;align-items:center}.section.svelte-14j3c1y{margin-bottom:var(--content-margin)}a.svelte-14j3c1y{color:#4da3ff;text-decoration:none}a.svelte-14j3c1y:hover{text-decoration:underline}.post.svelte-14j3c1y{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid var(--post-border-color)}.post.svelte-14j3c1y:nth-child(2n){background-color:var(--post-odd-bg)}.post.svelte-14j3c1y:last-child{border-bottom:none}.avatar.svelte-14j3c1y img:where(.svelte-14j3c1y){width:48px;height:48px;border-radius:var(--border-radius-small);object-fit:cover;border:1px solid var(--post-border-color)}.no-avatar.svelte-14j3c1y{display:flex;width:48px;height:48px;text-align:center;line-height:48px;background:var(--main-bg);border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:1.3rem;cursor:pointer;justify-content:center;align-items:center}.no-avatar.svelte-14j3c1y svg:where(.svelte-14j3c1y){width:55%;height:55%}.no-avatar.svelte-14j3c1y:hover{text-decoration:none!important}.content.svelte-14j3c1y{flex:1}.header.svelte-14j3c1y{font-size:.8rem;color:#bbb;margin-block-end:.4rem;display:flex;gap:.5rem;align-items:center}.nick.svelte-14j3c1y{font-weight:600}.date.svelte-14j3c1y{all:unset!important;color:var(--post-date-color)!important;font-weight:400!important;opacity:.8!important;cursor:pointer!important}.date.svelte-14j3c1y:hover{opacity:1!important}.message.svelte-14j3c1y{margin:0;line-height:1.4}#ultra-pagination.svelte-13k3ejc{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:var(--content-margin)}#ultra-pagination a{text-decoration:none!important} `);
+  importCSS(` .ultra-logo.svelte-zne36e{width:16px;display:inline-flex;vertical-align:top;margin:0 .45rem 0 0}.ultra-logo.svelte-zne36e:hover{cursor:pointer}#x-header.svelte-zne36e{--header-height: 4.5rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;margin-bottom:var(--content-margin);min-height:var(--header-height)}.floatingDownload.svelte-zne36e{padding-right:5rem}.logo.svelte-zne36e{height:var(--header-height)}.logo.svelte-zne36e img:where(.svelte-zne36e){height:100%;border-radius:var(--border-radius-large)}.align-right.svelte-zne36e{display:flex;justify-content:flex-end;min-width:0}.container.svelte-zne36e{display:flex;flex-direction:column;min-width:0;row-gap:1rem}.links.svelte-zne36e{display:flex;min-width:0;flex-wrap:nowrap;justify-content:end}.unread.svelte-zne36e{color:var(--highlighted);filter:brightness(1.25)}.item.svelte-zne36e{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item.svelte-zne36e+.item:where(.svelte-zne36e):before{display:inline-block;content:"|";margin:0 .8rem;color:var(--post-border-color);transform:translateY(-1px)}.search.svelte-zne36e{display:flex;gap:.5rem}.search.svelte-zne36e input:where(.svelte-zne36e){flex:1 1 auto;min-width:0;border:1px solid var(--post-border-color);color:var(--search-color);background:var(--input-bg)!important;padding:.3rem .5rem .4rem;border-radius:var(--border-radius-small);font-size:.8rem!important;font-family:inherit}.search.svelte-zne36e button:where(.svelte-zne36e){background:var(--input-bg)!important;border:1px solid var(--post-border-color)!important;width:1.75rem;border-radius:var(--border-radius-small)}.incognito.svelte-zne36e{filter:var(--incognito-filter)!important}.themeIcon.svelte-zne36e a,.themeIcon.svelte-zne36e a:hover{text-decoration:none!important}@media (max-width: 768px){#x-header.svelte-zne36e{grid-template-columns:1fr}.logo.svelte-zne36e{display:none}.container.svelte-zne36e{width:100%}}.container.svelte-1emp0k3{display:flex;gap:1.15rem;justify-content:space-between}.column.svelte-1emp0k3{display:flex;flex-direction:column;overflow:hidden;gap:.75rem}h2.svelte-1emp0k3{margin:0;margin-bottom:.25rem;font-size:1rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=checkbox].svelte-1emp0k3{margin:4px}label.svelte-1emp0k3{display:flex;align-items:center;gap:.5rem}.disabled.svelte-1emp0k3{text-decoration:line-through;cursor:default}span.svelte-1emp0k3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.description.svelte-1emp0k3{opacity:.5}input[type=checkbox].svelte-1emp0k3:disabled{cursor:default}@media (max-width: 1200px){.container.svelte-1emp0k3{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);gap:1rem;justify-content:stretch}.column.svelte-1emp0k3{min-width:0}}@media (max-width: 768px){.container.svelte-1emp0k3{display:flex;flex-direction:column;gap:1rem}.column.svelte-1emp0k3{min-width:0;width:100%}}button.svelte-1obhcw8{all:unset;display:flex;justify-content:center;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none;white-space:nowrap;background:var(--button-color)!important;border:none!important;border-radius:var(--border-radius-small);padding:.4rem .5rem;font-family:inherit;font-weight:500;font-size:.8rem;color:#fff;transition:background-color opacity 1.8s ease-in-out}button.svelte-1obhcw8:disabled{background-color:var(--post-border-color)!important;opacity:.5;cursor:not-allowed}svg.svelte-1obhcw8{position:absolute}svg.svelte-1obhcw8 path:where(.svelte-1obhcw8){transform-origin:center;fill:#fff}.container.svelte-1hugea{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}.align-right.svelte-1hugea{display:flex;gap:.5rem}.container.svelte-kvmnko{display:flex;flex-direction:column;margin-top:1.25rem}.item.svelte-kvmnko{display:grid;grid-template-columns:min-content minmax(0,10rem) 1fr auto;align-items:center;gap:.75rem;min-width:0;margin-bottom:.5rem}img.svelte-kvmnko{width:.9rem;height:.9rem;flex-shrink:0}input[type=text].svelte-kvmnko{padding:.3rem .5rem .4rem;border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:.8rem!important;background:var(--input-bg)!important;color:inherit;font:inherit;min-width:0}button.svelte-kvmnko{background:#a62f2fbf!important;border-radius:var(--border-radius-small);font-size:1.2rem;border:none!important;color:#fff!important;display:flex;align-items:center;width:1.5rem;height:1.5rem;align-items:flex-end;justify-content:center;-webkit-user-select:none;user-select:none}button.svelte-kvmnko:hover{background:#a62f2f!important}div.svelte-1kxfd5y{font-size:.8rem;position:relative;background:var(--post-bg);border:1px solid var(--post-border-color);padding:.9rem 1rem 1rem;border-radius:var(--border-radius-large);overflow:hidden;display:flex;flex-flow:column;font-family:inherit;margin-bottom:var(--content-margin)}button.svelte-1kxfd5y{position:absolute;top:.6rem;right:.6rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0;-webkit-user-select:none;user-select:none}div.svelte-wvkwp9{position:fixed;top:1.3rem;right:2.5rem;z-index:9999;border-radius:var(--border-radius-large);padding:.35rem;border:1px solid var(--post-border-color);background-color:#009c3c!important}button.svelte-wvkwp9{cursor:pointer;aspect-ratio:1 / 1;--size: 1.7rem;width:var(--size);background-color:#fff!important}.ic--sharp-download.svelte-wvkwp9{display:inline-block;--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z'/%3E%3C/svg%3E");background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%}.container.svelte-vtocc6{position:absolute;z-index:2;transform:translate(-50%);padding-top:.2rem}.indicator.svelte-vtocc6{position:absolute;left:calc(50% - 8px);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:7px solid var(--post-border-color)}.items.svelte-vtocc6{margin-top:7px;position:relative;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:var(--border-radius-large);-webkit-user-select:none;user-select:none;border:1px solid var(--post-border-color);box-shadow:#00000040 0 25px 50px -12px;background:var(--overlay-bg);white-space:nowrap}.items.svelte-vtocc6 img:where(.svelte-vtocc6){width:.9rem;height:1rem;width:1rem;-webkit-user-drag:none}.items.svelte-vtocc6 a:where(.svelte-vtocc6){display:flex;align-items:center;gap:.75rem;font-size:.9rem;font-weight:500;text-decoration:none;padding:.5rem 1rem;-webkit-user-drag:none}.items.svelte-vtocc6 a:where(.svelte-vtocc6):hover{color:unset}.items.svelte-vtocc6 a:where(.svelte-vtocc6):first-of-type{padding-top:.9rem}.items.svelte-vtocc6 a:where(.svelte-vtocc6):last-of-type{padding-bottom:1rem}#x-title.svelte-1gft3h5{font-size:1.375rem;margin-top:0;margin-bottom:var(--content-margin)}.original-title.svelte-1gft3h5{text-decoration:none}.title-item.svelte-1gft3h5{color:unset;text-decoration:none}.title-item.svelte-1gft3h5:hover,.title-item--hover{text-decoration:underline!important;color:var(--link-color)!important;cursor:pointer}button.svelte-1ai34w7{all:unset;cursor:pointer;background:none!important}button.svelte-1ai34w7:disabled{cursor:text;-webkit-user-select:text;user-select:text}#thx-btn{all:unset!important}#x-stats.svelte-cjprq{display:flex;flex-wrap:wrap;gap:.8rem;font-weight:500;font-size:.8rem;margin-bottom:var(--content-margin)}.item.svelte-cjprq:not(:last-child):after{display:inline-block;content:"|";color:var(--post-border-color);margin-left:.8rem;transform:translateY(-1px)}button.svelte-cjprq{all:unset;cursor:pointer;background:none!important}button.svelte-cjprq:disabled{cursor:text;-webkit-user-select:text;user-select:text}.seeders.svelte-cjprq{color:var(--seed-color)}.leechers.svelte-cjprq,.error.svelte-cjprq{color:var(--leech-color)}#x-tags.svelte-ttnt4a{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--content-margin)}.tag-item.svelte-ttnt4a{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .6rem .255rem;border-radius:var(--border-radius-small);font-size:.7rem;white-space:nowrap;text-decoration:none;cursor:pointer;font-weight:500;opacity:.75;transition:opacity .1s ease;color:var(--tag-color);background-color:var(--tag-bg);row-gap:.35rem;column-gap:.35rem;transition:opacity .15s ease-in-out}.tag-item.svelte-ttnt4a:hover,.tag-item--hover{opacity:1!important;text-decoration:none!important}.tag-res.svelte-ttnt4a{background:var(--highlighted)!important;color:#fff!important;opacity:1}.filelist.svelte-1xito9{background:var(--post-bg);border:1px solid var(--post-border-color);padding:.75rem;border-radius:var(--border-radius-large);margin-bottom:var(--content-margin)}.filelist.svelte-1xito9 i{color:var(--link-color);font-style:normal;font-weight:500}div.svelte-x5vner{column-gap:.75rem;column-fill:balance}.dragging.svelte-x5vner{cursor:ew-resize}.loader.svelte-bb97q4{width:15%;height:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}svg.svelte-bb97q4{width:100%;height:auto;will-change:transform}svg.svelte-bb97q4 path:where(.svelte-bb97q4){fill:#fff}.animate.svelte-bb97q4{animation:svelte-bb97q4-spin 1s linear infinite;transform-origin:center center}@keyframes svelte-bb97q4-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.debug.svelte-swtc1e{position:relative;display:flex;flex-direction:column;font-family:monospace;background:var(--button-color);padding:1rem;width:-webkit-fill-available;color:#fff;-webkit-user-select:text;user-select:text;word-wrap:break-word;gap:.4rem}.debug.svelte-swtc1e a:where(.svelte-swtc1e){color:#fff;text-decoration:none;display:contents}.debug.svelte-swtc1e p:where(.svelte-swtc1e){word-break:break-all}.error.svelte-swtc1e{color:red}.copy.svelte-swtc1e{position:absolute;top:.5rem;right:.5rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0}svg.svelte-swtc1e path:where(.svelte-swtc1e){transform-origin:center;fill:#fff;transform:translateY(2px)}.image-columns.svelte-1bzlgy6{display:flex;grid-template-columns:auto auto 1fr;position:absolute;top:-1px;right:-1px;background:transparent!important;padding:.75rem;z-index:2;background:var(--overlay-bg)!important;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:0 0 0 var(--border-radius-large);border:1px solid var(--post-border-color);transition:box-shadow .2s ease-in-out;box-shadow:#0000 0 25px 50px -12px}.image-columns.svelte-1bzlgy6:hover{box-shadow:#00000040 0 25px 50px -12px}svg.svelte-1bzlgy6{--size: 1.25rem;width:var(--size);height:var(--size);fill:#fff;opacity:.75;mix-blend-mode:difference}.slider.svelte-1bzlgy6{display:flex;gap:.55rem}input.svelte-1bzlgy6{margin-left:.75rem}.value.svelte-1bzlgy6{--size: 1.25rem;width:var(--size);height:var(--size);font-weight:500;font-size:.75rem;background:var(--tag-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none}.value.svelte-1bzlgy6 .text:where(.svelte-1bzlgy6){margin-top:-1px;color:var(--tag-color)}.section.svelte-27jg01{display:grid;padding:1rem;justify-items:center;margin-bottom:var(--content-margin);position:relative}a.svelte-27jg01{position:relative;display:block;overflow:hidden}.container.svelte-27jg01{border-radius:var(--border-radius-small);height:min-content;overflow:hidden;break-inside:avoid;margin-bottom:.75rem}img.svelte-27jg01{width:100%;height:auto;border:none;flex:1 0 100%;-webkit-user-select:none;user-select:none;will-change:width;display:block;word-break:break-all}a.gif.svelte-27jg01{width:fit-content}img.gif.svelte-27jg01{width:auto;max-width:100%}.incognito.svelte-27jg01{filter:var(--incognito-filter)!important}.dragging.svelte-27jg01 a:where(.svelte-27jg01),.dragging.svelte-27jg01 img:where(.svelte-27jg01){pointer-events:none}.forumline.svelte-wfy26x{padding:1rem;position:relative;display:flex;flex-direction:column;align-items:center}.section.svelte-wfy26x{margin-bottom:var(--content-margin)}a.svelte-wfy26x{color:#4da3ff;text-decoration:none}a.svelte-wfy26x:hover{text-decoration:underline}.post.svelte-wfy26x{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid var(--post-border-color)}.post.svelte-wfy26x:nth-child(2n){background-color:var(--post-odd-bg)}.post.svelte-wfy26x:last-child{border-bottom:none}.avatar.svelte-wfy26x img:where(.svelte-wfy26x){width:48px;height:48px;border-radius:var(--border-radius-small);object-fit:cover;border:1px solid var(--post-border-color)}.no-avatar.svelte-wfy26x{display:flex;width:48px;height:48px;text-align:center;line-height:48px;background:var(--main-bg);border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:1.3rem;cursor:pointer;justify-content:center;align-items:center}.no-avatar.svelte-wfy26x svg:where(.svelte-wfy26x){width:55%;height:55%}.no-avatar.svelte-wfy26x:hover{text-decoration:none!important}.content.svelte-wfy26x{flex:1}.header.svelte-wfy26x{font-size:.8rem;color:#bbb;margin-block-end:.4rem;display:flex;gap:.5rem;align-items:center}.nick.svelte-wfy26x{font-weight:600}.date.svelte-wfy26x{all:unset!important;color:var(--post-date-color)!important;font-weight:400!important;opacity:.8!important;cursor:pointer!important}.date.svelte-wfy26x:hover{opacity:1!important}.message.svelte-wfy26x{margin:0;line-height:1.4}#ultra-pagination.svelte-dlb7of{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:var(--content-margin)}#ultra-pagination a{text-decoration:none!important} `);
 
   const DEV = false;
   var is_array = Array.isArray;
@@ -106,11 +106,6 @@
     name = "StaleReactionError";
     message = "The reaction that called `getAbortSignal()` was re-run or destroyed";
   }();
-  function await_outside_boundary() {
-    {
-      throw new Error(`https://svelte.dev/e/await_outside_boundary`);
-    }
-  }
   function lifecycle_outside_component(name) {
     {
       throw new Error(`https://svelte.dev/e/lifecycle_outside_component`);
@@ -156,6 +151,11 @@
       throw new Error(`https://svelte.dev/e/state_unsafe_mutation`);
     }
   }
+  function svelte_boundary_reset_onerror() {
+    {
+      throw new Error(`https://svelte.dev/e/svelte_boundary_reset_onerror`);
+    }
+  }
   const EACH_ITEM_REACTIVE = 1;
   const EACH_INDEX_REACTIVE = 1 << 1;
   const EACH_IS_CONTROLLED = 1 << 2;
@@ -173,6 +173,11 @@
   const TEMPLATE_USE_IMPORT_NODE = 1 << 1;
   const UNINITIALIZED = Symbol();
   const NAMESPACE_HTML = "http://www.w3.org/1999/xhtml";
+  function svelte_boundary_reset_noop() {
+    {
+      console.warn(`https://svelte.dev/e/svelte_boundary_reset_noop`);
+    }
+  }
   let hydrating = false;
   function equals(value) {
     return value === this.v;
@@ -221,6 +226,38 @@ component_context
   function is_runes() {
     return !legacy_mode_flag || component_context !== null && component_context.l === null;
   }
+  let micro_tasks = [];
+  let idle_tasks = [];
+  function run_micro_tasks() {
+    var tasks = micro_tasks;
+    micro_tasks = [];
+    run_all(tasks);
+  }
+  function run_idle_tasks() {
+    var tasks = idle_tasks;
+    idle_tasks = [];
+    run_all(tasks);
+  }
+  function has_pending_tasks() {
+    return micro_tasks.length > 0 || idle_tasks.length > 0;
+  }
+  function queue_micro_task(fn) {
+    if (micro_tasks.length === 0 && !is_flushing_sync) {
+      var tasks = micro_tasks;
+      queueMicrotask(() => {
+        if (tasks === micro_tasks) run_micro_tasks();
+      });
+    }
+    micro_tasks.push(fn);
+  }
+  function flush_tasks() {
+    if (micro_tasks.length > 0) {
+      run_micro_tasks();
+    }
+    if (idle_tasks.length > 0) {
+      run_idle_tasks();
+    }
+  }
   const adjustments = new WeakMap();
   function handle_error(error) {
     var effect2 = active_effect;
@@ -268,271 +305,10 @@ component_context
       });
     }
   }
-  let micro_tasks = [];
-  let idle_tasks = [];
-  function run_micro_tasks() {
-    var tasks2 = micro_tasks;
-    micro_tasks = [];
-    run_all(tasks2);
-  }
-  function run_idle_tasks() {
-    var tasks2 = idle_tasks;
-    idle_tasks = [];
-    run_all(tasks2);
-  }
-  function queue_micro_task(fn) {
-    if (micro_tasks.length === 0) {
-      queueMicrotask(run_micro_tasks);
-    }
-    micro_tasks.push(fn);
-  }
-  function flush_tasks() {
-    if (micro_tasks.length > 0) {
-      run_micro_tasks();
-    }
-    if (idle_tasks.length > 0) {
-      run_idle_tasks();
-    }
-  }
-  function get_pending_boundary() {
-    var boundary = (
-active_effect.b
-    );
-    while (boundary !== null && !boundary.has_pending_snippet()) {
-      boundary = boundary.parent;
-    }
-    if (boundary === null) {
-      await_outside_boundary();
-    }
-    return boundary;
-  }
-function derived(fn) {
-    var flags = DERIVED | DIRTY;
-    var parent_derived = active_reaction !== null && (active_reaction.f & DERIVED) !== 0 ? (
-active_reaction
-    ) : null;
-    if (active_effect === null || parent_derived !== null && (parent_derived.f & UNOWNED) !== 0) {
-      flags |= UNOWNED;
-    } else {
-      active_effect.f |= EFFECT_PRESERVED;
-    }
-    const signal = {
-      ctx: component_context,
-      deps: null,
-      effects: null,
-      equals,
-      f: flags,
-      fn,
-      reactions: null,
-      rv: 0,
-      v: (
-UNINITIALIZED
-      ),
-      wv: 0,
-      parent: parent_derived ?? active_effect,
-      ac: null
-    };
-    return signal;
-  }
-function async_derived(fn, location2) {
-    let parent = (
-active_effect
-    );
-    if (parent === null) {
-      async_derived_orphan();
-    }
-    var boundary = (
-parent.b
-    );
-    var promise = (
-
-void 0
-    );
-    var signal = source(
-UNINITIALIZED
-    );
-    var prev = null;
-    var should_suspend = !active_reaction;
-    async_effect(() => {
-      try {
-        var p = fn();
-        if (prev) Promise.resolve(p).catch(() => {
-        });
-      } catch (error) {
-        p = Promise.reject(error);
-      }
-      var r2 = () => p;
-      promise = prev?.then(r2, r2) ?? Promise.resolve(p);
-      prev = promise;
-      var batch = (
-current_batch
-      );
-      var pending = boundary.pending;
-      if (should_suspend) {
-        boundary.update_pending_count(1);
-        if (!pending) batch.increment();
-      }
-      const handler = (value, error = void 0) => {
-        prev = null;
-        if (!pending) batch.activate();
-        if (error) {
-          if (error !== STALE_REACTION) {
-            signal.f |= ERROR_VALUE;
-            internal_set(signal, error);
-          }
-        } else {
-          if ((signal.f & ERROR_VALUE) !== 0) {
-            signal.f ^= ERROR_VALUE;
-          }
-          internal_set(signal, value);
-        }
-        if (should_suspend) {
-          boundary.update_pending_count(-1);
-          if (!pending) batch.decrement();
-        }
-        unset_context();
-      };
-      promise.then(handler, (e) => handler(null, e || "unknown"));
-      if (batch) {
-        return () => {
-          queueMicrotask(() => batch.neuter());
-        };
-      }
-    });
-    return new Promise((fulfil) => {
-      function next(p) {
-        function go() {
-          if (p === promise) {
-            fulfil(signal);
-          } else {
-            next(promise);
-          }
-        }
-        p.then(go, go);
-      }
-      next(promise);
-    });
-  }
-function user_derived(fn) {
-    const d = derived(fn);
-    push_reaction_value(d);
-    return d;
-  }
-function derived_safe_equal(fn) {
-    const signal = derived(fn);
-    signal.equals = safe_equals;
-    return signal;
-  }
-  function destroy_derived_effects(derived2) {
-    var effects = derived2.effects;
-    if (effects !== null) {
-      derived2.effects = null;
-      for (var i = 0; i < effects.length; i += 1) {
-        destroy_effect(
-effects[i]
-        );
-      }
-    }
-  }
-  function get_derived_parent_effect(derived2) {
-    var parent = derived2.parent;
-    while (parent !== null) {
-      if ((parent.f & DERIVED) === 0) {
-        return (
-parent
-        );
-      }
-      parent = parent.parent;
-    }
-    return null;
-  }
-  function execute_derived(derived2) {
-    var value;
-    var prev_active_effect = active_effect;
-    set_active_effect(get_derived_parent_effect(derived2));
-    {
-      try {
-        destroy_derived_effects(derived2);
-        value = update_reaction(derived2);
-      } finally {
-        set_active_effect(prev_active_effect);
-      }
-    }
-    return value;
-  }
-  function update_derived(derived2) {
-    var value = execute_derived(derived2);
-    if (!derived2.equals(value)) {
-      derived2.v = value;
-      derived2.wv = increment_write_version();
-    }
-    if (is_destroying_effect) {
-      return;
-    }
-    {
-      var status = (skip_reaction || (derived2.f & UNOWNED) !== 0) && derived2.deps !== null ? MAYBE_DIRTY : CLEAN;
-      set_signal_status(derived2, status);
-    }
-  }
-  function flatten(sync, async, fn) {
-    const d = is_runes() ? derived : derived_safe_equal;
-    if (async.length === 0) {
-      fn(sync.map(d));
-      return;
-    }
-    var batch = current_batch;
-    var parent = (
-active_effect
-    );
-    var restore = capture();
-    var boundary = get_pending_boundary();
-    Promise.all(async.map((expression) => async_derived(expression))).then((result) => {
-      batch?.activate();
-      restore();
-      try {
-        fn([...sync.map(d), ...result]);
-      } catch (error) {
-        if ((parent.f & DESTROYED) === 0) {
-          invoke_error_boundary(error, parent);
-        }
-      }
-      batch?.deactivate();
-      unset_context();
-    }).catch((error) => {
-      boundary.error(error);
-    });
-  }
-  function capture() {
-    var previous_effect = active_effect;
-    var previous_reaction = active_reaction;
-    var previous_component_context = component_context;
-    var previous_batch2 = current_batch;
-    return function restore() {
-      set_active_effect(previous_effect);
-      set_active_reaction(previous_reaction);
-      set_component_context(previous_component_context);
-      previous_batch2?.activate();
-    };
-  }
-  function unset_context() {
-    set_active_effect(null);
-    set_active_reaction(null);
-    set_component_context(null);
-  }
   const batches = new Set();
   let current_batch = null;
   let previous_batch = null;
   let effect_pending_updates = new Set();
-  let tasks = [];
-  function dequeue() {
-    const task = (
-tasks.shift()
-    );
-    if (tasks.length > 0) {
-      queueMicrotask(dequeue);
-    }
-    task();
-  }
   let queued_root_effects = [];
   let last_scheduled_effect = null;
   let is_flushing = false;
@@ -593,18 +369,18 @@ process(root_effects) {
       root2.f ^= CLEAN;
       var effect2 = root2.first;
       while (effect2 !== null) {
-        var flags = effect2.f;
-        var is_branch = (flags & (BRANCH_EFFECT | ROOT_EFFECT)) !== 0;
-        var is_skippable_branch = is_branch && (flags & CLEAN) !== 0;
-        var skip = is_skippable_branch || (flags & INERT) !== 0 || this.skipped_effects.has(effect2);
+        var flags2 = effect2.f;
+        var is_branch = (flags2 & (BRANCH_EFFECT | ROOT_EFFECT)) !== 0;
+        var is_skippable_branch = is_branch && (flags2 & CLEAN) !== 0;
+        var skip = is_skippable_branch || (flags2 & INERT) !== 0 || this.skipped_effects.has(effect2);
         if (!skip && effect2.fn !== null) {
           if (is_branch) {
             effect2.f ^= CLEAN;
-          } else if ((flags & EFFECT) !== 0) {
+          } else if ((flags2 & EFFECT) !== 0) {
             this.#effects.push(effect2);
-          } else if ((flags & CLEAN) === 0) {
-            if ((flags & ASYNC) !== 0) {
-              var effects = effect2.b?.pending ? this.#boundary_async_effects : this.#async_effects;
+          } else if ((flags2 & CLEAN) === 0) {
+            if ((flags2 & ASYNC) !== 0) {
+              var effects = effect2.b?.is_pending() ? this.#boundary_async_effects : this.#async_effects;
               effects.push(effect2);
             } else if (is_dirty(effect2)) {
               if ((effect2.f & BLOCK_EFFECT) !== 0) this.#block_effects.push(effect2);
@@ -721,10 +497,7 @@ add_callback(fn) {
       return current_batch;
     }
 static enqueue(task) {
-      if (tasks.length === 0) {
-        queueMicrotask(dequeue);
-      }
-      tasks.unshift(task);
+      queue_micro_task(task);
     }
   }
   function flushSync(fn) {
@@ -735,7 +508,7 @@ static enqueue(task) {
       if (fn) ;
       while (true) {
         flush_tasks();
-        if (queued_root_effects.length === 0) {
+        if (queued_root_effects.length === 0 && !has_pending_tasks()) {
           current_batch?.flush();
           if (queued_root_effects.length === 0) {
             last_scheduled_effect = null;
@@ -811,16 +584,504 @@ result
     var effect2 = last_scheduled_effect = signal;
     while (effect2.parent !== null) {
       effect2 = effect2.parent;
-      var flags = effect2.f;
-      if (is_flushing && effect2 === active_effect && (flags & BLOCK_EFFECT) !== 0) {
+      var flags2 = effect2.f;
+      if (is_flushing && effect2 === active_effect && (flags2 & BLOCK_EFFECT) !== 0) {
         return;
       }
-      if ((flags & (ROOT_EFFECT | BRANCH_EFFECT)) !== 0) {
-        if ((flags & CLEAN) === 0) return;
+      if ((flags2 & (ROOT_EFFECT | BRANCH_EFFECT)) !== 0) {
+        if ((flags2 & CLEAN) === 0) return;
         effect2.f ^= CLEAN;
       }
     }
     queued_root_effects.push(effect2);
+  }
+  function createSubscriber(start) {
+    let subscribers = 0;
+    let version = source(0);
+    let stop;
+    return () => {
+      if (effect_tracking()) {
+        get(version);
+        render_effect(() => {
+          if (subscribers === 0) {
+            stop = untrack(() => start(() => increment(version)));
+          }
+          subscribers += 1;
+          return () => {
+            queue_micro_task(() => {
+              subscribers -= 1;
+              if (subscribers === 0) {
+                stop?.();
+                stop = void 0;
+                increment(version);
+              }
+            });
+          };
+        });
+      }
+    };
+  }
+  var flags = EFFECT_TRANSPARENT | EFFECT_PRESERVED | BOUNDARY_EFFECT;
+  function boundary(node, props, children) {
+    new Boundary(node, props, children);
+  }
+  class Boundary {
+parent;
+    #pending = false;
+#anchor;
+#hydrate_open = null;
+#props;
+#children;
+#effect;
+#main_effect = null;
+#pending_effect = null;
+#failed_effect = null;
+#offscreen_fragment = null;
+    #local_pending_count = 0;
+    #pending_count = 0;
+    #is_creating_fallback = false;
+#effect_pending = null;
+    #effect_pending_update = () => {
+      if (this.#effect_pending) {
+        internal_set(this.#effect_pending, this.#local_pending_count);
+      }
+    };
+    #effect_pending_subscriber = createSubscriber(() => {
+      this.#effect_pending = source(this.#local_pending_count);
+      return () => {
+        this.#effect_pending = null;
+      };
+    });
+constructor(node, props, children) {
+      this.#anchor = node;
+      this.#props = props;
+      this.#children = children;
+      this.parent =
+active_effect.b;
+      this.#pending = !!this.#props.pending;
+      this.#effect = block(() => {
+        active_effect.b = this;
+        {
+          try {
+            this.#main_effect = branch(() => children(this.#anchor));
+          } catch (error) {
+            this.error(error);
+          }
+          if (this.#pending_count > 0) {
+            this.#show_pending_snippet();
+          } else {
+            this.#pending = false;
+          }
+        }
+      }, flags);
+    }
+    #hydrate_resolved_content() {
+      try {
+        this.#main_effect = branch(() => this.#children(this.#anchor));
+      } catch (error) {
+        this.error(error);
+      }
+      this.#pending = false;
+    }
+    #hydrate_pending_content() {
+      const pending = this.#props.pending;
+      if (!pending) {
+        return;
+      }
+      this.#pending_effect = branch(() => pending(this.#anchor));
+      Batch.enqueue(() => {
+        this.#main_effect = this.#run(() => {
+          Batch.ensure();
+          return branch(() => this.#children(this.#anchor));
+        });
+        if (this.#pending_count > 0) {
+          this.#show_pending_snippet();
+        } else {
+          pause_effect(
+this.#pending_effect,
+            () => {
+              this.#pending_effect = null;
+            }
+          );
+          this.#pending = false;
+        }
+      });
+    }
+is_pending() {
+      return this.#pending || !!this.parent && this.parent.is_pending();
+    }
+    has_pending_snippet() {
+      return !!this.#props.pending;
+    }
+#run(fn) {
+      var previous_effect = active_effect;
+      var previous_reaction = active_reaction;
+      var previous_ctx = component_context;
+      set_active_effect(this.#effect);
+      set_active_reaction(this.#effect);
+      set_component_context(this.#effect.ctx);
+      try {
+        return fn();
+      } catch (e) {
+        handle_error(e);
+        return null;
+      } finally {
+        set_active_effect(previous_effect);
+        set_active_reaction(previous_reaction);
+        set_component_context(previous_ctx);
+      }
+    }
+    #show_pending_snippet() {
+      const pending = (
+this.#props.pending
+      );
+      if (this.#main_effect !== null) {
+        this.#offscreen_fragment = document.createDocumentFragment();
+        move_effect(this.#main_effect, this.#offscreen_fragment);
+      }
+      if (this.#pending_effect === null) {
+        this.#pending_effect = branch(() => pending(this.#anchor));
+      }
+    }
+#update_pending_count(d) {
+      if (!this.has_pending_snippet()) {
+        if (this.parent) {
+          this.parent.#update_pending_count(d);
+        }
+        return;
+      }
+      this.#pending_count += d;
+      if (this.#pending_count === 0) {
+        this.#pending = false;
+        if (this.#pending_effect) {
+          pause_effect(this.#pending_effect, () => {
+            this.#pending_effect = null;
+          });
+        }
+        if (this.#offscreen_fragment) {
+          this.#anchor.before(this.#offscreen_fragment);
+          this.#offscreen_fragment = null;
+        }
+      }
+    }
+update_pending_count(d) {
+      this.#update_pending_count(d);
+      this.#local_pending_count += d;
+      effect_pending_updates.add(this.#effect_pending_update);
+    }
+    get_effect_pending() {
+      this.#effect_pending_subscriber();
+      return get(
+this.#effect_pending
+      );
+    }
+error(error) {
+      var onerror = this.#props.onerror;
+      let failed = this.#props.failed;
+      if (this.#is_creating_fallback || !onerror && !failed) {
+        throw error;
+      }
+      if (this.#main_effect) {
+        destroy_effect(this.#main_effect);
+        this.#main_effect = null;
+      }
+      if (this.#pending_effect) {
+        destroy_effect(this.#pending_effect);
+        this.#pending_effect = null;
+      }
+      if (this.#failed_effect) {
+        destroy_effect(this.#failed_effect);
+        this.#failed_effect = null;
+      }
+      var did_reset = false;
+      var calling_on_error = false;
+      const reset = () => {
+        if (did_reset) {
+          svelte_boundary_reset_noop();
+          return;
+        }
+        did_reset = true;
+        if (calling_on_error) {
+          svelte_boundary_reset_onerror();
+        }
+        Batch.ensure();
+        this.#local_pending_count = 0;
+        if (this.#failed_effect !== null) {
+          pause_effect(this.#failed_effect, () => {
+            this.#failed_effect = null;
+          });
+        }
+        this.#pending = this.has_pending_snippet();
+        this.#main_effect = this.#run(() => {
+          this.#is_creating_fallback = false;
+          return branch(() => this.#children(this.#anchor));
+        });
+        if (this.#pending_count > 0) {
+          this.#show_pending_snippet();
+        } else {
+          this.#pending = false;
+        }
+      };
+      var previous_reaction = active_reaction;
+      try {
+        set_active_reaction(null);
+        calling_on_error = true;
+        onerror?.(error, reset);
+        calling_on_error = false;
+      } catch (error2) {
+        invoke_error_boundary(error2, this.#effect && this.#effect.parent);
+      } finally {
+        set_active_reaction(previous_reaction);
+      }
+      if (failed) {
+        queue_micro_task(() => {
+          this.#failed_effect = this.#run(() => {
+            this.#is_creating_fallback = true;
+            try {
+              return branch(() => {
+                failed(
+                  this.#anchor,
+                  () => error,
+                  () => reset
+                );
+              });
+            } catch (error2) {
+              invoke_error_boundary(
+                error2,
+this.#effect.parent
+              );
+              return null;
+            } finally {
+              this.#is_creating_fallback = false;
+            }
+          });
+        });
+      }
+    }
+  }
+  function move_effect(effect2, fragment) {
+    var node = effect2.nodes_start;
+    var end = effect2.nodes_end;
+    while (node !== null) {
+      var next = node === end ? null : (
+
+get_next_sibling(node)
+      );
+      fragment.append(node);
+      node = next;
+    }
+  }
+  function flatten(sync, async, fn) {
+    const d = is_runes() ? derived : derived_safe_equal;
+    if (async.length === 0) {
+      fn(sync.map(d));
+      return;
+    }
+    var batch = current_batch;
+    var parent = (
+active_effect
+    );
+    var restore = capture();
+    Promise.all(async.map((expression) => async_derived(expression))).then((result) => {
+      batch?.activate();
+      restore();
+      try {
+        fn([...sync.map(d), ...result]);
+      } catch (error) {
+        if ((parent.f & DESTROYED) === 0) {
+          invoke_error_boundary(error, parent);
+        }
+      }
+      batch?.deactivate();
+      unset_context();
+    }).catch((error) => {
+      invoke_error_boundary(error, parent);
+    });
+  }
+  function capture() {
+    var previous_effect = active_effect;
+    var previous_reaction = active_reaction;
+    var previous_component_context = component_context;
+    var previous_batch2 = current_batch;
+    return function restore() {
+      set_active_effect(previous_effect);
+      set_active_reaction(previous_reaction);
+      set_component_context(previous_component_context);
+      previous_batch2?.activate();
+    };
+  }
+  function unset_context() {
+    set_active_effect(null);
+    set_active_reaction(null);
+    set_component_context(null);
+  }
+function derived(fn) {
+    var flags2 = DERIVED | DIRTY;
+    var parent_derived = active_reaction !== null && (active_reaction.f & DERIVED) !== 0 ? (
+active_reaction
+    ) : null;
+    if (active_effect === null || parent_derived !== null && (parent_derived.f & UNOWNED) !== 0) {
+      flags2 |= UNOWNED;
+    } else {
+      active_effect.f |= EFFECT_PRESERVED;
+    }
+    const signal = {
+      ctx: component_context,
+      deps: null,
+      effects: null,
+      equals,
+      f: flags2,
+      fn,
+      reactions: null,
+      rv: 0,
+      v: (
+UNINITIALIZED
+      ),
+      wv: 0,
+      parent: parent_derived ?? active_effect,
+      ac: null
+    };
+    return signal;
+  }
+function async_derived(fn, location2) {
+    let parent = (
+active_effect
+    );
+    if (parent === null) {
+      async_derived_orphan();
+    }
+    var boundary2 = (
+parent.b
+    );
+    var promise = (
+
+void 0
+    );
+    var signal = source(
+UNINITIALIZED
+    );
+    var prev = null;
+    var should_suspend = !active_reaction;
+    async_effect(() => {
+      try {
+        var p = fn();
+        if (prev) Promise.resolve(p).catch(() => {
+        });
+      } catch (error) {
+        p = Promise.reject(error);
+      }
+      var r2 = () => p;
+      promise = prev?.then(r2, r2) ?? Promise.resolve(p);
+      prev = promise;
+      var batch = (
+current_batch
+      );
+      var pending = boundary2.is_pending();
+      if (should_suspend) {
+        boundary2.update_pending_count(1);
+        if (!pending) batch.increment();
+      }
+      const handler = (value, error = void 0) => {
+        prev = null;
+        if (!pending) batch.activate();
+        if (error) {
+          if (error !== STALE_REACTION) {
+            signal.f |= ERROR_VALUE;
+            internal_set(signal, error);
+          }
+        } else {
+          if ((signal.f & ERROR_VALUE) !== 0) {
+            signal.f ^= ERROR_VALUE;
+          }
+          internal_set(signal, value);
+        }
+        if (should_suspend) {
+          boundary2.update_pending_count(-1);
+          if (!pending) batch.decrement();
+        }
+        unset_context();
+      };
+      promise.then(handler, (e) => handler(null, e || "unknown"));
+      if (batch) {
+        return () => {
+          queueMicrotask(() => batch.neuter());
+        };
+      }
+    });
+    return new Promise((fulfil) => {
+      function next(p) {
+        function go() {
+          if (p === promise) {
+            fulfil(signal);
+          } else {
+            next(promise);
+          }
+        }
+        p.then(go, go);
+      }
+      next(promise);
+    });
+  }
+function user_derived(fn) {
+    const d = derived(fn);
+    push_reaction_value(d);
+    return d;
+  }
+function derived_safe_equal(fn) {
+    const signal = derived(fn);
+    signal.equals = safe_equals;
+    return signal;
+  }
+  function destroy_derived_effects(derived2) {
+    var effects = derived2.effects;
+    if (effects !== null) {
+      derived2.effects = null;
+      for (var i = 0; i < effects.length; i += 1) {
+        destroy_effect(
+effects[i]
+        );
+      }
+    }
+  }
+  function get_derived_parent_effect(derived2) {
+    var parent = derived2.parent;
+    while (parent !== null) {
+      if ((parent.f & DERIVED) === 0) {
+        return (
+parent
+        );
+      }
+      parent = parent.parent;
+    }
+    return null;
+  }
+  function execute_derived(derived2) {
+    var value;
+    var prev_active_effect = active_effect;
+    set_active_effect(get_derived_parent_effect(derived2));
+    {
+      try {
+        destroy_derived_effects(derived2);
+        value = update_reaction(derived2);
+      } finally {
+        set_active_effect(prev_active_effect);
+      }
+    }
+    return value;
+  }
+  function update_derived(derived2) {
+    var value = execute_derived(derived2);
+    if (!derived2.equals(value)) {
+      derived2.v = value;
+      derived2.wv = increment_write_version();
+    }
+    if (is_destroying_effect) {
+      return;
+    }
+    {
+      var status = (skip_reaction || (derived2.f & UNOWNED) !== 0) && derived2.deps !== null ? MAYBE_DIRTY : CLEAN;
+      set_signal_status(derived2, status);
+    }
   }
   const old_values = new Map();
   function source(v, stack) {
@@ -899,19 +1160,19 @@ source2
     var length = reactions.length;
     for (var i = 0; i < length; i++) {
       var reaction = reactions[i];
-      var flags = reaction.f;
+      var flags2 = reaction.f;
       if (!runes && reaction === active_effect) continue;
-      var not_dirty = (flags & DIRTY) === 0;
+      var not_dirty = (flags2 & DIRTY) === 0;
       if (not_dirty) {
         set_signal_status(reaction, status);
       }
-      if ((flags & DERIVED) !== 0) {
+      if ((flags2 & DERIVED) !== 0) {
         mark_reactions(
 reaction,
           MAYBE_DIRTY
         );
       } else if (not_dirty) {
-        if ((flags & BLOCK_EFFECT) !== 0) {
+        if ((flags2 & BLOCK_EFFECT) !== 0) {
           if (eager_block_effects !== null) {
             eager_block_effects.push(
 reaction
@@ -1153,7 +1414,7 @@ function get_next_sibling(node) {
       return get_first_child(node);
     }
   }
-  function first_child(fragment, is_text) {
+  function first_child(fragment, is_text = false) {
     {
       var first = (
 
@@ -1302,6 +1563,9 @@ active_reaction
     }
     return effect2;
   }
+  function effect_tracking() {
+    return active_reaction !== null && !untracking;
+  }
   function teardown(fn) {
     const effect2 = create_effect(RENDER_EFFECT, null, false);
     set_signal_status(effect2, CLEAN);
@@ -1310,10 +1574,10 @@ active_reaction
   }
   function user_effect(fn) {
     validate_effect();
-    var flags = (
+    var flags2 = (
 active_effect.f
     );
-    var defer = !active_reaction && (flags & BRANCH_EFFECT) !== 0 && (flags & EFFECT_RAN) === 0;
+    var defer = !active_reaction && (flags2 & BRANCH_EFFECT) !== 0 && (flags2 & EFFECT_RAN) === 0;
     if (defer) {
       var context = (
 component_context
@@ -1353,16 +1617,16 @@ component_context
   function async_effect(fn) {
     return create_effect(ASYNC | EFFECT_PRESERVED, fn, true);
   }
-  function render_effect(fn, flags = 0) {
-    return create_effect(RENDER_EFFECT | flags, fn, true);
+  function render_effect(fn, flags2 = 0) {
+    return create_effect(RENDER_EFFECT | flags2, fn, true);
   }
   function template_effect(fn, sync = [], async = []) {
     flatten(sync, async, (values) => {
       create_effect(RENDER_EFFECT, () => fn(...values.map(get)), true);
     });
   }
-  function block(fn, flags = 0) {
-    var effect2 = create_effect(BLOCK_EFFECT | flags, fn, true);
+  function block(fn, flags2 = 0) {
+    var effect2 = create_effect(BLOCK_EFFECT | flags2, fn, true);
     return effect2;
   }
   function branch(fn, push2 = true) {
@@ -1564,17 +1828,17 @@ get_next_sibling(node)
     return ++write_version;
   }
   function is_dirty(reaction) {
-    var flags = reaction.f;
-    if ((flags & DIRTY) !== 0) {
+    var flags2 = reaction.f;
+    if ((flags2 & DIRTY) !== 0) {
       return true;
     }
-    if ((flags & MAYBE_DIRTY) !== 0) {
+    if ((flags2 & MAYBE_DIRTY) !== 0) {
       var dependencies = reaction.deps;
-      var is_unowned = (flags & UNOWNED) !== 0;
+      var is_unowned = (flags2 & UNOWNED) !== 0;
       if (dependencies !== null) {
         var i;
         var dependency;
-        var is_disconnected = (flags & DISCONNECTED) !== 0;
+        var is_disconnected = (flags2 & DISCONNECTED) !== 0;
         var is_unowned_connected = is_unowned && active_effect !== null && !skip_reaction;
         var length = dependencies.length;
         if ((is_disconnected || is_unowned_connected) && (active_effect === null || (active_effect.f & DESTROYED) === 0)) {
@@ -1651,13 +1915,13 @@ reaction
     var previous_component_context = component_context;
     var previous_untracking = untracking;
     var previous_update_version = update_version;
-    var flags = reaction.f;
+    var flags2 = reaction.f;
     new_deps =
 null;
     skipped_deps = 0;
     untracked_writes = null;
-    skip_reaction = (flags & UNOWNED) !== 0 && (untracking || !is_updating_effect || active_reaction === null);
-    active_reaction = (flags & (BRANCH_EFFECT | ROOT_EFFECT)) === 0 ? reaction : null;
+    skip_reaction = (flags2 & UNOWNED) !== 0 && (untracking || !is_updating_effect || active_reaction === null);
+    active_reaction = (flags2 & (BRANCH_EFFECT | ROOT_EFFECT)) === 0 ? reaction : null;
     current_sources = null;
     set_component_context(reaction.ctx);
     untracking = false;
@@ -1687,7 +1951,7 @@ reaction.fn
           reaction.deps = deps = new_deps;
         }
         if (!skip_reaction ||
-(flags & DERIVED) !== 0 &&
+(flags2 & DERIVED) !== 0 &&
 reaction.reactions !== null) {
           for (i = skipped_deps; i < deps.length; i++) {
             (deps[i].reactions ??= []).push(reaction);
@@ -1775,8 +2039,8 @@ dependency,
     }
   }
   function update_effect(effect2) {
-    var flags = effect2.f;
-    if ((flags & DESTROYED) !== 0) {
+    var flags2 = effect2.f;
+    if ((flags2 & DESTROYED) !== 0) {
       return;
     }
     set_signal_status(effect2, CLEAN);
@@ -1785,7 +2049,7 @@ dependency,
     active_effect = effect2;
     is_updating_effect = true;
     try {
-      if ((flags & BLOCK_EFFECT) !== 0) {
+      if ((flags2 & BLOCK_EFFECT) !== 0) {
         destroy_block_effect_children(effect2);
       } else {
         destroy_effect_children(effect2);
@@ -1806,8 +2070,8 @@ dependency,
     flushSync();
   }
   function get(signal) {
-    var flags = signal.f;
-    var is_derived = (flags & DERIVED) !== 0;
+    var flags2 = signal.f;
+    var is_derived = (flags2 & DERIVED) !== 0;
     if (active_reaction !== null && !untracking) {
       var destroyed = active_effect !== null && (active_effect.f & DESTROYED) !== 0;
       if (!destroyed && !current_sources?.includes(signal)) {
@@ -2105,9 +2369,9 @@ active_effect
       effect2.nodes_end = end;
     }
   }
-function from_html(content, flags) {
-    var is_fragment = (flags & TEMPLATE_FRAGMENT) !== 0;
-    var use_import_node = (flags & TEMPLATE_USE_IMPORT_NODE) !== 0;
+function from_html(content, flags2) {
+    var is_fragment = (flags2 & TEMPLATE_FRAGMENT) !== 0;
+    var use_import_node = (flags2 & TEMPLATE_USE_IMPORT_NODE) !== 0;
     var node;
     var has_start = !content.startsWith("<!>");
     return () => {
@@ -2135,7 +2399,7 @@ clone.lastChild
       return clone;
     };
   }
-function from_namespace(content, flags, ns = "svg") {
+function from_namespace(content, flags2, ns = "svg") {
     var has_start = !content.startsWith("<!>");
     var wrapped = `<${ns}>${has_start ? content : "<!>" + content}</${ns}>`;
     var node;
@@ -2163,8 +2427,8 @@ node.cloneNode(true)
       return clone;
     };
   }
-function from_svg(content, flags) {
-    return from_namespace(content, flags, "svg");
+function from_svg(content, flags2) {
+    return from_namespace(content, flags2, "svg");
   }
   function text(value = "") {
     {
@@ -2225,24 +2489,31 @@ dom
     var component = void 0;
     var unmount = component_root(() => {
       var anchor_node = anchor ?? target.appendChild(create_text());
-      branch(() => {
-        if (context) {
-          push({});
-          var ctx = (
+      boundary(
+anchor_node,
+        {
+          pending: () => {
+          }
+        },
+        (anchor_node2) => {
+          if (context) {
+            push({});
+            var ctx = (
 component_context
-          );
-          ctx.c = context;
+            );
+            ctx.c = context;
+          }
+          if (events) {
+            props.$$events = events;
+          }
+          should_intro = intro;
+          component = Component(anchor_node2, props) || {};
+          should_intro = true;
+          if (context) {
+            pop();
+          }
         }
-        if (events) {
-          props.$$events = events;
-        }
-        should_intro = intro;
-        component = Component(anchor_node, props) || {};
-        should_intro = true;
-        if (context) {
-          pop();
-        }
-      });
+      );
       return () => {
         for (var event_name of registered_events) {
           target.removeEventListener(event_name, handle_event_propagation);
@@ -2355,7 +2626,7 @@ void 0,
     var consequent_effect = null;
     var alternate_effect = null;
     var condition = UNINITIALIZED;
-    var flags = elseif ? EFFECT_TRANSPARENT : 0;
+    var flags2 = elseif ? EFFECT_TRANSPARENT : 0;
     var has_branch = false;
     const set_branch = (fn2, flag = true) => {
       has_branch = true;
@@ -2395,7 +2666,7 @@ void 0,
       if (!has_branch) {
         update_branch(null, null);
       }
-    }, flags);
+    }, flags2);
   }
   function index(_, i) {
     return i;
@@ -2431,10 +2702,10 @@ controlled_anchor
       }
     });
   }
-  function each(node, flags, get_collection, get_key, render_fn, fallback_fn = null) {
+  function each(node, flags2, get_collection, get_key, render_fn, fallback_fn = null) {
     var anchor = node;
-    var state2 = { flags, items: new Map(), first: null };
-    var is_controlled = (flags & EACH_IS_CONTROLLED) !== 0;
+    var state2 = { flags: flags2, items: new Map(), first: null };
+    var is_controlled = (flags2 & EACH_IS_CONTROLLED) !== 0;
     if (is_controlled) {
       var parent_node = (
 node
@@ -2458,7 +2729,7 @@ node
         offscreen_items,
         anchor,
         render_fn,
-        flags,
+        flags2,
         get_key,
         get_collection
       );
@@ -2494,9 +2765,9 @@ get(each_array);
       get(each_array);
     });
   }
-  function reconcile(each_effect, array, state2, offscreen_items, anchor, render_fn, flags, get_key, get_collection) {
-    var is_animated = (flags & EACH_IS_ANIMATED) !== 0;
-    var should_update = (flags & (EACH_ITEM_REACTIVE | EACH_INDEX_REACTIVE)) !== 0;
+  function reconcile(each_effect, array, state2, offscreen_items, anchor, render_fn, flags2, get_key, get_collection) {
+    var is_animated = (flags2 & EACH_IS_ANIMATED) !== 0;
+    var should_update = (flags2 & (EACH_ITEM_REACTIVE | EACH_INDEX_REACTIVE)) !== 0;
     var length = array.length;
     var items = state2.items;
     var first = state2.first;
@@ -2548,7 +2819,7 @@ current.e.nodes_start
             key,
             i,
             render_fn,
-            flags,
+            flags2,
             get_collection
           );
         }
@@ -2559,7 +2830,7 @@ current.e.nodes_start
         continue;
       }
       if (should_update) {
-        update_item(item, value, i, flags);
+        update_item(item, value, i, flags2);
       }
       if ((item.e.f & INERT) !== 0) {
         resume_effect(item.e);
@@ -2628,7 +2899,7 @@ current.e.nodes_start
       }
       var destroy_length = to_destroy.length;
       if (destroy_length > 0) {
-        var controlled_anchor = (flags & EACH_IS_CONTROLLED) !== 0 && length === 0 ? anchor : null;
+        var controlled_anchor = (flags2 & EACH_IS_CONTROLLED) !== 0 && length === 0 ? anchor : null;
         if (is_animated) {
           for (i = 0; i < destroy_length; i += 1) {
             to_destroy[i].a?.measure();
@@ -2668,11 +2939,11 @@ item.i,
       item.i = index2;
     }
   }
-  function create_item(anchor, state2, prev, next, value, key, index2, render_fn, flags, get_collection, deferred2) {
-    var reactive = (flags & EACH_ITEM_REACTIVE) !== 0;
-    var mutable = (flags & EACH_ITEM_IMMUTABLE) === 0;
+  function create_item(anchor, state2, prev, next, value, key, index2, render_fn, flags2, get_collection, deferred2) {
+    var reactive = (flags2 & EACH_ITEM_REACTIVE) !== 0;
+    var mutable = (flags2 & EACH_ITEM_IMMUTABLE) === 0;
     var v = reactive ? mutable ? mutable_source(value, false, false) : source(value) : value;
-    var i = (flags & EACH_INDEX_REACTIVE) === 0 ? index2 : source(index2);
+    var i = (flags2 & EACH_INDEX_REACTIVE) === 0 ? index2 : source(index2);
     var item = {
       i,
       v,
@@ -3063,11 +3334,11 @@ tick: (
     return keyframe;
   }
   const linear$1 = (t) => t;
-  function transition(flags, element, get_fn, get_params) {
-    var is_intro = (flags & TRANSITION_IN) !== 0;
-    var is_outro = (flags & TRANSITION_OUT) !== 0;
+  function transition(flags2, element, get_fn, get_params) {
+    var is_intro = (flags2 & TRANSITION_IN) !== 0;
+    var is_outro = (flags2 & TRANSITION_OUT) !== 0;
     var is_both = is_intro && is_outro;
-    var is_global = (flags & TRANSITION_GLOBAL) !== 0;
+    var is_global = (flags2 & TRANSITION_GLOBAL) !== 0;
     var direction = is_both ? "both" : is_intro ? "in" : "out";
     var current_options;
     var inert = element.inert;
@@ -3479,10 +3750,10 @@ component_context
       is_store_binding = previous_is_store_binding;
     }
   }
-  function prop(props, key, flags, fallback) {
-    var runes = !legacy_mode_flag || (flags & PROPS_IS_RUNES) !== 0;
-    var bindable = (flags & PROPS_IS_BINDABLE) !== 0;
-    var lazy = (flags & PROPS_IS_LAZY_INITIAL) !== 0;
+  function prop(props, key, flags2, fallback) {
+    var runes = !legacy_mode_flag || (flags2 & PROPS_IS_RUNES) !== 0;
+    var bindable = (flags2 & PROPS_IS_BINDABLE) !== 0;
+    var lazy = (flags2 & PROPS_IS_LAZY_INITIAL) !== 0;
     var fallback_value = (
 fallback
     );
@@ -3535,7 +3806,7 @@ void 0;
         return value === void 0 ? fallback_value : value;
       };
     }
-    if (runes && (flags & PROPS_IS_UPDATED) === 0) {
+    if (runes && (flags2 & PROPS_IS_UPDATED) === 0) {
       return getter;
     }
     if (setter) {
@@ -3553,7 +3824,7 @@ void 0;
       );
     }
     var overridden = false;
-    var d = ((flags & PROPS_IS_IMMUTABLE) !== 0 ? derived : derived_safe_equal)(() => {
+    var d = ((flags2 & PROPS_IS_IMMUTABLE) !== 0 ? derived : derived_safe_equal)(() => {
       overridden = false;
       return getter();
     });
@@ -3751,6 +4022,7 @@ context.l
     imgRefs: [],
     showFileList: false,
     fileListData: null,
+    columnCount: 1,
     toggleFileList() {
       this.showFileList = !this.showFileList;
     },
@@ -4173,6 +4445,31 @@ default:
     localStorage.setItem(RESIZE_KEY, DEFAULT_WIDTH.toString());
     store.resizeWidth = DEFAULT_WIDTH;
   }
+  const DEFAULT_COUNT = 1;
+  const COLUMN_COUNT_KEY = "grid-size-width";
+  function loadColumnCount() {
+    try {
+      const stored = localStorage.getItem(COLUMN_COUNT_KEY);
+      if (stored) return parseInt(stored);
+    } catch (error) {
+      console.warn(
+        `Failed to load ${COLUMN_COUNT_KEY} from localStorage:`,
+        error
+      );
+    }
+    return DEFAULT_COUNT;
+  }
+  function saveColumnCount(value) {
+    try {
+      localStorage.setItem(COLUMN_COUNT_KEY, value.toString());
+    } catch (error) {
+      console.warn(`Failed to save ${COLUMN_COUNT_KEY} to localStorage:`, error);
+    }
+  }
+  function restoreColumnCount() {
+    localStorage.setItem(COLUMN_COUNT_KEY, DEFAULT_COUNT.toString());
+    store.columnCount = DEFAULT_COUNT;
+  }
   const parser$3 = new DOMParser();
   const decoder = new TextDecoder("windows-1251");
   const regex = /\b\d+[pk]\b/gi;
@@ -4266,6 +4563,7 @@ default:
     restorePerformerLinks();
     restoreResize();
     restoreRelated();
+    restoreColumnCount();
     clearCache();
   }
   const SYNC_TRIGGER_KEY = "sync-trigger";
@@ -4314,6 +4612,8 @@ localStorage.setItem("${LINKS_KEY}", JSON.stringify(${JSON.stringify(
   )}));
 
 localStorage.setItem("${RESIZE_KEY}", "${store.resizeWidth || "100"}");
+
+localStorage.setItem("${COLUMN_COUNT_KEY}", "${store.columnCount || "1"}");
 
 location.reload();
 `;
@@ -4482,16 +4782,12 @@ location.reload();
       Digit4: handleDigit4
     };
     function handleSpace(event2) {
-      if (!getSettings("spaceImageAnchor") || !$$_import_store().imgRefs.length || !$$_import_store().ultraImages) return;
+      if (!getSettings("spaceImageAnchor") || !$$_import_store().imgRefs.length || !$$_import_store().ultraImages || $$_import_store().columnCount !== 1) return;
       const scrollY = window.scrollY;
       const containerTop = $$_import_store().ultraImages.offsetTop;
       const containerBottom = containerTop + $$_import_store().ultraImages.offsetHeight;
       if (containerTop >= scrollY + window.innerHeight || containerBottom <= scrollY) return;
       let imgRefs = [...$$_import_store().imgRefs];
-      if (getSettings("lastImageFirst") && imgRefs.length > 1) {
-        const lastImg = imgRefs.pop();
-        if (lastImg) imgRefs.unshift(lastImg);
-      }
       let filteredImgRefs = imgRefs.filter((el) => el.dataset["broken"] !== "true");
       if (filteredImgRefs.length === 0) return;
       if (scrollY < containerTop) {
@@ -4576,7 +4872,7 @@ location.reload();
     var a_2 = root_7$3();
     set_attribute(a_2, "href", get(href));
     var i = child(a_2);
-    template_effect(() => set_class(i, 1, clsx(["fas", "fa-envelope", data.messages && "unread"]), "svelte-14s75i7"));
+    template_effect(() => set_class(i, 1, clsx(["fas", "fa-envelope", data.messages && "unread"]), "svelte-zne36e"));
     append($$anchor, a_2);
   };
   const Settings$1 = ($$anchor) => {
@@ -4595,15 +4891,15 @@ location.reload();
     event2.preventDefault();
     setUserscript(true);
   }
-  var root_1$d = from_html(`<div class="item svelte-14s75i7"><!></div>`);
-  var root_5$5 = from_html(`<a>Profile</a>`);
+  var root_1$d = from_html(`<div class="item svelte-zne36e"><!></div>`);
+  var root_5$6 = from_html(`<a>Profile</a>`);
   var root_6$5 = from_html(`<a href="/">Login</a>`);
   var root_7$3 = from_html(`<a aria-label="inbox"><i></i></a>`);
-  var root_9$2 = from_html(`<span class="themeIcon svelte-14s75i7"></span>`);
+  var root_9$2 = from_html(`<span class="themeIcon svelte-zne36e"></span>`);
   var root_10 = from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
-  var root_11$2 = from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-14s75i7" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
+  var root_11$2 = from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-zne36e" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
   var root_12$1 = from_html(`<a href="#disable">Disable</a>`);
-  var root$5 = from_html(`<div id="x-header"><div class="logo svelte-14s75i7"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-14s75i7"><div class="container svelte-14s75i7"><div class="links svelte-14s75i7"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-14s75i7"><input type="text" name="search" placeholder="Search…" class="svelte-14s75i7"/> <button class="svelte-14s75i7">»</button></div></div></div></div>`);
+  var root$6 = from_html(`<div id="x-header"><div class="logo svelte-zne36e"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-zne36e"><div class="container svelte-zne36e"><div class="links svelte-zne36e"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-zne36e"><input type="text" name="search" placeholder="Search…" class="svelte-zne36e"/> <button class="svelte-zne36e">»</button></div></div></div></div>`);
   function Header($$anchor, $$props) {
     push($$props, true);
     const Profile = ($$anchor2) => {
@@ -4619,7 +4915,7 @@ location.reload();
           var node_2 = first_child(fragment_1);
           {
             var consequent_1 = ($$anchor4) => {
-              var a = root_5$5();
+              var a = root_5$6();
               template_effect(() => {
                 set_attribute(a, "href", data.user.link);
                 set_attribute(a, "title", data.user?.name);
@@ -4697,7 +4993,7 @@ location.reload();
         };
       };
     }
-    var div_1 = root$5();
+    var div_1 = root$6();
     let classes;
     var div_2 = child(div_1);
     var a_8 = child(div_2);
@@ -4727,9 +5023,9 @@ location.reload();
     button.__click = handleSearch2;
     template_effect(
       ($0, $1) => {
-        classes = set_class(div_1, 1, "svelte-14s75i7", null, classes, $0);
+        classes = set_class(div_1, 1, "svelte-zne36e", null, classes, $0);
         set_attribute(img, "src", data.logo);
-        classes_1 = set_class(img, 1, "svelte-14s75i7", null, classes_1, $1);
+        classes_1 = set_class(img, 1, "svelte-zne36e", null, classes_1, $1);
       },
       [
         () => ({ floatingDownload: get(floatingDownload) }),
@@ -4756,14 +5052,14 @@ location.reload();
   var on_click$4 = (event2) => {
     event2.currentTarget?.blur();
   };
-  var root_3$6 = from_html(`<span class="description svelte-5e73jo"> </span>`);
-  var root_2$5 = from_html(`<label><input type="checkbox" class="svelte-5e73jo"/> <span class="svelte-5e73jo"><!> <!></span></label>`);
-  var root_1$c = from_html(`<div class="column svelte-5e73jo"><h2 class="svelte-5e73jo"> </h2> <!></div>`);
-  var root$4 = from_html(`<div class="container svelte-5e73jo"></div>`);
+  var root_3$5 = from_html(`<span class="description svelte-1emp0k3"> </span>`);
+  var root_2$6 = from_html(`<label><input type="checkbox" class="svelte-1emp0k3"/> <span class="svelte-1emp0k3"><!> <!></span></label>`);
+  var root_1$c = from_html(`<div class="column svelte-1emp0k3"><h2 class="svelte-1emp0k3"> </h2> <!></div>`);
+  var root$5 = from_html(`<div class="container svelte-1emp0k3"></div>`);
   function Options($$anchor, $$props) {
     push($$props, true);
     let parseTitle = user_derived(() => getSettings("parseTitle"));
-    var div = root$4();
+    var div = root$5();
     each(
       div,
       21,
@@ -4778,8 +5074,8 @@ location.reload();
         var text2 = child(h2);
         var node = sibling(h2, 2);
         each(node, 17, items, (item) => item.key, ($$anchor3, item, $$index) => {
-          const disabled = user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags"));
-          var label = root_2$5();
+          const disabled = user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags") || get(item).key === "spaceImageAnchor" && store.columnCount !== 1);
+          var label = root_2$6();
           let classes;
           var input = child(label);
           input.__change = [onchange];
@@ -4790,7 +5086,7 @@ location.reload();
           var node_2 = sibling(node_1, 2);
           {
             var consequent = ($$anchor4) => {
-              var span_1 = root_3$6();
+              var span_1 = root_3$5();
               var text_1 = child(span_1);
               template_effect(() => set_text(text_1, get(item).description));
               append($$anchor4, span_1);
@@ -4801,7 +5097,7 @@ location.reload();
           }
           template_effect(
             ($0) => {
-              classes = set_class(label, 1, "svelte-5e73jo", null, classes, $0);
+              classes = set_class(label, 1, "svelte-1emp0k3", null, classes, $0);
               set_attribute(input, "id", get(item).key);
               input.disabled = get(disabled);
             },
@@ -4881,8 +5177,8 @@ location.reload();
     handleTransition();
   }
   var root_1$b = from_html(`<span><!></span>`);
-  var root_2$4 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-ig1se8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-ig1se8"></path></svg>`);
-  var root$3 = from_html(`<button class="svelte-ig1se8"><!></button>`);
+  var root_2$5 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-1obhcw8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-1obhcw8"></path></svg>`);
+  var root$4 = from_html(`<button class="svelte-1obhcw8"><!></button>`);
   function Checkmark($$anchor, $$props) {
     push($$props, true);
     const DURATION = 1e3;
@@ -4905,7 +5201,7 @@ location.reload();
     onDestroy(() => {
       if (timeout) clearTimeout(timeout);
     });
-    var button = root$3();
+    var button = root$4();
     button.__click = [onclick, $$props, handleTransition];
     let styles;
     var node = child(button);
@@ -4920,7 +5216,7 @@ location.reload();
         append($$anchor2, span);
       };
       var alternate = ($$anchor2) => {
-        var svg = root_2$4();
+        var svg = root_2$5();
         var path = child(svg);
         transition(3, path, () => scale, () => get(opts));
         append($$anchor2, svg);
@@ -4947,12 +5243,12 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  var root$2 = from_html(`<div class="container svelte-d5217q"><!> <div class="align-right svelte-d5217q"><!> <!> <!></div></div>`);
+  var root$3 = from_html(`<div class="container svelte-1hugea"><!> <div class="align-right svelte-1hugea"><!> <!> <!></div></div>`);
   function Actions($$anchor, $$props) {
     push($$props, true);
     let parseTitle = user_derived(() => getSettings("parseTitle"));
     let performerLinks = user_derived(() => getSettings("performerLinks"));
-    var div = root$2();
+    var div = root$3();
     var node = child(div);
     {
       let $0 = user_derived(() => !get(parseTitle) || !get(performerLinks));
@@ -5051,7 +5347,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     var node = first_child(fragment);
     {
       var consequent = ($$anchor2) => {
-        var img = root_2$3();
+        var img = root_2$4();
         template_effect(() => {
           set_attribute(img, "src", get(src));
           set_attribute(img, "alt", link2().label);
@@ -5069,17 +5365,17 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     button.__click = [on_click$3, index2];
     append($$anchor, button);
   };
-  var root_2$3 = from_html(`<img class="svelte-6don7f"/>`);
+  var root_2$4 = from_html(`<img class="svelte-kvmnko"/>`);
   var on_input = (_, index2, key, link2) => updatePerformerLink(index2(), { [key()]: link2()[key()] });
-  var root_3$5 = from_html(`<input type="text" class="svelte-6don7f"/>`);
+  var root_3$4 = from_html(`<input type="text" class="svelte-kvmnko"/>`);
   var on_click$3 = (__1, index2) => removePerformerLink(index2());
-  var root_4$3 = from_html(`<button title="Remove link" class="svelte-6don7f">×</button>`);
-  var root_6$4 = from_html(`<div class="item svelte-6don7f"><!> <!> <!> <!></div>`);
-  var root_5$4 = from_html(`<div class="container svelte-6don7f"></div>`);
+  var root_4$3 = from_html(`<button title="Remove link" class="svelte-kvmnko">×</button>`);
+  var root_6$4 = from_html(`<div class="item svelte-kvmnko"><!> <!> <!> <!></div>`);
+  var root_5$5 = from_html(`<div class="container svelte-kvmnko"></div>`);
   function Links($$anchor, $$props) {
     push($$props, true);
     const Input = ($$anchor2, key = noop, link2 = noop, index2 = noop) => {
-      var input = root_3$5();
+      var input = root_3$4();
       input.__input = [on_input, index2, key, link2];
       template_effect(() => {
         set_attribute(input, "name", placeholders[key()]);
@@ -5095,7 +5391,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     var node_1 = first_child(fragment_1);
     {
       var consequent_1 = ($$anchor2) => {
-        var div = root_5$4();
+        var div = root_5$5();
         each(div, 23, () => store.performerLinks, (link2) => link2.id, ($$anchor3, link2, index2) => {
           var div_1 = root_6$4();
           var node_2 = child(div_1);
@@ -5120,7 +5416,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   delegate(["input", "click"]);
-  var root_1$a = from_html(`<div class="svelte-rmjlst"><button class="svelte-rmjlst">×</button> <!> <!> <!></div>`);
+  var root_1$a = from_html(`<div class="svelte-1kxfd5y"><button class="svelte-1kxfd5y">×</button> <!> <!> <!></div>`);
   function Settings($$anchor, $$props) {
     push($$props, false);
     init();
@@ -5150,7 +5446,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   delegate(["click"]);
-  var root_1$9 = from_html(`<div class="svelte-hyxnps"><button class="ic--sharp-download svelte-hyxnps" title="Download" aria-label="Download"></button></div>`);
+  var root_1$9 = from_html(`<div class="svelte-wvkwp9"><button class="ic--sharp-download svelte-wvkwp9" title="Download" aria-label="Download"></button></div>`);
   function Float($$anchor, $$props) {
     push($$props, true);
     let floatingDownload = user_derived(() => getSettings("floatingDownload"));
@@ -5174,9 +5470,9 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   delegate(["click"]);
-  var root_3$4 = from_html(`<link rel="prefetch" as="image"/>`);
-  var root_6$3 = from_html(`<a class="svelte-m808n"><img class="svelte-m808n"/> </a>`);
-  var root_4$2 = from_html(`<div class="container svelte-m808n"><div class="indicator svelte-m808n"></div> <div class="items svelte-m808n"></div></div>`);
+  var root_3$3 = from_html(`<link rel="prefetch" as="image"/>`);
+  var root_6$3 = from_html(`<a class="svelte-vtocc6"><img class="svelte-vtocc6"/> </a>`);
+  var root_4$2 = from_html(`<div class="container svelte-vtocc6"><div class="indicator svelte-vtocc6"></div> <div class="items svelte-vtocc6"></div></div>`);
   function Dropdown$1($$anchor, $$props) {
     push($$props, true);
     let top = state$1(0);
@@ -5224,7 +5520,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
         var node_1 = first_child(fragment_1);
         {
           var consequent = ($$anchor4) => {
-            var link_1 = root_3$4();
+            var link_1 = root_3$3();
             template_effect(() => set_attribute(link_1, "href", store.favIcons[get(link2).url]));
             append($$anchor4, link_1);
           };
@@ -5284,7 +5580,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   const Dropdown = ($$anchor, item = noop) => {
-    var span = root_3$3();
+    var span = root_3$2();
     span.__click = [on_click$2, item];
     var text2 = child(span);
     template_effect(() => set_text(text2, item()));
@@ -5295,7 +5591,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     var fragment_1 = comment();
     var node_1 = first_child(fragment_1);
     each(node_1, 17, () => get(items), index, ($$anchor2, item, i) => {
-      var fragment_2 = root_5$3();
+      var fragment_2 = root_5$4();
       var text_1 = first_child(fragment_2);
       text_1.nodeValue = `${i > 0 ? " - " : ""} `;
       var node_2 = sibling(text_1);
@@ -5305,14 +5601,14 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     append($$anchor, fragment_1);
   };
   var on_click$2 = (event2, item) => store.openDropdown(event2, item(), ["title-item--hover"]);
-  var root_3$3 = from_html(`<span class="title-item svelte-12bxepp"> </span>`);
-  var root_5$3 = from_html(` <!>`, 1);
-  var root_9$1 = from_html(`<a class="title-item svelte-12bxepp"> </a>`);
-  var root_11$1 = from_html(`<a class="title-item svelte-12bxepp"> </a>`);
-  var root_15$1 = from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
-  var root_17 = from_html(`<h1 id="x-title" class="svelte-12bxepp"> </h1>`);
-  var root_19$1 = from_html(`<h1 id="x-title" class="svelte-12bxepp"><!></h1>`);
-  var root_21 = from_html(`<h1 id="x-title" class="svelte-12bxepp"><a class="original-title svelte-12bxepp"> </a></h1>`);
+  var root_3$2 = from_html(`<span class="title-item svelte-1gft3h5"> </span>`);
+  var root_5$4 = from_html(` <!>`, 1);
+  var root_9$1 = from_html(`<a class="title-item svelte-1gft3h5"> </a>`);
+  var root_11$1 = from_html(`<a class="title-item svelte-1gft3h5"> </a>`);
+  var root_15$1 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><!></h1>`);
+  var root_17 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"> </h1>`);
+  var root_19$1 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><!></h1>`);
+  var root_21 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><a class="original-title svelte-1gft3h5"> </a></h1>`);
   function Title($$anchor, $$props) {
     push($$props, true);
     const ParsedTitle = ($$anchor2, searchTerms2 = noop) => {
@@ -5452,7 +5748,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
             return get(title);
           }
         }
-        return document.title;
+        return data.title?.original || document.title;
       }
     );
     var fragment_10 = comment();
@@ -5555,7 +5851,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   delegate(["click"]);
-  var root_1$8 = from_html(`<button class="item svelte-1ilvoyd" aria-label="thank"></button>`);
+  var root_1$8 = from_html(`<button class="item svelte-1ai34w7" aria-label="thank"></button>`);
   function Thank($$anchor, $$props) {
     push($$props, true);
     let observer2;
@@ -5642,7 +5938,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     var node = first_child(fragment);
     {
       var consequent = ($$anchor2) => {
-        var div = root_2$2();
+        var div = root_2$3();
         var span = child(div);
         var text2 = child(span);
         var span_1 = sibling(span, 2);
@@ -5650,7 +5946,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
         template_effect(
           ($0) => {
             set_text(text2, `${title() ?? ""}:`);
-            set_class(span_1, 1, $0, "svelte-7pdkl5");
+            set_class(span_1, 1, $0, "svelte-cjprq");
             set_text(text_1, data2());
           },
           [() => clsx(title().toLowerCase())]
@@ -5685,15 +5981,15 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     }
     store.toggleFileList();
   }
-  var root_2$2 = from_html(`<div class="item svelte-7pdkl5"><span class="title"> </span> <span> </span></div>`);
-  var root_4$1 = from_html(`<div class="item svelte-7pdkl5"><span class="title"> </span> <span class="error svelte-7pdkl5">N/A</span></div>`);
-  var root_6$2 = from_html(`<button class="item svelte-7pdkl5"><span class="title">Date:</span> <!></button>`);
-  var root_14 = from_html(`<span class="item svelte-7pdkl5"><!></span>`);
-  var root_22 = from_html(`<a>.torrent</a>`);
-  var root_18 = from_html(`<button class="item svelte-7pdkl5"><span class="title">Download:</span> <!></button>`);
+  var root_2$3 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span> </span></div>`);
+  var root_4$1 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span class="error svelte-cjprq">N/A</span></div>`);
+  var root_6$2 = from_html(`<button class="item svelte-cjprq"><span class="title">Date:</span> <!></button>`);
+  var root_14 = from_html(`<span class="item svelte-cjprq"><!></span>`);
+  var root_22 = from_html(`<a id="dl-link">.torrent</a>`);
+  var root_18 = from_html(`<button class="item svelte-cjprq"><span class="title">Download:</span> <!></button>`);
   var root_27 = from_html(`<span><a> </a> </span>`);
-  var root_26 = from_html(`<div class="item svelte-7pdkl5"><span class="title">Related:</span> <!></div>`);
-  var root_5$2 = from_html(`<div id="x-stats" class="svelte-7pdkl5"><!> <!> <!> <!> <button class="item svelte-7pdkl5"><span class="title">Files:</span> <!></button> <!> <!> <!> <!></div>`);
+  var root_26 = from_html(`<div class="item svelte-cjprq"><span class="title">Related:</span> <!></div>`);
+  var root_5$3 = from_html(`<div id="x-stats" class="svelte-cjprq"><!> <!> <!> <!> <button class="item svelte-cjprq"><span class="title">Files:</span> <!></button> <!> <!> <!> <!></div>`);
   function Stats($$anchor, $$props) {
     push($$props, true);
     let showFullDate = state$1(false);
@@ -5721,7 +6017,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     var node_1 = first_child(fragment_2);
     {
       var consequent_12 = ($$anchor2) => {
-        var div_2 = root_5$2();
+        var div_2 = root_5$3();
         var node_2 = child(div_2);
         Item$1(node_2, () => "Seeders", () => data.torrent?.seeders || "0");
         var node_3 = sibling(node_2, 2);
@@ -5842,7 +6138,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
                 {
                   var alternate_7 = ($$anchor5) => {
                     var a = root_22();
-                    template_effect(() => set_attribute(a, "href", data.torrent?.link));
+                    template_effect(() => set_attribute(a, "href", data.torrent.link));
                     append($$anchor5, a);
                   };
                   if_block(
@@ -5865,7 +6161,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
             Error$1($$anchor3, () => "Download");
           };
           if_block(node_12, ($$render) => {
-            if (data.torrent) $$render(consequent_9);
+            if (data.torrent?.link) $$render(consequent_9);
             else $$render(alternate_9, false);
           });
         }
@@ -5920,11 +6216,11 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   delegate(["click"]);
-  var root_3$2 = from_html(`<a> </a>`);
+  var root_3$1 = from_html(`<a> </a>`);
   var root_6$1 = from_html(`<a> </a>`);
   var on_click$1 = (event2, item) => store.openDropdown(event2, get(item), ["tag-item--hover"]);
   var root_7$2 = from_html(`<span> </span>`);
-  var root_1$7 = from_html(`<div id="x-tags" class="svelte-hxarl5"></div>`);
+  var root_1$7 = from_html(`<div id="x-tags" class="svelte-ttnt4a"></div>`);
   function Tags($$anchor, $$props) {
     push($$props, true);
     let parseTitle = user_derived(() => getSettings("parseTitle"));
@@ -5951,11 +6247,11 @@ style[`border${capitalized_secondary_properties[1]}Width`]
           var node_1 = first_child(fragment_1);
           {
             var consequent = ($$anchor4) => {
-              var a = root_3$2();
+              var a = root_3$1();
               var text2 = child(a);
               template_effect(
                 ($0) => {
-                  set_class(a, 1, clsx(get(classList)), "svelte-hxarl5");
+                  set_class(a, 1, clsx(get(classList)), "svelte-ttnt4a");
                   set_attribute(a, "href", `/forum/tracker.php?nm=${$0 ?? ""}`);
                   set_text(text2, get(item));
                 },
@@ -5977,7 +6273,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
                       var text_1 = child(a_1);
                       template_effect(
                         ($0) => {
-                          set_class(a_1, 1, clsx(get(classList)), "svelte-hxarl5");
+                          set_class(a_1, 1, clsx(get(classList)), "svelte-ttnt4a");
                           set_attribute(a_1, "href", $0);
                           set_text(text_1, get(item));
                         },
@@ -5996,7 +6292,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
                   span.__click = [on_click$1, item];
                   var text_2 = child(span);
                   template_effect(() => {
-                    set_class(span, 1, clsx(get(classList)), "svelte-hxarl5");
+                    set_class(span, 1, clsx(get(classList)), "svelte-ttnt4a");
                     set_text(text_2, get(item));
                   });
                   append($$anchor5, span);
@@ -6030,7 +6326,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     pop();
   }
   delegate(["click"]);
-  var root_1$6 = from_html(`<div class="filelist svelte-eqeghx"><!></div>`);
+  var root_1$6 = from_html(`<div class="filelist svelte-1xito9"><!></div>`);
   function FileList($$anchor, $$props) {
     push($$props, true);
     function humanSize(bytes) {
@@ -6136,7 +6432,8 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     );
     if (!src || !match) {
       const selector = "#left > a > img";
-      return generic(href, selector);
+      const imgSrc2 = await generic(href, selector);
+      return await getBlob(imgSrc2);
     }
     const domain = match[1];
     const path = match[2];
@@ -6146,7 +6443,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     }
     const filename = linkMatch[1];
     const imgSrc = `${domain}i/${path}.jpg/${filename}`;
-    return imgSrc;
+    return await getBlob(imgSrc);
   }
   async function imagetwist(href, src) {
     let imgSrc;
@@ -6441,7 +6738,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
       observer.observe(img);
     });
   }
-  var root$1 = from_html(`<div><!></div>`);
+  var root$2 = from_html(`<div><!></div>`);
   function Resize($$anchor, $$props) {
     push($$props, true);
     let clicked = prop($$props, "clicked", 15), resized = prop($$props, "resized", 15);
@@ -6450,6 +6747,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     let prevResizeWidth = state$1(0);
     let draggedEl = state$1(null);
     let draggedElCenter = state$1(0);
+    let fitColumnCount = state$1(proxy(store.columnCount));
     function getElementCenter(element) {
       const rect = element.getBoundingClientRect();
       return rect.top + rect.height / 2;
@@ -6497,7 +6795,39 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
       set(clientX, 0);
       set(prevResizeWidth, 0);
     }
-    var div = root$1();
+    function waitForImages(containerEl) {
+      const images = containerEl.querySelectorAll("img");
+      return Promise.all(Array.from(images).map((img) => img.complete ? Promise.resolve() : new Promise((resolve) => {
+        img.onload = img.onerror = resolve;
+      })));
+    }
+    function getpopulatedColumns(containerEl) {
+      const marker = document.createElement("span");
+      marker.style.cssText = "position: absolute; visibility: hidden; height: 1px;";
+      containerEl.appendChild(marker);
+      const markerRect = marker.getBoundingClientRect();
+      const containerRect = containerEl.getBoundingClientRect();
+      const columnWidth = containerRect.width / parseFloat(getComputedStyle(containerEl).columnCount);
+      const actualColumns = Math.floor((markerRect.left - containerRect.left) / columnWidth) + 1;
+      containerEl.removeChild(marker);
+      return actualColumns;
+    }
+    user_effect(() => {
+      set(fitColumnCount, store.columnCount, true);
+      if (store.columnCount === 1) return;
+      const containerEl = store.ultraImages?.querySelector('[style*="column-count"]');
+      if (containerEl) {
+        waitForImages(containerEl).then(() => {
+          requestAnimationFrame(() => {
+            const populatedColumns = getpopulatedColumns(containerEl);
+            if (populatedColumns < store.columnCount) {
+              set(fitColumnCount, populatedColumns, true);
+            }
+          });
+        });
+      }
+    });
+    var div = root$2();
     event("pointermove", $document, onpointermove);
     event("pointerup", $document, onpointerup);
     div.__pointerdown = onpointerdown;
@@ -6507,13 +6837,14 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     snippet(node, () => $$props.children);
     template_effect(
       ($0, $1) => {
-        classes = set_class(div, 1, "svelte-1rhiyed", null, classes, $0);
+        classes = set_class(div, 1, "svelte-x5vner", null, classes, $0);
         styles = set_style(div, "", styles, $1);
       },
       [
         () => ({ dragging: clicked() && resized() }),
         () => ({
-          width: `${(get(dragResize) ? store.resizeWidth : 100) ?? ""}%`
+          width: `${(get(dragResize) ? store.resizeWidth : 100) ?? ""}%`,
+          "column-count": get(fitColumnCount)
         })
       ]
     );
@@ -6521,7 +6852,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     pop();
   }
   delegate(["pointerdown"]);
-  var root_1$5 = from_html(`<div class="loader svelte-10rouec"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="svelte-10rouec"><path d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" class="svelte-10rouec"></path><path class="animate svelte-10rouec" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"></path></svg></div>`);
+  var root_1$5 = from_html(`<div class="loader svelte-bb97q4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="svelte-bb97q4"><path d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" class="svelte-bb97q4"></path><path class="animate svelte-bb97q4" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"></path></svg></div>`);
   function Loader($$anchor, $$props) {
     push($$props, true);
     var fragment = comment();
@@ -6546,7 +6877,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     var node = sibling(strong, 2);
     {
       var consequent = ($$anchor2) => {
-        var a = root_2$1();
+        var a = root_2$2();
         var text_1 = child(a);
         template_effect(() => {
           set_attribute(a, "href", value());
@@ -6563,7 +6894,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
             append($$anchor3, span);
           };
           var alternate = ($$anchor3) => {
-            var fragment_1 = root_5$1();
+            var fragment_1 = root_5$2();
             var text_2 = first_child(fragment_1);
             var node_2 = sibling(text_2);
             {
@@ -6602,13 +6933,13 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     });
     append($$anchor, p);
   };
-  var root_2$1 = from_html(`<a class="svelte-zizdl6"> </a>`);
-  var root_4 = from_html(`<span class="error svelte-zizdl6">null</span>`);
-  var root_6 = from_html(`<span class="error svelte-zizdl6"> </span>`);
-  var root_5$1 = from_html(` <!>`, 1);
-  var root_1$4 = from_html(`<p><strong> </strong>: <!></p>`);
-  var root_7$1 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-zizdl6"><path d="M17 9H7V7h10m0 6H7v-2h10m-3 6H7v-2h7M12 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" class="svelte-zizdl6"></path></svg>`);
-  var root = from_html(`<div class="debug svelte-zizdl6"><!> <!> <!> <!> <div class="copy svelte-zizdl6"><!></div></div>`);
+  var root_2$2 = from_html(`<a class="svelte-swtc1e"> </a>`);
+  var root_4 = from_html(`<span class="error svelte-swtc1e">null</span>`);
+  var root_6 = from_html(`<span class="error svelte-swtc1e"> </span>`);
+  var root_5$2 = from_html(` <!>`, 1);
+  var root_1$4 = from_html(`<p class="svelte-swtc1e"><strong> </strong>: <!></p>`);
+  var root_7$1 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-swtc1e"><path d="M17 9H7V7h10m0 6H7v-2h10m-3 6H7v-2h7M12 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" class="svelte-swtc1e"></path></svg>`);
+  var root$1 = from_html(`<div class="debug svelte-swtc1e"><!> <!> <!> <!> <div class="copy svelte-swtc1e"><!></div></div>`);
   function Debug($$anchor, $$props) {
     push($$props, true);
     let data2 = user_derived(() => store.upgradeImgData?.[$$props.img.id] || {});
@@ -6620,7 +6951,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
         console.error("Failed to copy debug:", err);
       }
     }
-    var div = root();
+    var div = root$1();
     var node_3 = child(div);
     Item(node_3, () => "status", () => get(data2).status, () => get(data2).error);
     var node_4 = sibling(node_3, 2);
@@ -6651,10 +6982,116 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     append($$anchor, div);
     pop();
   }
-  var root_3$1 = from_html(`<div class="container svelte-ojhdzd"><!> <a target="_blank"><img/> <!></a></div>`);
-  var root_1$3 = from_html(`<div id="x-images"><!></div>`);
-  function Images($$anchor, $$props) {
+  var root_1$3 = from_html(`<div class="slider svelte-1bzlgy6"><input type="range" min="1" max="5" step="1" class="svelte-1bzlgy6"/> <span class="value svelte-1bzlgy6" title="Max columns"><span class="text svelte-1bzlgy6"> </span></span></div>`);
+  var root = from_html(`<div class="image-columns svelte-1bzlgy6"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-1bzlgy6"><path d="M22 9.999V20a1 1 0 0 1-1 1h-8V9.999zm-11 6V21H3a1 1 0 0 1-1-1v-4.001zM11 3v10.999H2V4a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v3.999h-9V3z"></path></svg> <!></div>`);
+  function Columns($$anchor, $$props) {
     push($$props, true);
+    let open = state$1(false);
+    function onpointerenter() {
+      set(open, true);
+    }
+    function onpointerleave() {
+      set(open, false);
+    }
+    function onchange2() {
+      saveColumnCount(store.columnCount);
+    }
+    var div = root();
+    var node = sibling(child(div), 2);
+    {
+      var consequent = ($$anchor2) => {
+        const opts = user_derived(() => ({ ...store.transition, axis: "x" }));
+        var div_1 = root_1$3();
+        var input = child(div_1);
+        input.__change = onchange2;
+        var span = sibling(input, 2);
+        var span_1 = child(span);
+        var text2 = child(span_1);
+        template_effect(() => set_text(text2, store.columnCount));
+        bind_value(input, () => store.columnCount, ($$value) => store.columnCount = $$value);
+        transition(3, div_1, () => slideFade, () => get(opts));
+        append($$anchor2, div_1);
+      };
+      if_block(node, ($$render) => {
+        if (get(open)) $$render(consequent);
+      });
+    }
+    event("pointerenter", div, onpointerenter);
+    event("pointerleave", div, onpointerleave);
+    append($$anchor, div);
+    pop();
+  }
+  delegate(["change"]);
+  var root_2$1 = from_html(`<div class="container svelte-27jg01"><!> <a target="_blank"><img/> <!></a></div>`);
+  var root_5$1 = from_html(`<div id="x-images"><!> <!></div>`);
+  function Images_1($$anchor, $$props) {
+    push($$props, true);
+    const Images = ($$anchor2, images2 = noop) => {
+      var fragment = comment();
+      var node = first_child(fragment);
+      each(node, 19, images2, (img) => img.id, ($$anchor3, img, i) => {
+        const gif = user_derived(() => get(img)?.src?.toLowerCase()?.includes(".gif"));
+        const loading = user_derived(() => get(img)?.href ? "eager" : "lazy");
+        var div = root_2$1();
+        let styles;
+        var node_1 = child(div);
+        {
+          var consequent = ($$anchor4) => {
+            Debug($$anchor4, {
+              get img() {
+                return get(img);
+              }
+            });
+          };
+          if_block(node_1, ($$render) => {
+            if (get(debugImgs)) $$render(consequent);
+          });
+        }
+        var a = sibling(node_1, 2);
+        let classes;
+        var img_1 = child(a);
+        let classes_1;
+        bind_this(img_1, ($$value, i2) => store.imgRefs[i2] = $$value, (i2) => store?.imgRefs?.[i2], () => [get(i)]);
+        var node_2 = sibling(img_1, 2);
+        {
+          var consequent_1 = ($$anchor4) => {
+            const statusLoading = user_derived(() => store.upgradeImgData?.[get(img).id]?.status === "loading");
+            {
+              let $0 = user_derived(() => get(upgradeImages) && get(statusLoading));
+              Loader($$anchor4, {
+                get loading() {
+                  return get($0);
+                }
+              });
+            }
+          };
+          if_block(node_2, ($$render) => {
+            if (!get(gif)) $$render(consequent_1);
+          });
+        }
+        template_effect(
+          ($0, $1, $2) => {
+            set_attribute(div, "data-id", get(img).id);
+            styles = set_style(div, "", styles, $0);
+            set_attribute(a, "href", get(img)?.href);
+            classes = set_class(a, 1, "svelte-27jg01", null, classes, $1);
+            set_attribute(img_1, "loading", get(loading));
+            set_attribute(img_1, "id", get(img).id);
+            set_attribute(img_1, "src", get(img)?.src);
+            set_attribute(img_1, "alt", get(img)?.src);
+            classes_1 = set_class(img_1, 1, "svelte-27jg01", null, classes_1, $2);
+          },
+          [
+            () => ({ order: handleOrder(get(i)) }),
+            () => ({ gif: get(gif) }),
+            () => ({ incognito: get(incognito), gif: get(gif) })
+          ]
+        );
+        event("error", img_1, onerror);
+        append($$anchor3, div);
+      });
+      append($$anchor2, fragment);
+    };
     let clicked = state$1(false);
     let resized = state$1(false);
     let containerWidth = state$1(0);
@@ -6680,14 +7117,25 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
         return () => observer.disconnect();
       }
     );
-    var fragment = comment();
-    var node = first_child(fragment);
+    let images = user_derived(() => {
+      const images2 = data.images || [];
+      if (!get(lastImageFirst) || images2.length <= 1) {
+        return images2;
+      }
+      const reordered = images2.slice();
+      reordered.unshift(reordered.pop());
+      return reordered;
+    });
+    var fragment_3 = comment();
+    var node_3 = first_child(fragment_3);
     {
       var consequent_2 = ($$anchor2) => {
-        var div = root_1$3();
-        let classes;
-        var node_1 = child(div);
-        Resize(node_1, {
+        var div_1 = root_5$1();
+        let classes_2;
+        var node_4 = child(div_1);
+        Columns(node_4, {});
+        var node_5 = sibling(node_4, 2);
+        Resize(node_5, {
           get containerWidth() {
             return get(containerWidth);
           },
@@ -6704,82 +7152,20 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
             set(resized, $$value, true);
           },
           children: ($$anchor3, $$slotProps) => {
-            var fragment_1 = comment();
-            var node_2 = first_child(fragment_1);
-            each(node_2, 19, () => data.images, (img) => img.id, ($$anchor4, img, i) => {
-              const gif = user_derived(() => get(img)?.src?.toLowerCase()?.includes(".gif"));
-              const loading = user_derived(() => get(img)?.href ? "eager" : "lazy");
-              var div_1 = root_3$1();
-              let styles;
-              var node_3 = child(div_1);
-              {
-                var consequent = ($$anchor5) => {
-                  Debug($$anchor5, {
-                    get img() {
-                      return get(img);
-                    }
-                  });
-                };
-                if_block(node_3, ($$render) => {
-                  if (get(debugImgs)) $$render(consequent);
-                });
-              }
-              var a = sibling(node_3, 2);
-              let classes_1;
-              var img_1 = child(a);
-              let classes_2;
-              bind_this(img_1, ($$value, i2) => store.imgRefs[i2] = $$value, (i2) => store?.imgRefs?.[i2], () => [get(i)]);
-              var node_4 = sibling(img_1, 2);
-              {
-                var consequent_1 = ($$anchor5) => {
-                  {
-                    let $0 = user_derived(() => get(upgradeImages) && store.upgradeImgData?.[get(img).id]?.status === "loading");
-                    Loader($$anchor5, {
-                      get loading() {
-                        return get($0);
-                      }
-                    });
-                  }
-                };
-                if_block(node_4, ($$render) => {
-                  if (!get(gif)) $$render(consequent_1);
-                });
-              }
-              template_effect(
-                ($0, $1, $2) => {
-                  set_attribute(div_1, "data-id", get(img).id);
-                  styles = set_style(div_1, "", styles, $0);
-                  set_attribute(a, "href", get(img)?.href);
-                  classes_1 = set_class(a, 1, "svelte-ojhdzd", null, classes_1, $1);
-                  set_attribute(img_1, "loading", get(loading));
-                  set_attribute(img_1, "id", get(img).id);
-                  set_attribute(img_1, "src", get(img)?.src);
-                  set_attribute(img_1, "alt", get(img)?.src);
-                  classes_2 = set_class(img_1, 1, "svelte-ojhdzd", null, classes_2, $2);
-                },
-                [
-                  () => ({ order: handleOrder(get(i)) }),
-                  () => ({ gif: get(gif) }),
-                  () => ({ incognito: get(incognito), gif: get(gif) })
-                ]
-              );
-              event("error", img_1, onerror);
-              append($$anchor4, div_1);
-            });
-            append($$anchor3, fragment_1);
+            Images($$anchor3, () => get(images));
           },
           $$slots: { default: true }
         });
-        bind_this(div, ($$value) => store.ultraImages = $$value, () => store?.ultraImages);
-        template_effect(($0) => classes = set_class(div, 1, "section svelte-ojhdzd", null, classes, $0), [() => ({ dragging: get(clicked) && get(resized) })]);
-        bind_element_size(div, "offsetWidth", ($$value) => set(containerWidth, $$value));
-        append($$anchor2, div);
+        bind_this(div_1, ($$value) => store.ultraImages = $$value, () => store?.ultraImages);
+        template_effect(($0) => classes_2 = set_class(div_1, 1, "section svelte-27jg01", null, classes_2, $0), [() => ({ dragging: get(clicked) && get(resized) })]);
+        bind_element_size(div_1, "offsetWidth", ($$value) => set(containerWidth, $$value));
+        append($$anchor2, div_1);
       };
-      if_block(node, ($$render) => {
+      if_block(node_3, ($$render) => {
         if (data.images && data.images.length) $$render(consequent_2);
       });
     }
-    append($$anchor, fragment);
+    append($$anchor, fragment_3);
     pop();
   }
   const Incognito = ($$anchor) => {
@@ -6910,18 +7296,18 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     event2.preventDefault();
     updateOption("incognito", false);
   };
-  var root_1$2 = from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-14j3c1y">turn off incognito</a></div>`);
-  var root_3 = from_html(`<h3>Information</h3> <br/> <p><!></p> <br/> <a href="/forum/index.php" class="svelte-14j3c1y">Return to home page</a>`, 1);
+  var root_1$2 = from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-wfy26x">turn off incognito</a></div>`);
+  var root_3 = from_html(`<h3>Information</h3> <br/> <p><!></p> <br/> <a href="/forum/index.php" class="svelte-wfy26x">Return to home page</a>`, 1);
   var root_5 = from_html(`<h3> </h3> <!>`, 1);
-  var root_2 = from_html(`<div class="forumline svelte-14j3c1y"><!></div>`);
-  var root_8 = from_html(`<img class="svelte-14j3c1y"/>`);
-  var root_9 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-14j3c1y"><path fill="currentcolor" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd"></path></svg>`);
-  var root_7 = from_html(`<a class="no-avatar svelte-14j3c1y"><!></a>`);
-  var root_12 = from_html(`<a class="svelte-14j3c1y"> </a>`);
-  var root_11 = from_html(`<span class="nick svelte-14j3c1y"><!></span>`);
+  var root_2 = from_html(`<div class="forumline svelte-wfy26x"><!></div>`);
+  var root_8 = from_html(`<img class="svelte-wfy26x"/>`);
+  var root_9 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-wfy26x"><path fill="currentcolor" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd"></path></svg>`);
+  var root_7 = from_html(`<a class="no-avatar svelte-wfy26x"><!></a>`);
+  var root_12 = from_html(`<a class="svelte-wfy26x"> </a>`);
+  var root_11 = from_html(`<span class="nick svelte-wfy26x"><!></span>`);
   var on_click_1 = (_, toggleFullDate, i) => toggleFullDate(i());
-  var root_15 = from_html(`<button class="date svelte-14j3c1y"><!></button>`);
-  var root_23 = from_html(`<div class="post svelte-14j3c1y"><div class="avatar svelte-14j3c1y"><!></div> <div class="content svelte-14j3c1y"><div class="header svelte-14j3c1y"><!> <!></div> <div class="message svelte-14j3c1y"></div></div></div>`);
+  var root_15 = from_html(`<button class="date svelte-wfy26x"><!></button>`);
+  var root_23 = from_html(`<div class="post svelte-wfy26x"><div class="avatar svelte-wfy26x"><!></div> <div class="content svelte-wfy26x"><div class="header svelte-wfy26x"><!> <!></div> <div class="message svelte-wfy26x"></div></div></div>`);
   var root_19 = from_html(`<div id="x-post"><!></div>`);
   function Post($$anchor, $$props) {
     push($$props, true);
@@ -7028,7 +7414,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
           });
         }
         bind_this(div_2, ($$value) => store.ultraPost = $$value, () => store?.ultraPost);
-        template_effect(($0) => classes = set_class(div_2, 1, "svelte-14j3c1y", null, classes, $0), [() => ({ section: data.forumline || data.posts?.length })]);
+        template_effect(($0) => classes = set_class(div_2, 1, "svelte-wfy26x", null, classes, $0), [() => ({ section: data.forumline || data.posts?.length })]);
         append($$anchor2, div_2);
       };
       if_block(node_10, ($$render) => {
@@ -7040,7 +7426,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     pop();
   }
   delegate(["click"]);
-  var root_1$1 = from_html(`<div id="ultra-pagination" class="svelte-13k3ejc"><!></div>`);
+  var root_1$1 = from_html(`<div id="ultra-pagination" class="svelte-dlb7of"><!></div>`);
   function Pagination($$anchor, $$props) {
     push($$props, true);
     const parser2 = new DOMParser();
@@ -7105,6 +7491,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
         store.options = loadOptions();
         store.performerLinks = loadPerformerLinks();
         store.resizeWidth = loadResize();
+        store.columnCount = loadColumnCount();
         const startParam = new URLSearchParams(location.search).get("start");
         set(firstPage, startParam === null || Number(startParam) === 0, true);
         setTimeout(
@@ -7163,7 +7550,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
         var node_9 = sibling(node_8, 2);
         FileList(node_9, {});
         var node_10 = sibling(node_9, 2);
-        Images(node_10, {});
+        Images_1(node_10, {});
         var node_11 = sibling(node_10, 2);
         Post(node_11, {});
         var node_12 = sibling(node_11, 2);
