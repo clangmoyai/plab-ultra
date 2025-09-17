@@ -149,7 +149,7 @@ Stats
     {/if}
 
     <!-- download -->
-    {#if data.torrent}
+    {#if data.torrent?.link}
       <button
         class="item"
         onclick={handleDownload}
@@ -161,7 +161,7 @@ Stats
         {:else if downloadState === "downloading"}
           Loading...
         {:else}
-          <a href={data.torrent?.link}>.torrent</a>
+          <a id="dl-link" href={data.torrent.link}>.torrent</a>
         {/if}
       </button>
     {:else}
