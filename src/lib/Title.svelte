@@ -80,7 +80,7 @@ Renders (parsed) post title
           return title;
         }
       }
-      return document.title;
+      return data.title?.original || document.title;
     }
   );
 </script>
