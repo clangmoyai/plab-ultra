@@ -34,6 +34,7 @@ interface Store {
   imgRefs: HTMLImageElement[];
   showFileList: boolean;
   fileListData: string | null;
+  columnCount: number;
   toggleFileList(): void;
   documentHidden: boolean;
   transition: {
@@ -89,6 +90,7 @@ export const store = $state<Store>({
   imgRefs: [],
   showFileList: false,
   fileListData: null,
+  columnCount: 1,
   toggleFileList() {
     this.showFileList = !this.showFileList;
   },

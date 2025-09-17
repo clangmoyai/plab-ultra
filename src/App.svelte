@@ -11,6 +11,7 @@ App component mounted from `main.ts`
   import { loadOptions } from "./lib/settings/handleOptions";
   import { loadPerformerLinks } from "./lib/settings/handleLinks";
   import { loadResize } from "./lib/utils/handleResize";
+  import { loadColumnCount } from "./lib/utils/handleColumns";
   import { forumDisabled } from "./lib/utils/handleUserscript";
   import { handlePosts } from "./lib/utils/handleParse";
   import Events from "./lib/Events.svelte";
@@ -50,6 +51,7 @@ App component mounted from `main.ts`
       store.options = loadOptions();
       store.performerLinks = loadPerformerLinks();
       store.resizeWidth = loadResize();
+      store.columnCount = loadColumnCount();
 
       // firstPage boolean
       const startParam = new URLSearchParams(location.search).get("start");

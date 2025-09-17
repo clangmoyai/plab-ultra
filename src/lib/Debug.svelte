@@ -107,6 +107,10 @@ Renders debug message in `Images.svelte`
     display: contents;
   }
 
+  .debug p {
+    word-break: break-all;
+  }
+
   .error {
     color: red;
   }

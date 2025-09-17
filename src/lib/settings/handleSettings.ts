@@ -7,6 +7,7 @@ import {
 } from "./handleLinks";
 import { OPTIONS_KEY, restoreOptions, saveOptions } from "./handleOptions";
 import { RESIZE_KEY, restoreResize } from "../utils/handleResize";
+import { COLUMN_COUNT_KEY, restoreColumnCount } from "../utils/handleColumns";
 import { restoreRelated } from "../utils/handleRelated";
 import { store } from "../utils/store.svelte";
 
@@ -76,6 +77,7 @@ export function restoreDefaultSettings(): void {
   restorePerformerLinks();
   restoreResize();
   restoreRelated();
+  restoreColumnCount();
   clearCache();
 }
 
@@ -146,6 +148,8 @@ localStorage.setItem("${LINKS_KEY}", JSON.stringify(${JSON.stringify(
   )}));
 
 localStorage.setItem("${RESIZE_KEY}", "${store.resizeWidth || "100"}");
+
+localStorage.setItem("${COLUMN_COUNT_KEY}", "${store.columnCount || "1"}");
 
 location.reload();
 `;

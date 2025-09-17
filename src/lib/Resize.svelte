@@ -7,12 +7,18 @@ Resize component for `Images.svelte`
   import { getSettings } from "./settings/handleSettings";
   import { saveResize } from "./utils/handleResize";
   import { store } from "./utils/store.svelte";
+  import type { Snippet } from "svelte";
 
   let {
     clicked = $bindable(),
     resized = $bindable(),
     containerWidth,
     children,
+  }: {
+    clicked: boolean;
+    resized: boolean;
+    containerWidth: number;
+    children: Snippet;
   } = $props();
 
   let dragResize = $derived(getSettings("dragResize"));
@@ -20,6 +26,8 @@ Resize component for `Images.svelte`
   let prevResizeWidth = $state(0);
   let draggedEl: Element | null = $state(null);
   let draggedElCenter = $state(0);
+
+  let fitColumnCount = $state(store.columnCount);
 
   /**
    * Calculates the center coordinates of image
@@ -105,6 +113,65 @@ Resize component for `Images.svelte`
     clientX = 0;
     prevResizeWidth = 0;
   }
+
+  /**
+   * Waits for all images to load
+   */
+  function waitForImages(containerEl: Element): Promise<unknown> {
+    const images = containerEl.querySelectorAll("img");
+    return Promise.all(
+      Array.from(images).map((img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise((resolve) => {
+              img.onload = img.onerror = resolve;
+            })
+      )
+    );
+  }
+
+  /**
+   * Gets actual number of columns being used
+   */
+  function getpopulatedColumns(containerEl: Element): number {
+    const marker = document.createElement("span");
+    marker.style.cssText =
+      "position: absolute; visibility: hidden; height: 1px;";
+
+    containerEl.appendChild(marker);
+
+    const markerRect = marker.getBoundingClientRect();
+    const containerRect = containerEl.getBoundingClientRect();
+    const columnWidth =
+      containerRect.width /
+      parseFloat(getComputedStyle(containerEl).columnCount);
+    const actualColumns =
+      Math.floor((markerRect.left - containerRect.left) / columnWidth) + 1;
+
+    containerEl.removeChild(marker);
+    return actualColumns;
+  }
+
+  $effect(() => {
+    fitColumnCount = store.columnCount;
+
+    if (store.columnCount === 1) return;
+
+    const containerEl = store.ultraImages?.querySelector(
+      '[style*="column-count"]'
+    );
+
+    if (containerEl) {
+      waitForImages(containerEl).then(() => {
+        requestAnimationFrame(() => {
+          const populatedColumns = getpopulatedColumns(containerEl);
+          if (populatedColumns < store.columnCount) {
+            fitColumnCount = populatedColumns;
+          }
+        });
+      });
+    }
+  });
 </script>
 
 <svelte:document {onpointermove} {onpointerup} />
@@ -112,6 +179,7 @@ Resize component for `Images.svelte`
 <div
   class:dragging={clicked && resized}
   style:width="{dragResize ? store.resizeWidth : 100}%"
+  style:column-count={fitColumnCount}
   {onpointerdown}
 >
   {@render children()}
@@ -119,11 +187,8 @@ Resize component for `Images.svelte`
 
 <style>
   div {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    will-change: width;
-    position: relative;
+    column-gap: 0.75rem;
+    column-fill: balance;
   }
 
   .dragging {

@@ -37,8 +37,9 @@ Renders checkboxes in `Settings.svelte`
 
       {#each items as item (item.key)}
         {@const disabled =
-          !parseTitle &&
-          (item.key === "performerLinks" || item.key === "showTags")}
+          (!parseTitle &&
+            (item.key === "performerLinks" || item.key === "showTags")) ||
+          (item.key === "spaceImageAnchor" && store.columnCount !== 1)}
 
         <label class:disabled>
           <input

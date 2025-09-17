@@ -11,6 +11,8 @@ Renders images within post
   import Resize from "./Resize.svelte";
   import Loader from "./Loader.svelte";
   import Debug from "./Debug.svelte";
+  import Columns from "./Columns.svelte";
+  import type { Image } from "./utils/data.svelte";
 
   let clicked = $state(false);
   let resized = $state(false);
@@ -56,7 +58,56 @@ Renders images within post
       return (): void => observer.disconnect();
     }
   );
+
+  let images = $derived.by<Image[]>(() => {
+    const images = data.images || [];
+
+    if (!lastImageFirst || images.length <= 1) {
+      return images;
+    }
+
+    const reordered = images.slice();
+    reordered.unshift(reordered.pop()!);
+    return reordered;
+  });
 </script>
+
+{#snippet Images(images: Image[])}
+  {#each images as img, i (img.id)}
+    <!-- check if image is a gif by extension -->
+    {@const gif = img?.src?.toLowerCase()?.includes(".gif")}
+
+    <!-- no href means image is directly linked which can cause rate limiting -->
+    {@const loading = img?.href ? "eager" : "lazy"}
+
+    <div data-id={img.id} class="container" style:order={handleOrder(i)}>
+      {#if debugImgs}
+        <Debug {img} />
+      {/if}
+
+      <a href={img?.href} target="_blank" class:gif>
+        <img
+          {loading}
+          id={img.id}
+          src={img?.src}
+          alt={img?.src}
+          class:incognito
+          class:gif
+          bind:this={store.imgRefs[i]}
+          {onerror}
+        />
+
+        <!-- gif is loading as it plays  -->
+        {#if !gif}
+          {@const statusLoading =
+            store.upgradeImgData?.[img.id]?.status === "loading"}
+
+          <Loader loading={upgradeImages && statusLoading} />
+        {/if}
+      </a>
+    </div>
+  {/each}
+{/snippet}
 
 {#if data.images && data.images.length}
   <div
@@ -66,53 +117,21 @@ Renders images within post
     bind:this={store.ultraImages}
     bind:offsetWidth={containerWidth}
   >
+    <Columns />
+
     <Resize bind:clicked bind:resized {containerWidth}>
-      {#each data.images as img, i (img.id)}
-        <!-- check if image is a gif by extension -->
-        {@const gif = img?.src?.toLowerCase()?.includes(".gif")}
-
-        <!-- no href means image is directly linked which can cause rate limiting -->
-        {@const loading = img?.href ? "eager" : "lazy"}
-
-        <div data-id={img.id} class="container" style:order={handleOrder(i)}>
-          {#if debugImgs}
-            <Debug {img} />
-          {/if}
-
-          <a href={img?.href} target="_blank" class:gif>
-            <img
-              {loading}
-              id={img.id}
-              src={img?.src}
-              alt={img?.src}
-              class:incognito
-              class:gif
-              bind:this={store.imgRefs[i]}
-              {onerror}
-            />
-
-            <!-- gif is loading as it plays  -->
-            {#if !gif}
-              <Loader
-                loading={upgradeImages &&
-                  store.upgradeImgData?.[img.id]?.status === "loading"}
-              />
-            {/if}
-          </a>
-        </div>
-      {/each}
+      {@render Images(images)}
     </Resize>
   </div>
 {/if}
 
 <style>
   .section {
-    display: flex;
+    display: grid;
     padding: 1rem;
-    flex-direction: column;
-    align-items: center;
-    user-select: none;
+    justify-items: center;
     margin-bottom: var(--content-margin);
+    position: relative;
   }
 
   a {
@@ -123,7 +142,12 @@ Renders images within post
 
   .container {
     border-radius: var(--border-radius-small);
+    height: min-content;
     overflow: hidden;
+
+    /* "columns" */
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
   }
 
   img {
@@ -134,6 +158,9 @@ Renders images within post
     user-select: none;
     will-change: width;
     display: block;
+
+    /* broken img */
+    word-break: break-all;
   }
 
   a.gif {

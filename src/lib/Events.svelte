@@ -98,7 +98,8 @@ Attaches event listeners to window and document:
     if (
       !getSettings("spaceImageAnchor") ||
       !store.imgRefs.length ||
-      !store.ultraImages
+      !store.ultraImages ||
+      store.columnCount !== 1
     )
       return;
 
@@ -113,11 +114,6 @@ Attaches event listeners to window and document:
       return;
 
     let imgRefs = [...store.imgRefs];
-
-    if (getSettings("lastImageFirst") && imgRefs.length > 1) {
-      const lastImg = imgRefs.pop();
-      if (lastImg) imgRefs.unshift(lastImg);
-    }
 
     let filteredImgRefs = imgRefs.filter(
       (el): el is HTMLImageElement => el.dataset["broken"] !== "true"

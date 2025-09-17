@@ -2,7 +2,7 @@
   import { fade } from "svelte/transition";
   import { store } from "./utils/store.svelte";
 
-  let { loading } = $props();
+  let { loading }: { loading: boolean } = $props();
 </script>
 
 {#if loading}
