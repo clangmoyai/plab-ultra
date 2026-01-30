@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2025.09.18
+// @version      2026.01.30
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -22,13 +22,14 @@
 (function () {
   'use strict';
 
-  const d=new Set;const importCSS = async e=>{d.has(e)||(d.add(e),(t=>{typeof GM_addStyle=="function"?GM_addStyle(t):document.head.appendChild(document.createElement("style")).append(t);})(e));};
+  const d=new Set;const importCSS = async e=>{d.has(e)||(d.add(e),(t=>{typeof GM_addStyle=="function"?GM_addStyle(t):(document.head||document.documentElement).appendChild(document.createElement("style")).append(t);})(e));};
 
-  importCSS(` .ultra-logo.svelte-zne36e{width:16px;display:inline-flex;vertical-align:top;margin:0 .45rem 0 0}.ultra-logo.svelte-zne36e:hover{cursor:pointer}#x-header.svelte-zne36e{--header-height: 4.5rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;margin-bottom:var(--content-margin);min-height:var(--header-height)}.floatingDownload.svelte-zne36e{padding-right:5rem}.logo.svelte-zne36e{height:var(--header-height)}.logo.svelte-zne36e img:where(.svelte-zne36e){height:100%;border-radius:var(--border-radius-large)}.align-right.svelte-zne36e{display:flex;justify-content:flex-end;min-width:0}.container.svelte-zne36e{display:flex;flex-direction:column;min-width:0;row-gap:1rem}.links.svelte-zne36e{display:flex;min-width:0;flex-wrap:nowrap;justify-content:end}.unread.svelte-zne36e{color:var(--highlighted);filter:brightness(1.25)}.item.svelte-zne36e{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item.svelte-zne36e+.item:where(.svelte-zne36e):before{display:inline-block;content:"|";margin:0 .8rem;color:var(--post-border-color);transform:translateY(-1px)}.search.svelte-zne36e{display:flex;gap:.5rem}.search.svelte-zne36e input:where(.svelte-zne36e){flex:1 1 auto;min-width:0;border:1px solid var(--post-border-color);color:var(--search-color);background:var(--input-bg)!important;padding:.3rem .5rem .4rem;border-radius:var(--border-radius-small);font-size:.8rem!important;font-family:inherit}.search.svelte-zne36e button:where(.svelte-zne36e){background:var(--input-bg)!important;border:1px solid var(--post-border-color)!important;width:1.75rem;border-radius:var(--border-radius-small)}.incognito.svelte-zne36e{filter:var(--incognito-filter)!important}.themeIcon.svelte-zne36e a,.themeIcon.svelte-zne36e a:hover{text-decoration:none!important}@media (max-width: 768px){#x-header.svelte-zne36e{grid-template-columns:1fr}.logo.svelte-zne36e{display:none}.container.svelte-zne36e{width:100%}}.container.svelte-1emp0k3{display:flex;gap:1.15rem;justify-content:space-between}.column.svelte-1emp0k3{display:flex;flex-direction:column;overflow:hidden;gap:.75rem}h2.svelte-1emp0k3{margin:0;margin-bottom:.25rem;font-size:1rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=checkbox].svelte-1emp0k3{margin:4px}label.svelte-1emp0k3{display:flex;align-items:center;gap:.5rem}.disabled.svelte-1emp0k3{text-decoration:line-through;cursor:default}span.svelte-1emp0k3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.description.svelte-1emp0k3{opacity:.5}input[type=checkbox].svelte-1emp0k3:disabled{cursor:default}@media (max-width: 1200px){.container.svelte-1emp0k3{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);gap:1rem;justify-content:stretch}.column.svelte-1emp0k3{min-width:0}}@media (max-width: 768px){.container.svelte-1emp0k3{display:flex;flex-direction:column;gap:1rem}.column.svelte-1emp0k3{min-width:0;width:100%}}button.svelte-1obhcw8{all:unset;display:flex;justify-content:center;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none;white-space:nowrap;background:var(--button-color)!important;border:none!important;border-radius:var(--border-radius-small);padding:.4rem .5rem;font-family:inherit;font-weight:500;font-size:.8rem;color:#fff;transition:background-color opacity 1.8s ease-in-out}button.svelte-1obhcw8:disabled{background-color:var(--post-border-color)!important;opacity:.5;cursor:not-allowed}svg.svelte-1obhcw8{position:absolute}svg.svelte-1obhcw8 path:where(.svelte-1obhcw8){transform-origin:center;fill:#fff}.container.svelte-1hugea{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}.align-right.svelte-1hugea{display:flex;gap:.5rem}.container.svelte-kvmnko{display:flex;flex-direction:column;margin-top:1.25rem}.item.svelte-kvmnko{display:grid;grid-template-columns:min-content minmax(0,10rem) 1fr auto;align-items:center;gap:.75rem;min-width:0;margin-bottom:.5rem}img.svelte-kvmnko{width:.9rem;height:.9rem;flex-shrink:0}input[type=text].svelte-kvmnko{padding:.3rem .5rem .4rem;border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:.8rem!important;background:var(--input-bg)!important;color:inherit;font:inherit;min-width:0}button.svelte-kvmnko{background:#a62f2fbf!important;border-radius:var(--border-radius-small);font-size:1.2rem;border:none!important;color:#fff!important;display:flex;align-items:center;width:1.5rem;height:1.5rem;align-items:flex-end;justify-content:center;-webkit-user-select:none;user-select:none}button.svelte-kvmnko:hover{background:#a62f2f!important}div.svelte-1kxfd5y{font-size:.8rem;position:relative;background:var(--post-bg);border:1px solid var(--post-border-color);padding:.9rem 1rem 1rem;border-radius:var(--border-radius-large);overflow:hidden;display:flex;flex-flow:column;font-family:inherit;margin-bottom:var(--content-margin)}button.svelte-1kxfd5y{position:absolute;top:.6rem;right:.6rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0;-webkit-user-select:none;user-select:none}div.svelte-wvkwp9{position:fixed;top:1.3rem;right:2.5rem;z-index:9999;border-radius:var(--border-radius-large);padding:.35rem;border:1px solid var(--post-border-color);background-color:#009c3c!important}button.svelte-wvkwp9{cursor:pointer;aspect-ratio:1 / 1;--size: 1.7rem;width:var(--size);background-color:#fff!important}.ic--sharp-download.svelte-wvkwp9{display:inline-block;--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z'/%3E%3C/svg%3E");background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%}.container.svelte-vtocc6{position:absolute;z-index:2;transform:translate(-50%);padding-top:.2rem}.indicator.svelte-vtocc6{position:absolute;left:calc(50% - 8px);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:7px solid var(--post-border-color)}.items.svelte-vtocc6{margin-top:7px;position:relative;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:var(--border-radius-large);-webkit-user-select:none;user-select:none;border:1px solid var(--post-border-color);box-shadow:#00000040 0 25px 50px -12px;background:var(--overlay-bg);white-space:nowrap}.items.svelte-vtocc6 img:where(.svelte-vtocc6){width:.9rem;height:1rem;width:1rem;-webkit-user-drag:none}.items.svelte-vtocc6 a:where(.svelte-vtocc6){display:flex;align-items:center;gap:.75rem;font-size:.9rem;font-weight:500;text-decoration:none;padding:.5rem 1rem;-webkit-user-drag:none}.items.svelte-vtocc6 a:where(.svelte-vtocc6):hover{color:unset}.items.svelte-vtocc6 a:where(.svelte-vtocc6):first-of-type{padding-top:.9rem}.items.svelte-vtocc6 a:where(.svelte-vtocc6):last-of-type{padding-bottom:1rem}#x-title.svelte-1gft3h5{font-size:1.375rem;margin-top:0;margin-bottom:var(--content-margin)}.original-title.svelte-1gft3h5{text-decoration:none}.title-item.svelte-1gft3h5{color:unset;text-decoration:none}.title-item.svelte-1gft3h5:hover,.title-item--hover{text-decoration:underline!important;color:var(--link-color)!important;cursor:pointer}button.svelte-1ai34w7{all:unset;cursor:pointer;background:none!important}button.svelte-1ai34w7:disabled{cursor:text;-webkit-user-select:text;user-select:text}#thx-btn{all:unset!important}#x-stats.svelte-cjprq{display:flex;flex-wrap:wrap;gap:.8rem;font-weight:500;font-size:.8rem;margin-bottom:var(--content-margin)}.item.svelte-cjprq:not(:last-child):after{display:inline-block;content:"|";color:var(--post-border-color);margin-left:.8rem;transform:translateY(-1px)}button.svelte-cjprq{all:unset;cursor:pointer;background:none!important}button.svelte-cjprq:disabled{cursor:text;-webkit-user-select:text;user-select:text}.seeders.svelte-cjprq{color:var(--seed-color)}.leechers.svelte-cjprq,.error.svelte-cjprq{color:var(--leech-color)}#x-tags.svelte-ttnt4a{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--content-margin)}.tag-item.svelte-ttnt4a{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .6rem .255rem;border-radius:var(--border-radius-small);font-size:.7rem;white-space:nowrap;text-decoration:none;cursor:pointer;font-weight:500;opacity:.75;transition:opacity .1s ease;color:var(--tag-color);background-color:var(--tag-bg);row-gap:.35rem;column-gap:.35rem;transition:opacity .15s ease-in-out}.tag-item.svelte-ttnt4a:hover,.tag-item--hover{opacity:1!important;text-decoration:none!important}.tag-res.svelte-ttnt4a{background:var(--highlighted)!important;color:#fff!important;opacity:1}.filelist.svelte-1xito9{background:var(--post-bg);border:1px solid var(--post-border-color);padding:.75rem;border-radius:var(--border-radius-large);margin-bottom:var(--content-margin)}.filelist.svelte-1xito9 i{color:var(--link-color);font-style:normal;font-weight:500}div.svelte-x5vner{column-gap:.75rem;column-fill:balance}.dragging.svelte-x5vner{cursor:ew-resize}.loader.svelte-bb97q4{width:15%;height:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}svg.svelte-bb97q4{width:100%;height:auto;will-change:transform}svg.svelte-bb97q4 path:where(.svelte-bb97q4){fill:#fff}.animate.svelte-bb97q4{animation:svelte-bb97q4-spin 1s linear infinite;transform-origin:center center}@keyframes svelte-bb97q4-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.debug.svelte-swtc1e{position:relative;display:flex;flex-direction:column;font-family:monospace;background:var(--button-color);padding:1rem;width:-webkit-fill-available;color:#fff;-webkit-user-select:text;user-select:text;word-wrap:break-word;gap:.4rem}.debug.svelte-swtc1e a:where(.svelte-swtc1e){color:#fff;text-decoration:none;display:contents}.debug.svelte-swtc1e p:where(.svelte-swtc1e){word-break:break-all}.error.svelte-swtc1e{color:red}.copy.svelte-swtc1e{position:absolute;top:.5rem;right:.5rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0}svg.svelte-swtc1e path:where(.svelte-swtc1e){transform-origin:center;fill:#fff;transform:translateY(2px)}.image-columns.svelte-1bzlgy6{display:flex;grid-template-columns:auto auto 1fr;position:absolute;top:-1px;right:-1px;background:transparent!important;padding:.75rem;z-index:2;background:var(--overlay-bg)!important;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:0 0 0 var(--border-radius-large);border:1px solid var(--post-border-color);transition:box-shadow .2s ease-in-out;box-shadow:#0000 0 25px 50px -12px}.image-columns.svelte-1bzlgy6:hover{box-shadow:#00000040 0 25px 50px -12px}svg.svelte-1bzlgy6{--size: 1.25rem;width:var(--size);height:var(--size);fill:#fff;opacity:.75;mix-blend-mode:difference}.slider.svelte-1bzlgy6{display:flex;gap:.55rem}input.svelte-1bzlgy6{margin-left:.75rem}.value.svelte-1bzlgy6{--size: 1.25rem;width:var(--size);height:var(--size);font-weight:500;font-size:.75rem;background:var(--tag-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none}.value.svelte-1bzlgy6 .text:where(.svelte-1bzlgy6){margin-top:-1px;color:var(--tag-color)}.section.svelte-27jg01{display:grid;padding:1rem;justify-items:center;margin-bottom:var(--content-margin);position:relative}a.svelte-27jg01{position:relative;display:block;overflow:hidden}.container.svelte-27jg01{border-radius:var(--border-radius-small);height:min-content;overflow:hidden;break-inside:avoid;margin-bottom:.75rem}img.svelte-27jg01{width:100%;height:auto;border:none;flex:1 0 100%;-webkit-user-select:none;user-select:none;will-change:width;display:block;word-break:break-all}a.gif.svelte-27jg01{width:fit-content}img.gif.svelte-27jg01{width:auto;max-width:100%}.incognito.svelte-27jg01{filter:var(--incognito-filter)!important}.dragging.svelte-27jg01 a:where(.svelte-27jg01),.dragging.svelte-27jg01 img:where(.svelte-27jg01){pointer-events:none}.forumline.svelte-wfy26x{padding:1rem;position:relative;display:flex;flex-direction:column;align-items:center}.section.svelte-wfy26x{margin-bottom:var(--content-margin)}a.svelte-wfy26x{color:#4da3ff;text-decoration:none}a.svelte-wfy26x:hover{text-decoration:underline}.post.svelte-wfy26x{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid var(--post-border-color)}.post.svelte-wfy26x:nth-child(2n){background-color:var(--post-odd-bg)}.post.svelte-wfy26x:last-child{border-bottom:none}.avatar.svelte-wfy26x img:where(.svelte-wfy26x){width:48px;height:48px;border-radius:var(--border-radius-small);object-fit:cover;border:1px solid var(--post-border-color)}.no-avatar.svelte-wfy26x{display:flex;width:48px;height:48px;text-align:center;line-height:48px;background:var(--main-bg);border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:1.3rem;cursor:pointer;justify-content:center;align-items:center}.no-avatar.svelte-wfy26x svg:where(.svelte-wfy26x){width:55%;height:55%}.no-avatar.svelte-wfy26x:hover{text-decoration:none!important}.content.svelte-wfy26x{flex:1}.header.svelte-wfy26x{font-size:.8rem;color:#bbb;margin-block-end:.4rem;display:flex;gap:.5rem;align-items:center}.nick.svelte-wfy26x{font-weight:600}.date.svelte-wfy26x{all:unset!important;color:var(--post-date-color)!important;font-weight:400!important;opacity:.8!important;cursor:pointer!important}.date.svelte-wfy26x:hover{opacity:1!important}.message.svelte-wfy26x{margin:0;line-height:1.4}#ultra-pagination.svelte-dlb7of{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:var(--content-margin)}#ultra-pagination a{text-decoration:none!important} `);
+  importCSS(` .ultra-logo.svelte-zne36e{width:16px;display:inline-flex;vertical-align:top;margin:0 .45rem 0 0}.ultra-logo.svelte-zne36e:hover{cursor:pointer}#x-header.svelte-zne36e{--header-height: 4.5rem;display:grid;grid-template-columns:auto 1fr;column-gap:1rem;margin-bottom:var(--content-margin);min-height:var(--header-height)}.floatingDownload.svelte-zne36e{padding-right:5rem}.logo.svelte-zne36e{height:var(--header-height)}.logo.svelte-zne36e img:where(.svelte-zne36e){height:100%;border-radius:var(--border-radius-large)}.align-right.svelte-zne36e{display:flex;justify-content:flex-end;min-width:0}.container.svelte-zne36e{display:flex;flex-direction:column;min-width:0;row-gap:1rem}.links.svelte-zne36e{display:flex;min-width:0;flex-wrap:nowrap;justify-content:end}.unread.svelte-zne36e{color:var(--highlighted);filter:brightness(1.25)}.item.svelte-zne36e{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.item.svelte-zne36e+.item:where(.svelte-zne36e):before{display:inline-block;content:"|";margin:0 .8rem;color:var(--post-border-color);transform:translateY(-1px)}.search.svelte-zne36e{display:flex;gap:.5rem}.search.svelte-zne36e input:where(.svelte-zne36e){flex:1 1 auto;min-width:0;border:1px solid var(--post-border-color);color:var(--search-color);background:var(--input-bg)!important;padding:.3rem .5rem .4rem;border-radius:var(--border-radius-small);font-size:.8rem!important;font-family:inherit}.search.svelte-zne36e button:where(.svelte-zne36e){background:var(--input-bg)!important;border:1px solid var(--post-border-color)!important;width:1.75rem;border-radius:var(--border-radius-small)}.incognito.svelte-zne36e{filter:var(--incognito-filter)!important}.themeIcon.svelte-zne36e a,.themeIcon.svelte-zne36e a:hover{text-decoration:none!important}@media(max-width:768px){#x-header.svelte-zne36e{grid-template-columns:1fr}.logo.svelte-zne36e{display:none}.container.svelte-zne36e{width:100%}}.container.svelte-1emp0k3{display:flex;gap:1.15rem;justify-content:space-between}.column.svelte-1emp0k3{display:flex;flex-direction:column;overflow:hidden;gap:.75rem}h2.svelte-1emp0k3{margin:0;margin-bottom:.25rem;font-size:1rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}input[type=checkbox].svelte-1emp0k3{margin:4px}label.svelte-1emp0k3{display:flex;align-items:center;gap:.5rem}.disabled.svelte-1emp0k3{text-decoration:line-through;cursor:default}span.svelte-1emp0k3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.description.svelte-1emp0k3{opacity:.5}input[type=checkbox].svelte-1emp0k3:disabled{cursor:default}@media(max-width:1200px){.container.svelte-1emp0k3{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,auto);gap:1rem;justify-content:stretch}.column.svelte-1emp0k3{min-width:0}}@media(max-width:768px){.container.svelte-1emp0k3{display:flex;flex-direction:column;gap:1rem}.column.svelte-1emp0k3{min-width:0;width:100%}}button.svelte-1obhcw8{all:unset;display:flex;justify-content:center;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none;white-space:nowrap;background:var(--button-color)!important;border:none!important;border-radius:var(--border-radius-small);padding:.4rem .5rem;font-family:inherit;font-weight:500;font-size:.8rem;color:#fff;transition:background-color opacity 1.8s ease-in-out}button.svelte-1obhcw8:disabled{background-color:var(--post-border-color)!important;opacity:.5;cursor:not-allowed}svg.svelte-1obhcw8{position:absolute}svg.svelte-1obhcw8 path:where(.svelte-1obhcw8){transform-origin:center;fill:#fff}.container.svelte-1hugea{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}.align-right.svelte-1hugea{display:flex;gap:.5rem}.container.svelte-kvmnko{display:flex;flex-direction:column;margin-top:1.25rem}.item.svelte-kvmnko{display:grid;grid-template-columns:min-content minmax(0,10rem) 1fr auto;align-items:center;gap:.75rem;min-width:0;margin-bottom:.5rem}img.svelte-kvmnko{width:.9rem;height:.9rem;flex-shrink:0}input[type=text].svelte-kvmnko{padding:.3rem .5rem .4rem;border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:.8rem!important;background:var(--input-bg)!important;color:inherit;font:inherit;min-width:0}button.svelte-kvmnko{background:#a62f2fbf!important;border-radius:var(--border-radius-small);font-size:1.2rem;border:none!important;color:#fff!important;display:flex;align-items:center;width:1.5rem;height:1.5rem;align-items:flex-end;justify-content:center;-webkit-user-select:none;user-select:none}button.svelte-kvmnko:hover{background:#a62f2f!important}div.svelte-1kxfd5y{font-size:.8rem;position:relative;background:var(--post-bg);border:1px solid var(--post-border-color);padding:.9rem 1rem 1rem;border-radius:var(--border-radius-large);overflow:hidden;display:flex;flex-flow:column;font-family:inherit;margin-bottom:var(--content-margin)}button.svelte-1kxfd5y{position:absolute;top:.6rem;right:.6rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0;-webkit-user-select:none;user-select:none}div.svelte-wvkwp9{position:fixed;top:1.3rem;right:2.5rem;z-index:9999;border-radius:var(--border-radius-large);padding:.35rem;border:1px solid var(--post-border-color);background-color:#009c3c!important}button.svelte-wvkwp9{cursor:pointer;aspect-ratio:1 / 1;--size: 1.7rem;width:var(--size);background-color:#fff!important}.ic--sharp-download.svelte-wvkwp9{display:inline-block;--svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 9h-4V3H9v6H5l7 7zM5 18v2h14v-2z'/%3E%3C/svg%3E");background-color:currentColor;-webkit-mask-image:var(--svg);mask-image:var(--svg);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:100% 100%;mask-size:100% 100%}.container.svelte-vtocc6{position:absolute;z-index:2;transform:translate(-50%);padding-top:.2rem}.indicator.svelte-vtocc6{position:absolute;left:calc(50% - 8px);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:7px solid var(--post-border-color)}.items.svelte-vtocc6{margin-top:7px;position:relative;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:var(--border-radius-large);-webkit-user-select:none;user-select:none;border:1px solid var(--post-border-color);box-shadow:#00000040 0 25px 50px -12px;background:var(--overlay-bg);white-space:nowrap}.items.svelte-vtocc6 img:where(.svelte-vtocc6){width:.9rem;height:1rem;width:1rem;-webkit-user-drag:none}.items.svelte-vtocc6 a:where(.svelte-vtocc6){display:flex;align-items:center;gap:.75rem;font-size:.9rem;font-weight:500;text-decoration:none;padding:.5rem 1rem;-webkit-user-drag:none}.items.svelte-vtocc6 a:where(.svelte-vtocc6):hover{color:unset}.items.svelte-vtocc6 a:where(.svelte-vtocc6):first-of-type{padding-top:.9rem}.items.svelte-vtocc6 a:where(.svelte-vtocc6):last-of-type{padding-bottom:1rem}#x-title.svelte-1gft3h5{font-size:1.375rem;margin-top:0;margin-bottom:var(--content-margin)}.original-title.svelte-1gft3h5{text-decoration:none}.title-item.svelte-1gft3h5{color:unset;text-decoration:none}.title-item.svelte-1gft3h5:hover,.title-item--hover{text-decoration:underline!important;color:var(--link-color)!important;cursor:pointer}button.svelte-1ai34w7{all:unset;cursor:pointer;background:none!important}button.svelte-1ai34w7:disabled{cursor:text;-webkit-user-select:text;user-select:text}#thx-btn{all:unset!important}#x-stats.svelte-cjprq{display:flex;flex-wrap:wrap;gap:.8rem;font-weight:500;font-size:.8rem;margin-bottom:var(--content-margin)}.item.svelte-cjprq:not(:last-child):after{display:inline-block;content:"|";color:var(--post-border-color);margin-left:.8rem;transform:translateY(-1px)}button.svelte-cjprq{all:unset;cursor:pointer;background:none!important}button.svelte-cjprq:disabled{cursor:text;-webkit-user-select:text;user-select:text}.seeders.svelte-cjprq{color:var(--seed-color)}.leechers.svelte-cjprq,.error.svelte-cjprq{color:var(--leech-color)}#x-tags.svelte-ttnt4a{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:var(--content-margin)}.tag-item.svelte-ttnt4a{display:inline-flex;align-items:center;justify-content:center;padding:.25rem .6rem .255rem;border-radius:var(--border-radius-small);font-size:.7rem;white-space:nowrap;text-decoration:none;cursor:pointer;font-weight:500;opacity:.75;transition:opacity .1s ease;color:var(--tag-color);background-color:var(--tag-bg);row-gap:.35rem;column-gap:.35rem;transition:opacity .15s ease-in-out}.tag-item.svelte-ttnt4a:hover,.tag-item--hover{opacity:1!important;text-decoration:none!important}.tag-res.svelte-ttnt4a{background:var(--highlighted)!important;color:#fff!important;opacity:1}.filelist.svelte-1xito9{background:var(--post-bg);border:1px solid var(--post-border-color);padding:.75rem;border-radius:var(--border-radius-large);margin-bottom:var(--content-margin)}.filelist.svelte-1xito9 i{color:var(--link-color);font-style:normal;font-weight:500}div.svelte-x5vner{column-gap:.75rem;column-fill:balance}.dragging.svelte-x5vner{cursor:ew-resize}.loader.svelte-bb97q4{width:15%;height:auto;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}svg.svelte-bb97q4{width:100%;height:auto;will-change:transform}svg.svelte-bb97q4 path:where(.svelte-bb97q4){fill:#fff}.animate.svelte-bb97q4{animation:svelte-bb97q4-spin 1s linear infinite;transform-origin:center center}@keyframes svelte-bb97q4-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.debug.svelte-swtc1e{position:relative;display:flex;flex-direction:column;font-family:monospace;background:var(--button-color);padding:1rem;width:-webkit-fill-available;color:#fff;-webkit-user-select:text;user-select:text;word-wrap:break-word;gap:.4rem}.debug.svelte-swtc1e a:where(.svelte-swtc1e){color:#fff;text-decoration:none;display:contents}.debug.svelte-swtc1e p:where(.svelte-swtc1e){word-break:break-all}.error.svelte-swtc1e{color:red}.copy.svelte-swtc1e{position:absolute;top:.5rem;right:.5rem;background:none!important;border:none;font-size:1.5rem;cursor:pointer;flex-shrink:0}svg.svelte-swtc1e path:where(.svelte-swtc1e){transform-origin:center;fill:#fff;transform:translateY(2px)}.image-columns.svelte-1bzlgy6{display:flex;grid-template-columns:auto auto 1fr;position:absolute;top:-1px;right:-1px;background:transparent!important;padding:.75rem;z-index:2;background:var(--overlay-bg)!important;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:0 0 0 var(--border-radius-large);border:1px solid var(--post-border-color);transition:box-shadow .2s ease-in-out;box-shadow:#0000 0 25px 50px -12px}.image-columns.svelte-1bzlgy6:hover{box-shadow:#00000040 0 25px 50px -12px}svg.svelte-1bzlgy6{--size: 1.25rem;width:var(--size);height:var(--size);fill:#fff;opacity:.75;mix-blend-mode:difference}.slider.svelte-1bzlgy6{display:flex;gap:.55rem}input.svelte-1bzlgy6{margin-left:.75rem}.value.svelte-1bzlgy6{--size: 1.25rem;width:var(--size);height:var(--size);font-weight:500;font-size:.75rem;background:var(--tag-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none}.value.svelte-1bzlgy6 .text:where(.svelte-1bzlgy6){margin-top:-1px;color:var(--tag-color)}.section.svelte-27jg01{display:grid;padding:1rem;justify-items:center;margin-bottom:var(--content-margin);position:relative}a.svelte-27jg01{position:relative;display:block;overflow:hidden}.container.svelte-27jg01{border-radius:var(--border-radius-small);height:min-content;overflow:hidden;break-inside:avoid;margin-bottom:.75rem}img.svelte-27jg01{width:100%;height:auto;border:none;flex:1 0 100%;-webkit-user-select:none;user-select:none;will-change:width;display:block;word-break:break-all}a.gif.svelte-27jg01{width:fit-content}img.gif.svelte-27jg01{width:auto;max-width:100%}.incognito.svelte-27jg01{filter:var(--incognito-filter)!important}.dragging.svelte-27jg01 a:where(.svelte-27jg01),.dragging.svelte-27jg01 img:where(.svelte-27jg01){pointer-events:none}.forumline.svelte-wfy26x{padding:1rem;position:relative;display:flex;flex-direction:column;align-items:center}.section.svelte-wfy26x{margin-bottom:var(--content-margin)}a.svelte-wfy26x{color:#4da3ff;text-decoration:none}a.svelte-wfy26x:hover{text-decoration:underline}.post.svelte-wfy26x{display:flex;gap:1rem;padding:1rem;border-bottom:1px solid var(--post-border-color)}.post.svelte-wfy26x:nth-child(2n){background-color:var(--post-odd-bg)}.post.svelte-wfy26x:last-child{border-bottom:none}.avatar.svelte-wfy26x img:where(.svelte-wfy26x){width:48px;height:48px;border-radius:var(--border-radius-small);object-fit:cover;border:1px solid var(--post-border-color)}.no-avatar.svelte-wfy26x{display:flex;width:48px;height:48px;text-align:center;line-height:48px;background:var(--main-bg);border:1px solid var(--post-border-color);border-radius:var(--border-radius-small);font-size:1.3rem;cursor:pointer;justify-content:center;align-items:center;overflow:clip}.no-avatar.svelte-wfy26x svg:where(.svelte-wfy26x){width:55%;height:55%}.no-avatar.svelte-wfy26x:hover{text-decoration:none!important}.content.svelte-wfy26x{flex:1}.header.svelte-wfy26x{font-size:.8rem;color:#bbb;margin-block-end:.4rem;display:flex;gap:.5rem;align-items:center}.nick.svelte-wfy26x{font-weight:600}.date.svelte-wfy26x{all:unset!important;color:var(--post-date-color)!important;font-weight:400!important;opacity:.8!important;cursor:pointer!important}.date.svelte-wfy26x:hover{opacity:1!important}.message.svelte-wfy26x{margin:0;line-height:1.4}#ultra-pagination.svelte-dlb7of{display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:var(--content-margin)}#ultra-pagination a{text-decoration:none!important} `);
 
   const DEV = false;
   var is_array = Array.isArray;
   var index_of = Array.prototype.indexOf;
+  var includes = Array.prototype.includes;
   var array_from = Array.from;
   var define_property = Object.defineProperty;
   var get_descriptor = Object.getOwnPropertyDescriptor;
@@ -79,12 +80,12 @@
   const DERIVED = 1 << 1;
   const EFFECT = 1 << 2;
   const RENDER_EFFECT = 1 << 3;
+  const MANAGED_EFFECT = 1 << 24;
   const BLOCK_EFFECT = 1 << 4;
   const BRANCH_EFFECT = 1 << 5;
   const ROOT_EFFECT = 1 << 6;
   const BOUNDARY_EFFECT = 1 << 7;
-  const UNOWNED = 1 << 8;
-  const DISCONNECTED = 1 << 9;
+  const CONNECTED = 1 << 9;
   const CLEAN = 1 << 10;
   const DIRTY = 1 << 11;
   const MAYBE_DIRTY = 1 << 12;
@@ -92,10 +93,12 @@
   const DESTROYED = 1 << 14;
   const EFFECT_RAN = 1 << 15;
   const EFFECT_TRANSPARENT = 1 << 16;
-  const INSPECT_EFFECT = 1 << 17;
+  const EAGER_EFFECT = 1 << 17;
   const HEAD_EFFECT = 1 << 18;
   const EFFECT_PRESERVED = 1 << 19;
   const USER_EFFECT = 1 << 20;
+  const EFFECT_OFFSCREEN = 1 << 25;
+  const WAS_MARKED = 1 << 15;
   const REACTION_IS_UPDATING = 1 << 21;
   const ASYNC = 1 << 22;
   const ERROR_VALUE = 1 << 23;
@@ -178,7 +181,6 @@
       console.warn(`https://svelte.dev/e/svelte_boundary_reset_noop`);
     }
   }
-  let hydrating = false;
   function equals(value) {
     return value === this.v;
   }
@@ -200,6 +202,7 @@
   function push(props, runes = false, fn) {
     component_context = {
       p: component_context,
+      i: false,
       c: null,
       e: null,
       s: props,
@@ -218,6 +221,7 @@ component_context
         create_user_effect(fn);
       }
     }
+    context.i = true;
     component_context = context.p;
     return (
 {}
@@ -227,19 +231,10 @@ component_context
     return !legacy_mode_flag || component_context !== null && component_context.l === null;
   }
   let micro_tasks = [];
-  let idle_tasks = [];
   function run_micro_tasks() {
     var tasks = micro_tasks;
     micro_tasks = [];
     run_all(tasks);
-  }
-  function run_idle_tasks() {
-    var tasks = idle_tasks;
-    idle_tasks = [];
-    run_all(tasks);
-  }
-  function has_pending_tasks() {
-    return micro_tasks.length > 0 || idle_tasks.length > 0;
   }
   function queue_micro_task(fn) {
     if (micro_tasks.length === 0 && !is_flushing_sync) {
@@ -251,14 +246,10 @@ component_context
     micro_tasks.push(fn);
   }
   function flush_tasks() {
-    if (micro_tasks.length > 0) {
+    while (micro_tasks.length > 0) {
       run_micro_tasks();
     }
-    if (idle_tasks.length > 0) {
-      run_idle_tasks();
-    }
   }
-  const adjustments = new WeakMap();
   function handle_error(error) {
     var effect2 = active_effect;
     if (effect2 === null) {
@@ -267,9 +258,6 @@ component_context
     }
     if ((effect2.f & EFFECT_RAN) === 0) {
       if ((effect2.f & BOUNDARY_EFFECT) === 0) {
-        if (!effect2.parent && error instanceof Error) {
-          apply_adjustments(error);
-        }
         throw error;
       }
       effect2.b.error(error);
@@ -289,85 +277,98 @@ component_context
       }
       effect2 = effect2.parent;
     }
-    if (error instanceof Error) {
-      apply_adjustments(error);
-    }
     throw error;
   }
-  function apply_adjustments(error) {
-    const adjusted = adjustments.get(error);
-    if (adjusted) {
-      define_property(error, "message", {
-        value: adjusted.message
-      });
-      define_property(error, "stack", {
-        value: adjusted.stack
-      });
+  const STATUS_MASK = -7169;
+  function set_signal_status(signal, status) {
+    signal.f = signal.f & STATUS_MASK | status;
+  }
+  function update_derived_status(derived2) {
+    if ((derived2.f & CONNECTED) !== 0 || derived2.deps === null) {
+      set_signal_status(derived2, CLEAN);
+    } else {
+      set_signal_status(derived2, MAYBE_DIRTY);
     }
+  }
+  function clear_marked(deps) {
+    if (deps === null) return;
+    for (const dep of deps) {
+      if ((dep.f & DERIVED) === 0 || (dep.f & WAS_MARKED) === 0) {
+        continue;
+      }
+      dep.f ^= WAS_MARKED;
+      clear_marked(
+dep.deps
+      );
+    }
+  }
+  function defer_effect(effect2, dirty_effects, maybe_dirty_effects) {
+    if ((effect2.f & DIRTY) !== 0) {
+      dirty_effects.add(effect2);
+    } else if ((effect2.f & MAYBE_DIRTY) !== 0) {
+      maybe_dirty_effects.add(effect2);
+    }
+    clear_marked(effect2.deps);
+    set_signal_status(effect2, CLEAN);
   }
   const batches = new Set();
   let current_batch = null;
   let previous_batch = null;
-  let effect_pending_updates = new Set();
+  let batch_values = null;
   let queued_root_effects = [];
   let last_scheduled_effect = null;
   let is_flushing = false;
   let is_flushing_sync = false;
   class Batch {
+    committed = false;
 current = new Map();
-#previous = new Map();
-#callbacks = new Set();
+previous = new Map();
+#commit_callbacks = new Set();
+#discard_callbacks = new Set();
 #pending = 0;
+#blocking_pending = 0;
 #deferred = null;
-#neutered = false;
-#async_effects = [];
-#boundary_async_effects = [];
-#render_effects = [];
-#effects = [];
-#block_effects = [];
-#dirty_effects = [];
-#maybe_dirty_effects = [];
+#dirty_effects = new Set();
+#maybe_dirty_effects = new Set();
 skipped_effects = new Set();
+    is_fork = false;
+    #decrement_queued = false;
+    is_deferred() {
+      return this.is_fork || this.#blocking_pending > 0;
+    }
 process(root_effects) {
       queued_root_effects = [];
-      previous_batch = null;
+      this.apply();
+      var effects = [];
+      var render_effects = [];
       for (const root2 of root_effects) {
-        this.#traverse_effect_tree(root2);
+        this.#traverse_effect_tree(root2, effects, render_effects);
       }
-      if (this.#async_effects.length === 0 && this.#pending === 0) {
-        this.#commit();
-        var render_effects = this.#render_effects;
-        var effects = this.#effects;
-        this.#render_effects = [];
-        this.#effects = [];
-        this.#block_effects = [];
-        previous_batch = current_batch;
+      if (this.is_deferred()) {
+        this.#defer_effects(render_effects);
+        this.#defer_effects(effects);
+        for (const e of this.skipped_effects) {
+          reset_branch(e);
+        }
+      } else {
+        for (const fn of this.#commit_callbacks) fn();
+        this.#commit_callbacks.clear();
+        if (this.#pending === 0) {
+          this.#commit();
+        }
+        previous_batch = this;
         current_batch = null;
         flush_queued_effects(render_effects);
         flush_queued_effects(effects);
-        if (current_batch === null) {
-          current_batch = this;
-        } else {
-          batches.delete(this);
-        }
+        previous_batch = null;
         this.#deferred?.resolve();
-      } else {
-        this.#defer_effects(this.#render_effects);
-        this.#defer_effects(this.#effects);
-        this.#defer_effects(this.#block_effects);
       }
-      for (const effect2 of this.#async_effects) {
-        update_effect(effect2);
-      }
-      for (const effect2 of this.#boundary_async_effects) {
-        update_effect(effect2);
-      }
-      this.#async_effects = [];
-      this.#boundary_async_effects = [];
+      batch_values = null;
     }
-#traverse_effect_tree(root2) {
+#traverse_effect_tree(root2, effects, render_effects) {
       root2.f ^= CLEAN;
       var effect2 = root2.first;
+      var pending_boundary = null;
       while (effect2 !== null) {
         var flags2 = effect2.f;
         var is_branch = (flags2 & (BRANCH_EFFECT | ROOT_EFFECT)) !== 0;
@@ -376,16 +377,13 @@ process(root_effects) {
         if (!skip && effect2.fn !== null) {
           if (is_branch) {
             effect2.f ^= CLEAN;
+          } else if (pending_boundary !== null && (flags2 & (EFFECT | RENDER_EFFECT | MANAGED_EFFECT)) !== 0) {
+            pending_boundary.b.defer_effect(effect2);
           } else if ((flags2 & EFFECT) !== 0) {
-            this.#effects.push(effect2);
-          } else if ((flags2 & CLEAN) === 0) {
-            if ((flags2 & ASYNC) !== 0) {
-              var effects = effect2.b?.is_pending() ? this.#boundary_async_effects : this.#async_effects;
-              effects.push(effect2);
-            } else if (is_dirty(effect2)) {
-              if ((effect2.f & BLOCK_EFFECT) !== 0) this.#block_effects.push(effect2);
-              update_effect(effect2);
-            }
+            effects.push(effect2);
+          } else if (is_dirty(effect2)) {
+            if ((flags2 & BLOCK_EFFECT) !== 0) this.#maybe_dirty_effects.add(effect2);
+            update_effect(effect2);
           }
           var child2 = effect2.first;
           if (child2 !== null) {
@@ -396,87 +394,138 @@ process(root_effects) {
         var parent = effect2.parent;
         effect2 = effect2.next;
         while (effect2 === null && parent !== null) {
+          if (parent === pending_boundary) {
+            pending_boundary = null;
+          }
           effect2 = parent.next;
           parent = parent.parent;
         }
       }
     }
 #defer_effects(effects) {
-      for (const e of effects) {
-        const target = (e.f & DIRTY) !== 0 ? this.#dirty_effects : this.#maybe_dirty_effects;
-        target.push(e);
-        set_signal_status(e, CLEAN);
+      for (var i = 0; i < effects.length; i += 1) {
+        defer_effect(effects[i], this.#dirty_effects, this.#maybe_dirty_effects);
       }
-      effects.length = 0;
     }
 capture(source2, value) {
-      if (!this.#previous.has(source2)) {
-        this.#previous.set(source2, value);
+      if (value !== UNINITIALIZED && !this.previous.has(source2)) {
+        this.previous.set(source2, value);
       }
-      this.current.set(source2, source2.v);
+      if ((source2.f & ERROR_VALUE) === 0) {
+        this.current.set(source2, source2.v);
+        batch_values?.set(source2, source2.v);
+      }
     }
     activate() {
       current_batch = this;
+      this.apply();
     }
     deactivate() {
+      if (current_batch !== this) return;
       current_batch = null;
-      previous_batch = null;
-      for (const update of effect_pending_updates) {
-        effect_pending_updates.delete(update);
-        update();
-        if (current_batch !== null) {
-          break;
-        }
-      }
-    }
-    neuter() {
-      this.#neutered = true;
+      batch_values = null;
     }
     flush() {
+      this.activate();
       if (queued_root_effects.length > 0) {
         flush_effects();
-      } else {
-        this.#commit();
-      }
-      if (current_batch !== this) {
-        return;
-      }
-      if (this.#pending === 0) {
-        batches.delete(this);
+        if (current_batch !== null && current_batch !== this) {
+          return;
+        }
+      } else if (this.#pending === 0) {
+        this.process([]);
       }
       this.deactivate();
     }
-#commit() {
-      if (!this.#neutered) {
-        for (const fn of this.#callbacks) {
-          fn();
-        }
-      }
-      this.#callbacks.clear();
+    discard() {
+      for (const fn of this.#discard_callbacks) fn(this);
+      this.#discard_callbacks.clear();
     }
-    increment() {
+    #commit() {
+      if (batches.size > 1) {
+        this.previous.clear();
+        var previous_batch_values = batch_values;
+        var is_earlier = true;
+        for (const batch of batches) {
+          if (batch === this) {
+            is_earlier = false;
+            continue;
+          }
+          const sources = [];
+          for (const [source2, value] of this.current) {
+            if (batch.current.has(source2)) {
+              if (is_earlier && value !== batch.current.get(source2)) {
+                batch.current.set(source2, value);
+              } else {
+                continue;
+              }
+            }
+            sources.push(source2);
+          }
+          if (sources.length === 0) {
+            continue;
+          }
+          const others = [...batch.current.keys()].filter((s) => !this.current.has(s));
+          if (others.length > 0) {
+            var prev_queued_root_effects = queued_root_effects;
+            queued_root_effects = [];
+            const marked = new Set();
+            const checked = new Map();
+            for (const source2 of sources) {
+              mark_effects(source2, others, marked, checked);
+            }
+            if (queued_root_effects.length > 0) {
+              current_batch = batch;
+              batch.apply();
+              for (const root2 of queued_root_effects) {
+                batch.#traverse_effect_tree(root2, [], []);
+              }
+              batch.deactivate();
+            }
+            queued_root_effects = prev_queued_root_effects;
+          }
+        }
+        current_batch = null;
+        batch_values = previous_batch_values;
+      }
+      this.committed = true;
+      batches.delete(this);
+    }
+increment(blocking) {
       this.#pending += 1;
+      if (blocking) this.#blocking_pending += 1;
     }
-    decrement() {
+decrement(blocking) {
       this.#pending -= 1;
-      if (this.#pending === 0) {
-        for (const e of this.#dirty_effects) {
-          set_signal_status(e, DIRTY);
-          schedule_effect(e);
+      if (blocking) this.#blocking_pending -= 1;
+      if (this.#decrement_queued) return;
+      this.#decrement_queued = true;
+      queue_micro_task(() => {
+        this.#decrement_queued = false;
+        if (!this.is_deferred()) {
+          this.revive();
+        } else if (queued_root_effects.length > 0) {
+          this.flush();
         }
-        for (const e of this.#maybe_dirty_effects) {
-          set_signal_status(e, MAYBE_DIRTY);
-          schedule_effect(e);
-        }
-        this.#render_effects = [];
-        this.#effects = [];
-        this.flush();
-      } else {
-        this.deactivate();
-      }
+      });
     }
-add_callback(fn) {
-      this.#callbacks.add(fn);
+    revive() {
+      for (const e of this.#dirty_effects) {
+        this.#maybe_dirty_effects.delete(e);
+        set_signal_status(e, DIRTY);
+        schedule_effect(e);
+      }
+      for (const e of this.#maybe_dirty_effects) {
+        set_signal_status(e, MAYBE_DIRTY);
+        schedule_effect(e);
+      }
+      this.flush();
+    }
+oncommit(fn) {
+      this.#commit_callbacks.add(fn);
+    }
+ondiscard(fn) {
+      this.#discard_callbacks.add(fn);
     }
     settled() {
       return (this.#deferred ??= deferred()).promise;
@@ -486,7 +535,7 @@ add_callback(fn) {
         const batch = current_batch = new Batch();
         batches.add(current_batch);
         if (!is_flushing_sync) {
-          Batch.enqueue(() => {
+          queue_micro_task(() => {
             if (current_batch !== batch) {
               return;
             }
@@ -496,8 +545,8 @@ add_callback(fn) {
       }
       return current_batch;
     }
-static enqueue(task) {
-      queue_micro_task(task);
+    apply() {
+      return;
     }
   }
   function flushSync(fn) {
@@ -508,7 +557,7 @@ static enqueue(task) {
       if (fn) ;
       while (true) {
         flush_tasks();
-        if (queued_root_effects.length === 0 && !has_pending_tasks()) {
+        if (queued_root_effects.length === 0) {
           current_batch?.flush();
           if (queued_root_effects.length === 0) {
             last_scheduled_effect = null;
@@ -524,11 +573,9 @@ result
     }
   }
   function flush_effects() {
-    var was_updating_effect = is_updating_effect;
     is_flushing = true;
     try {
       var flush_count = 0;
-      set_is_updating_effect(true);
       while (queued_root_effects.length > 0) {
         var batch = Batch.ensure();
         if (flush_count++ > 1e3) {
@@ -538,10 +585,10 @@ result
         }
         batch.process(queued_root_effects);
         old_values.clear();
+        if (DEV) ;
       }
     } finally {
       is_flushing = false;
-      set_is_updating_effect(was_updating_effect);
       last_scheduled_effect = null;
     }
   }
@@ -560,32 +607,92 @@ result
     while (i < length) {
       var effect2 = effects[i++];
       if ((effect2.f & (DESTROYED | INERT)) === 0 && is_dirty(effect2)) {
-        eager_block_effects = [];
+        eager_block_effects = new Set();
         update_effect(effect2);
-        if (effect2.deps === null && effect2.first === null && effect2.nodes_start === null) {
+        if (effect2.deps === null && effect2.first === null && effect2.nodes === null) {
           if (effect2.teardown === null && effect2.ac === null) {
             unlink_effect(effect2);
           } else {
             effect2.fn = null;
           }
         }
-        if (eager_block_effects?.length > 0) {
+        if (eager_block_effects?.size > 0) {
           old_values.clear();
           for (const e of eager_block_effects) {
-            update_effect(e);
+            if ((e.f & (DESTROYED | INERT)) !== 0) continue;
+            const ordered_effects = [e];
+            let ancestor = e.parent;
+            while (ancestor !== null) {
+              if (eager_block_effects.has(ancestor)) {
+                eager_block_effects.delete(ancestor);
+                ordered_effects.push(ancestor);
+              }
+              ancestor = ancestor.parent;
+            }
+            for (let j = ordered_effects.length - 1; j >= 0; j--) {
+              const e2 = ordered_effects[j];
+              if ((e2.f & (DESTROYED | INERT)) !== 0) continue;
+              update_effect(e2);
+            }
           }
-          eager_block_effects = [];
+          eager_block_effects.clear();
         }
       }
     }
     eager_block_effects = null;
+  }
+  function mark_effects(value, sources, marked, checked) {
+    if (marked.has(value)) return;
+    marked.add(value);
+    if (value.reactions !== null) {
+      for (const reaction of value.reactions) {
+        const flags2 = reaction.f;
+        if ((flags2 & DERIVED) !== 0) {
+          mark_effects(
+reaction,
+            sources,
+            marked,
+            checked
+          );
+        } else if ((flags2 & (ASYNC | BLOCK_EFFECT)) !== 0 && (flags2 & DIRTY) === 0 && depends_on(reaction, sources, checked)) {
+          set_signal_status(reaction, DIRTY);
+          schedule_effect(
+reaction
+          );
+        }
+      }
+    }
+  }
+  function depends_on(reaction, sources, checked) {
+    const depends = checked.get(reaction);
+    if (depends !== void 0) return depends;
+    if (reaction.deps !== null) {
+      for (const dep of reaction.deps) {
+        if (includes.call(sources, dep)) {
+          return true;
+        }
+        if ((dep.f & DERIVED) !== 0 && depends_on(
+dep,
+          sources,
+          checked
+        )) {
+          checked.set(
+dep,
+            true
+          );
+          return true;
+        }
+      }
+    }
+    checked.set(reaction, false);
+    return false;
   }
   function schedule_effect(signal) {
     var effect2 = last_scheduled_effect = signal;
     while (effect2.parent !== null) {
       effect2 = effect2.parent;
       var flags2 = effect2.f;
-      if (is_flushing && effect2 === active_effect && (flags2 & BLOCK_EFFECT) !== 0) {
+      if (is_flushing && effect2 === active_effect && (flags2 & BLOCK_EFFECT) !== 0 && (flags2 & HEAD_EFFECT) === 0) {
         return;
       }
       if ((flags2 & (ROOT_EFFECT | BRANCH_EFFECT)) !== 0) {
@@ -594,6 +701,17 @@ result
       }
     }
     queued_root_effects.push(effect2);
+  }
+  function reset_branch(effect2) {
+    if ((effect2.f & BRANCH_EFFECT) !== 0 && (effect2.f & CLEAN) !== 0) {
+      return;
+    }
+    set_signal_status(effect2, CLEAN);
+    var e = effect2.first;
+    while (e !== null) {
+      reset_branch(e);
+      e = e.next;
+    }
   }
   function createSubscriber(start) {
     let subscribers = 0;
@@ -627,7 +745,7 @@ result
   }
   class Boundary {
 parent;
-    #pending = false;
+    is_pending = false;
 #anchor;
 #hydrate_open = null;
 #props;
@@ -637,15 +755,14 @@ parent;
 #pending_effect = null;
 #failed_effect = null;
 #offscreen_fragment = null;
+#pending_anchor = null;
     #local_pending_count = 0;
     #pending_count = 0;
+    #pending_count_update_queued = false;
     #is_creating_fallback = false;
+#dirty_effects = new Set();
+#maybe_dirty_effects = new Set();
 #effect_pending = null;
-    #effect_pending_update = () => {
-      if (this.#effect_pending) {
-        internal_set(this.#effect_pending, this.#local_pending_count);
-      }
-    };
     #effect_pending_subscriber = createSubscriber(() => {
       this.#effect_pending = source(this.#local_pending_count);
       return () => {
@@ -658,21 +775,25 @@ constructor(node, props, children) {
       this.#children = children;
       this.parent =
 active_effect.b;
-      this.#pending = !!this.#props.pending;
+      this.is_pending = !!this.#props.pending;
       this.#effect = block(() => {
         active_effect.b = this;
         {
+          var anchor = this.#get_anchor();
           try {
-            this.#main_effect = branch(() => children(this.#anchor));
+            this.#main_effect = branch(() => children(anchor));
           } catch (error) {
             this.error(error);
           }
           if (this.#pending_count > 0) {
             this.#show_pending_snippet();
           } else {
-            this.#pending = false;
+            this.is_pending = false;
           }
         }
+        return () => {
+          this.#pending_anchor?.remove();
+        };
       }, flags);
     }
     #hydrate_resolved_content() {
@@ -681,18 +802,16 @@ active_effect.b;
       } catch (error) {
         this.error(error);
       }
-      this.#pending = false;
     }
     #hydrate_pending_content() {
       const pending = this.#props.pending;
-      if (!pending) {
-        return;
-      }
+      if (!pending) return;
       this.#pending_effect = branch(() => pending(this.#anchor));
-      Batch.enqueue(() => {
+      queue_micro_task(() => {
+        var anchor = this.#get_anchor();
         this.#main_effect = this.#run(() => {
           Batch.ensure();
-          return branch(() => this.#children(this.#anchor));
+          return branch(() => this.#children(anchor));
         });
         if (this.#pending_count > 0) {
           this.#show_pending_snippet();
@@ -703,12 +822,24 @@ this.#pending_effect,
               this.#pending_effect = null;
             }
           );
-          this.#pending = false;
+          this.is_pending = false;
         }
       });
     }
-is_pending() {
-      return this.#pending || !!this.parent && this.parent.is_pending();
+    #get_anchor() {
+      var anchor = this.#anchor;
+      if (this.is_pending) {
+        this.#pending_anchor = create_text();
+        this.#anchor.before(this.#pending_anchor);
+        anchor = this.#pending_anchor;
+      }
+      return anchor;
+    }
+defer_effect(effect2) {
+      defer_effect(effect2, this.#dirty_effects, this.#maybe_dirty_effects);
+    }
+is_rendered() {
+      return !this.is_pending && (!this.parent || this.parent.is_rendered());
     }
     has_pending_snippet() {
       return !!this.#props.pending;
@@ -737,6 +868,9 @@ this.#props.pending
       );
       if (this.#main_effect !== null) {
         this.#offscreen_fragment = document.createDocumentFragment();
+        this.#offscreen_fragment.append(
+this.#pending_anchor
+        );
         move_effect(this.#main_effect, this.#offscreen_fragment);
       }
       if (this.#pending_effect === null) {
@@ -752,7 +886,17 @@ this.#props.pending
       }
       this.#pending_count += d;
       if (this.#pending_count === 0) {
-        this.#pending = false;
+        this.is_pending = false;
+        for (const e of this.#dirty_effects) {
+          set_signal_status(e, DIRTY);
+          schedule_effect(e);
+        }
+        for (const e of this.#maybe_dirty_effects) {
+          set_signal_status(e, MAYBE_DIRTY);
+          schedule_effect(e);
+        }
+        this.#dirty_effects.clear();
+        this.#maybe_dirty_effects.clear();
         if (this.#pending_effect) {
           pause_effect(this.#pending_effect, () => {
             this.#pending_effect = null;
@@ -767,7 +911,14 @@ this.#props.pending
 update_pending_count(d) {
       this.#update_pending_count(d);
       this.#local_pending_count += d;
-      effect_pending_updates.add(this.#effect_pending_update);
+      if (!this.#effect_pending || this.#pending_count_update_queued) return;
+      this.#pending_count_update_queued = true;
+      queue_micro_task(() => {
+        this.#pending_count_update_queued = false;
+        if (this.#effect_pending) {
+          internal_set(this.#effect_pending, this.#local_pending_count);
+        }
+      });
     }
     get_effect_pending() {
       this.#effect_pending_subscriber();
@@ -811,7 +962,7 @@ error(error) {
             this.#failed_effect = null;
           });
         }
-        this.#pending = this.has_pending_snippet();
+        this.is_pending = this.has_pending_snippet();
         this.#main_effect = this.#run(() => {
           this.#is_creating_fallback = false;
           return branch(() => this.#children(this.#anchor));
@@ -819,23 +970,20 @@ error(error) {
         if (this.#pending_count > 0) {
           this.#show_pending_snippet();
         } else {
-          this.#pending = false;
+          this.is_pending = false;
         }
       };
-      var previous_reaction = active_reaction;
-      try {
-        set_active_reaction(null);
-        calling_on_error = true;
-        onerror?.(error, reset);
-        calling_on_error = false;
-      } catch (error2) {
-        invoke_error_boundary(error2, this.#effect && this.#effect.parent);
-      } finally {
-        set_active_reaction(previous_reaction);
-      }
-      if (failed) {
-        queue_micro_task(() => {
+      queue_micro_task(() => {
+        try {
+          calling_on_error = true;
+          onerror?.(error, reset);
+          calling_on_error = false;
+        } catch (error2) {
+          invoke_error_boundary(error2, this.#effect && this.#effect.parent);
+        }
+        if (failed) {
           this.#failed_effect = this.#run(() => {
+            Batch.ensure();
             this.#is_creating_fallback = true;
             try {
               return branch(() => {
@@ -855,25 +1003,14 @@ this.#effect.parent
               this.#is_creating_fallback = false;
             }
           });
-        });
-      }
+        }
+      });
     }
   }
-  function move_effect(effect2, fragment) {
-    var node = effect2.nodes_start;
-    var end = effect2.nodes_end;
-    while (node !== null) {
-      var next = node === end ? null : (
-
-get_next_sibling(node)
-      );
-      fragment.append(node);
-      node = next;
-    }
-  }
-  function flatten(sync, async, fn) {
+  function flatten(blockers, sync, async, fn) {
     const d = is_runes() ? derived : derived_safe_equal;
-    if (async.length === 0) {
+    var pending = blockers.filter((b) => !b.settled);
+    if (async.length === 0 && pending.length === 0) {
       fn(sync.map(d));
       return;
     }
@@ -882,11 +1019,11 @@ get_next_sibling(node)
 active_effect
     );
     var restore = capture();
-    Promise.all(async.map((expression) => async_derived(expression))).then((result) => {
-      batch?.activate();
+    var blocker_promise = pending.length === 1 ? pending[0].promise : pending.length > 1 ? Promise.all(pending.map((b) => b.promise)) : null;
+    function finish(values) {
       restore();
       try {
-        fn([...sync.map(d), ...result]);
+        fn(values);
       } catch (error) {
         if ((parent.f & DESTROYED) === 0) {
           invoke_error_boundary(error, parent);
@@ -894,20 +1031,31 @@ active_effect
       }
       batch?.deactivate();
       unset_context();
-    }).catch((error) => {
-      invoke_error_boundary(error, parent);
-    });
+    }
+    if (async.length === 0) {
+      blocker_promise.then(() => finish(sync.map(d)));
+      return;
+    }
+    function run2() {
+      restore();
+      Promise.all(async.map((expression) => async_derived(expression))).then((result) => finish([...sync.map(d), ...result])).catch((error) => invoke_error_boundary(error, parent));
+    }
+    if (blocker_promise) {
+      blocker_promise.then(run2);
+    } else {
+      run2();
+    }
   }
   function capture() {
     var previous_effect = active_effect;
     var previous_reaction = active_reaction;
     var previous_component_context = component_context;
     var previous_batch2 = current_batch;
-    return function restore() {
+    return function restore(activate_batch = true) {
       set_active_effect(previous_effect);
       set_active_reaction(previous_reaction);
       set_component_context(previous_component_context);
-      previous_batch2?.activate();
+      if (activate_batch) previous_batch2?.activate();
     };
   }
   function unset_context() {
@@ -920,9 +1068,7 @@ function derived(fn) {
     var parent_derived = active_reaction !== null && (active_reaction.f & DERIVED) !== 0 ? (
 active_reaction
     ) : null;
-    if (active_effect === null || parent_derived !== null && (parent_derived.f & UNOWNED) !== 0) {
-      flags2 |= UNOWNED;
-    } else {
+    if (active_effect !== null) {
       active_effect.f |= EFFECT_PRESERVED;
     }
     const signal = {
@@ -943,7 +1089,7 @@ UNINITIALIZED
     };
     return signal;
   }
-function async_derived(fn, location2) {
+function async_derived(fn, label, location2) {
     let parent = (
 active_effect
     );
@@ -960,30 +1106,35 @@ void 0
     var signal = source(
 UNINITIALIZED
     );
-    var prev = null;
     var should_suspend = !active_reaction;
+    var deferreds = new Map();
     async_effect(() => {
+      var d = deferred();
+      promise = d.promise;
       try {
-        var p = fn();
-        if (prev) Promise.resolve(p).catch(() => {
+        Promise.resolve(fn()).then(d.resolve, d.reject).then(() => {
+          if (batch === current_batch && batch.committed) {
+            batch.deactivate();
+          }
+          unset_context();
         });
       } catch (error) {
-        p = Promise.reject(error);
+        d.reject(error);
+        unset_context();
       }
-      var r2 = () => p;
-      promise = prev?.then(r2, r2) ?? Promise.resolve(p);
-      prev = promise;
       var batch = (
 current_batch
       );
-      var pending = boundary2.is_pending();
       if (should_suspend) {
+        var blocking = boundary2.is_rendered();
         boundary2.update_pending_count(1);
-        if (!pending) batch.increment();
+        batch.increment(blocking);
+        deferreds.get(batch)?.reject(STALE_REACTION);
+        deferreds.delete(batch);
+        deferreds.set(batch, d);
       }
       const handler = (value, error = void 0) => {
-        prev = null;
-        if (!pending) batch.activate();
+        batch.activate();
         if (error) {
           if (error !== STALE_REACTION) {
             signal.f |= ERROR_VALUE;
@@ -994,18 +1145,22 @@ current_batch
             signal.f ^= ERROR_VALUE;
           }
           internal_set(signal, value);
+          for (const [b, d2] of deferreds) {
+            deferreds.delete(b);
+            if (b === batch) break;
+            d2.reject(STALE_REACTION);
+          }
         }
         if (should_suspend) {
           boundary2.update_pending_count(-1);
-          if (!pending) batch.decrement();
+          batch.decrement(blocking);
         }
-        unset_context();
       };
-      promise.then(handler, (e) => handler(null, e || "unknown"));
-      if (batch) {
-        return () => {
-          queueMicrotask(() => batch.neuter());
-        };
+      d.promise.then(handler, (e) => handler(null, e || "unknown"));
+    });
+    teardown(() => {
+      for (const d of deferreds.values()) {
+        d.reject(STALE_REACTION);
       }
     });
     return new Promise((fulfil) => {
@@ -1047,9 +1202,9 @@ effects[i]
     var parent = derived2.parent;
     while (parent !== null) {
       if ((parent.f & DERIVED) === 0) {
-        return (
+        return (parent.f & DESTROYED) === 0 ? (
 parent
-        );
+        ) : null;
       }
       parent = parent.parent;
     }
@@ -1061,6 +1216,7 @@ parent
     set_active_effect(get_derived_parent_effect(derived2));
     {
       try {
+        derived2.f &= ~WAS_MARKED;
         destroy_derived_effects(derived2);
         value = update_reaction(derived2);
       } finally {
@@ -1072,18 +1228,29 @@ parent
   function update_derived(derived2) {
     var value = execute_derived(derived2);
     if (!derived2.equals(value)) {
-      derived2.v = value;
       derived2.wv = increment_write_version();
+      if (!current_batch?.is_fork || derived2.deps === null) {
+        derived2.v = value;
+        if (derived2.deps === null) {
+          set_signal_status(derived2, CLEAN);
+          return;
+        }
+      }
     }
     if (is_destroying_effect) {
       return;
     }
-    {
-      var status = (skip_reaction || (derived2.f & UNOWNED) !== 0) && derived2.deps !== null ? MAYBE_DIRTY : CLEAN;
-      set_signal_status(derived2, status);
+    if (batch_values !== null) {
+      if (effect_tracking() || current_batch?.is_fork) {
+        batch_values.set(derived2, value);
+      }
+    } else {
+      update_derived_status(derived2);
     }
   }
+  let eager_effects = new Set();
   const old_values = new Map();
+  let eager_effects_deferred = false;
   function source(v, stack) {
     var signal = {
       f: 0,
@@ -1113,7 +1280,7 @@ function mutable_source(initial_value, immutable = false, trackable = true) {
   function set(source2, value, should_proxy = false) {
     if (active_reaction !== null &&
 
-(!untracking || (active_reaction.f & INSPECT_EFFECT) !== 0) && is_runes() && (active_reaction.f & (DERIVED | BLOCK_EFFECT | ASYNC | INSPECT_EFFECT)) !== 0 && !current_sources?.includes(source2)) {
+(!untracking || (active_reaction.f & EAGER_EFFECT) !== 0) && is_runes() && (active_reaction.f & (DERIVED | BLOCK_EFFECT | ASYNC | EAGER_EFFECT)) !== 0 && (current_sources === null || !includes.call(current_sources, source2))) {
       state_unsafe_mutation();
     }
     let new_value = should_proxy ? proxy(value) : value;
@@ -1131,12 +1298,13 @@ function mutable_source(initial_value, immutable = false, trackable = true) {
       var batch = Batch.ensure();
       batch.capture(source2, old_value);
       if ((source2.f & DERIVED) !== 0) {
-        if ((source2.f & DIRTY) !== 0) {
-          execute_derived(
+        const derived2 = (
 source2
-          );
+        );
+        if ((source2.f & DIRTY) !== 0) {
+          execute_derived(derived2);
         }
-        set_signal_status(source2, (source2.f & UNOWNED) === 0 ? CLEAN : MAYBE_DIRTY);
+        update_derived_status(derived2);
       }
       source2.wv = increment_write_version();
       mark_reactions(source2, DIRTY);
@@ -1147,8 +1315,23 @@ source2
           untracked_writes.push(source2);
         }
       }
+      if (!batch.is_fork && eager_effects.size > 0 && !eager_effects_deferred) {
+        flush_eager_effects();
+      }
     }
     return value;
+  }
+  function flush_eager_effects() {
+    eager_effects_deferred = false;
+    for (const effect2 of eager_effects) {
+      if ((effect2.f & CLEAN) !== 0) {
+        set_signal_status(effect2, MAYBE_DIRTY);
+      }
+      if (is_dirty(effect2)) {
+        update_effect(effect2);
+      }
+    }
+    eager_effects.clear();
   }
   function increment(source2) {
     set(source2, source2.v + 1);
@@ -1167,17 +1350,21 @@ source2
         set_signal_status(reaction, status);
       }
       if ((flags2 & DERIVED) !== 0) {
-        mark_reactions(
-reaction,
-          MAYBE_DIRTY
-        );
-      } else if (not_dirty) {
-        if ((flags2 & BLOCK_EFFECT) !== 0) {
-          if (eager_block_effects !== null) {
-            eager_block_effects.push(
+        var derived2 = (
 reaction
-            );
+        );
+        batch_values?.delete(derived2);
+        if ((flags2 & WAS_MARKED) === 0) {
+          if (flags2 & CONNECTED) {
+            reaction.f |= WAS_MARKED;
           }
+          mark_reactions(derived2, MAYBE_DIRTY);
+        }
+      } else if (not_dirty) {
+        if ((flags2 & BLOCK_EFFECT) !== 0 && eager_block_effects !== null) {
+          eager_block_effects.add(
+reaction
+          );
         }
         schedule_effect(
 reaction
@@ -1404,24 +1591,23 @@ sources.get("length")
     return document.createTextNode(value);
   }
 function get_first_child(node) {
-    return first_child_getter.call(node);
+    return (
+first_child_getter.call(node)
+    );
   }
 function get_next_sibling(node) {
-    return next_sibling_getter.call(node);
+    return (
+next_sibling_getter.call(node)
+    );
   }
   function child(node, is_text) {
     {
       return get_first_child(node);
     }
   }
-  function first_child(fragment, is_text = false) {
+  function first_child(node, is_text = false) {
     {
-      var first = (
-
-get_first_child(
-fragment
-        )
-      );
+      var first = get_first_child(node);
       if (first instanceof Comment && first.data === "") return get_next_sibling(first);
       return first;
     }
@@ -1488,10 +1674,10 @@ evt.target.elements
     add_form_reset_listener();
   }
   function validate_effect(rune) {
-    if (active_effect === null && active_reaction === null) {
-      effect_orphan();
-    }
-    if (active_reaction !== null && (active_reaction.f & UNOWNED) !== 0 && active_effect === null) {
+    if (active_effect === null) {
+      if (active_reaction === null) {
+        effect_orphan();
+      }
       effect_in_unowned_derived();
     }
     if (is_destroying_effect) {
@@ -1508,7 +1694,7 @@ evt.target.elements
       parent_effect.last = effect2;
     }
   }
-  function create_effect(type, fn, sync, push2 = true) {
+  function create_effect(type, fn, sync) {
     var parent = active_effect;
     if (parent !== null && (parent.f & INERT) !== 0) {
       type |= INERT;
@@ -1516,9 +1702,8 @@ evt.target.elements
     var effect2 = {
       ctx: component_context,
       deps: null,
-      nodes_start: null,
-      nodes_end: null,
-      f: type | DIRTY,
+      nodes: null,
+      f: type | DIRTY | CONNECTED,
       first: null,
       fn,
       last: null,
@@ -1527,7 +1712,6 @@ evt.target.elements
       b: parent && parent.b,
       prev: null,
       teardown: null,
-      transitions: null,
       wv: 0,
       ac: null
     };
@@ -1542,23 +1726,24 @@ evt.target.elements
     } else if (fn !== null) {
       schedule_effect(effect2);
     }
-    if (push2) {
-      var e = effect2;
-      if (sync && e.deps === null && e.teardown === null && e.nodes_start === null && e.first === e.last &&
+    var e = effect2;
+    if (sync && e.deps === null && e.teardown === null && e.nodes === null && e.first === e.last &&
 (e.f & EFFECT_PRESERVED) === 0) {
-        e = e.first;
+      e = e.first;
+      if ((type & BLOCK_EFFECT) !== 0 && (type & EFFECT_TRANSPARENT) !== 0 && e !== null) {
+        e.f |= EFFECT_TRANSPARENT;
       }
-      if (e !== null) {
-        e.parent = parent;
-        if (parent !== null) {
-          push_effect(e, parent);
-        }
-        if (active_reaction !== null && (active_reaction.f & DERIVED) !== 0 && (type & ROOT_EFFECT) === 0) {
-          var derived2 = (
+    }
+    if (e !== null) {
+      e.parent = parent;
+      if (parent !== null) {
+        push_effect(e, parent);
+      }
+      if (active_reaction !== null && (active_reaction.f & DERIVED) !== 0 && (type & ROOT_EFFECT) === 0) {
+        var derived2 = (
 active_reaction
-          );
-          (derived2.effects ??= []).push(e);
-        }
+        );
+        (derived2.effects ??= []).push(e);
       }
     }
     return effect2;
@@ -1620,17 +1805,32 @@ component_context
   function render_effect(fn, flags2 = 0) {
     return create_effect(RENDER_EFFECT | flags2, fn, true);
   }
-  function template_effect(fn, sync = [], async = []) {
-    flatten(sync, async, (values) => {
+  function template_effect(fn, sync = [], async = [], blockers = []) {
+    flatten(blockers, sync, async, (values) => {
       create_effect(RENDER_EFFECT, () => fn(...values.map(get)), true);
+    });
+  }
+  function deferred_template_effect(fn, sync = [], async = [], blockers = []) {
+    var batch = (
+current_batch
+    );
+    var is_async = async.length > 0 || blockers.length > 0;
+    if (is_async) batch.increment(true);
+    flatten(blockers, sync, async, (values) => {
+      create_effect(EFFECT, () => fn(...values.map(get)), false);
+      if (is_async) batch.decrement(true);
     });
   }
   function block(fn, flags2 = 0) {
     var effect2 = create_effect(BLOCK_EFFECT | flags2, fn, true);
     return effect2;
   }
-  function branch(fn, push2 = true) {
-    return create_effect(BRANCH_EFFECT | EFFECT_PRESERVED, fn, true, push2);
+  function managed(fn, flags2 = 0) {
+    var effect2 = create_effect(MANAGED_EFFECT | flags2, fn, true);
+    return effect2;
+  }
+  function branch(fn) {
+    return create_effect(BRANCH_EFFECT | EFFECT_PRESERVED, fn, true);
   }
   function execute_effect_teardown(effect2) {
     var teardown2 = effect2.teardown;
@@ -1678,17 +1878,17 @@ component_context
   }
   function destroy_effect(effect2, remove_dom = true) {
     var removed = false;
-    if ((remove_dom || (effect2.f & HEAD_EFFECT) !== 0) && effect2.nodes_start !== null && effect2.nodes_end !== null) {
+    if ((remove_dom || (effect2.f & HEAD_EFFECT) !== 0) && effect2.nodes !== null && effect2.nodes.end !== null) {
       remove_effect_dom(
-        effect2.nodes_start,
-effect2.nodes_end
+        effect2.nodes.start,
+effect2.nodes.end
       );
       removed = true;
     }
     destroy_effect_children(effect2, remove_dom && !removed);
     remove_reactions(effect2, 0);
     set_signal_status(effect2, DESTROYED);
-    var transitions = effect2.transitions;
+    var transitions = effect2.nodes && effect2.nodes.t;
     if (transitions !== null) {
       for (const transition2 of transitions) {
         transition2.stop();
@@ -1699,14 +1899,11 @@ effect2.nodes_end
     if (parent !== null && parent.first !== null) {
       unlink_effect(effect2);
     }
-    effect2.next = effect2.prev = effect2.teardown = effect2.ctx = effect2.deps = effect2.fn = effect2.nodes_start = effect2.nodes_end = effect2.ac = null;
+    effect2.next = effect2.prev = effect2.teardown = effect2.ctx = effect2.deps = effect2.fn = effect2.nodes = effect2.ac = null;
   }
   function remove_effect_dom(node, end) {
     while (node !== null) {
-      var next = node === end ? null : (
-
-get_next_sibling(node)
-      );
+      var next = node === end ? null : get_next_sibling(node);
       node.remove();
       node = next;
     }
@@ -1722,15 +1919,13 @@ get_next_sibling(node)
       if (parent.last === effect2) parent.last = prev;
     }
   }
-  function pause_effect(effect2, callback) {
+  function pause_effect(effect2, callback, destroy = true) {
     var transitions = [];
     pause_children(effect2, transitions, true);
-    run_out_transitions(transitions, () => {
-      destroy_effect(effect2);
+    var fn = () => {
+      if (destroy) destroy_effect(effect2);
       if (callback) callback();
-    });
-  }
-  function run_out_transitions(transitions, fn) {
+    };
     var remaining = transitions.length;
     if (remaining > 0) {
       var check = () => --remaining || fn();
@@ -1744,8 +1939,9 @@ get_next_sibling(node)
   function pause_children(effect2, transitions, local) {
     if ((effect2.f & INERT) !== 0) return;
     effect2.f ^= INERT;
-    if (effect2.transitions !== null) {
-      for (const transition2 of effect2.transitions) {
+    var t = effect2.nodes && effect2.nodes.t;
+    if (t !== null) {
+      for (const transition2 of t) {
         if (transition2.is_global || local) {
           transitions.push(transition2);
         }
@@ -1754,7 +1950,10 @@ get_next_sibling(node)
     var child2 = effect2.first;
     while (child2 !== null) {
       var sibling2 = child2.next;
-      var transparent = (child2.f & EFFECT_TRANSPARENT) !== 0 || (child2.f & BRANCH_EFFECT) !== 0;
+      var transparent = (child2.f & EFFECT_TRANSPARENT) !== 0 ||
+
+
+(child2.f & BRANCH_EFFECT) !== 0 && (effect2.f & BLOCK_EFFECT) !== 0;
       pause_children(child2, transitions, transparent ? local : false);
       child2 = sibling2;
     }
@@ -1776,18 +1975,26 @@ get_next_sibling(node)
       resume_children(child2, transparent ? local : false);
       child2 = sibling2;
     }
-    if (effect2.transitions !== null) {
-      for (const transition2 of effect2.transitions) {
+    var t = effect2.nodes && effect2.nodes.t;
+    if (t !== null) {
+      for (const transition2 of t) {
         if (transition2.is_global || local) {
           transition2.in();
         }
       }
     }
   }
-  let is_updating_effect = false;
-  function set_is_updating_effect(value) {
-    is_updating_effect = value;
+  function move_effect(effect2, fragment) {
+    if (!effect2.nodes) return;
+    var node = effect2.nodes.start;
+    var end = effect2.nodes.end;
+    while (node !== null) {
+      var next = node === end ? null : get_next_sibling(node);
+      fragment.append(node);
+      node = next;
+    }
   }
+  let is_updating_effect = false;
   let is_destroying_effect = false;
   function set_is_destroying_effect(value) {
     is_destroying_effect = value;
@@ -1823,7 +2030,6 @@ get_next_sibling(node)
   function set_update_version(value) {
     update_version = value;
   }
-  let skip_reaction = false;
   function increment_write_version() {
     return ++write_version;
   }
@@ -1832,48 +2038,30 @@ get_next_sibling(node)
     if ((flags2 & DIRTY) !== 0) {
       return true;
     }
+    if (flags2 & DERIVED) {
+      reaction.f &= ~WAS_MARKED;
+    }
     if ((flags2 & MAYBE_DIRTY) !== 0) {
-      var dependencies = reaction.deps;
-      var is_unowned = (flags2 & UNOWNED) !== 0;
-      if (dependencies !== null) {
-        var i;
-        var dependency;
-        var is_disconnected = (flags2 & DISCONNECTED) !== 0;
-        var is_unowned_connected = is_unowned && active_effect !== null && !skip_reaction;
-        var length = dependencies.length;
-        if ((is_disconnected || is_unowned_connected) && (active_effect === null || (active_effect.f & DESTROYED) === 0)) {
-          var derived2 = (
-reaction
+      var dependencies = (
+reaction.deps
+      );
+      var length = dependencies.length;
+      for (var i = 0; i < length; i++) {
+        var dependency = dependencies[i];
+        if (is_dirty(
+dependency
+        )) {
+          update_derived(
+dependency
           );
-          var parent = derived2.parent;
-          for (i = 0; i < length; i++) {
-            dependency = dependencies[i];
-            if (is_disconnected || !dependency?.reactions?.includes(derived2)) {
-              (dependency.reactions ??= []).push(derived2);
-            }
-          }
-          if (is_disconnected) {
-            derived2.f ^= DISCONNECTED;
-          }
-          if (is_unowned_connected && parent !== null && (parent.f & UNOWNED) === 0) {
-            derived2.f ^= UNOWNED;
-          }
         }
-        for (i = 0; i < length; i++) {
-          dependency = dependencies[i];
-          if (is_dirty(
-dependency
-          )) {
-            update_derived(
-dependency
-            );
-          }
-          if (dependency.wv > reaction.wv) {
-            return true;
-          }
+        if (dependency.wv > reaction.wv) {
+          return true;
         }
       }
-      if (!is_unowned || active_effect !== null && !skip_reaction) {
+      if ((flags2 & CONNECTED) !== 0 &&
+
+batch_values === null) {
         set_signal_status(reaction, CLEAN);
       }
     }
@@ -1882,7 +2070,7 @@ dependency
   function schedule_possible_effect_self_invalidation(signal, effect2, root2 = true) {
     var reactions = signal.reactions;
     if (reactions === null) return;
-    if (current_sources?.includes(signal)) {
+    if (current_sources !== null && includes.call(current_sources, signal)) {
       return;
     }
     for (var i = 0; i < reactions.length; i++) {
@@ -1910,7 +2098,6 @@ reaction
     var previous_skipped_deps = skipped_deps;
     var previous_untracked_writes = untracked_writes;
     var previous_reaction = active_reaction;
-    var previous_skip_reaction = skip_reaction;
     var previous_sources = current_sources;
     var previous_component_context = component_context;
     var previous_untracking = untracking;
@@ -1920,7 +2107,6 @@ reaction
 null;
     skipped_deps = 0;
     untracked_writes = null;
-    skip_reaction = (flags2 & UNOWNED) !== 0 && (untracking || !is_updating_effect || active_reaction === null);
     active_reaction = (flags2 & (BRANCH_EFFECT | ROOT_EFFECT)) === 0 ? reaction : null;
     current_sources = null;
     set_component_context(reaction.ctx);
@@ -1939,9 +2125,12 @@ reaction.fn
       );
       var result = fn();
       var deps = reaction.deps;
+      var is_fork = current_batch?.is_fork;
       if (new_deps !== null) {
         var i;
-        remove_reactions(reaction, skipped_deps);
+        if (!is_fork) {
+          remove_reactions(reaction, skipped_deps);
+        }
         if (deps !== null && skipped_deps > 0) {
           deps.length = skipped_deps + new_deps.length;
           for (i = 0; i < new_deps.length; i++) {
@@ -1950,14 +2139,12 @@ reaction.fn
         } else {
           reaction.deps = deps = new_deps;
         }
-        if (!skip_reaction ||
-(flags2 & DERIVED) !== 0 &&
-reaction.reactions !== null) {
+        if (effect_tracking() && (reaction.f & CONNECTED) !== 0) {
           for (i = skipped_deps; i < deps.length; i++) {
             (deps[i].reactions ??= []).push(reaction);
           }
         }
-      } else if (deps !== null && skipped_deps < deps.length) {
+      } else if (!is_fork && deps !== null && skipped_deps < deps.length) {
         remove_reactions(reaction, skipped_deps);
         deps.length = skipped_deps;
       }
@@ -1972,6 +2159,16 @@ reaction
       }
       if (previous_reaction !== null && previous_reaction !== reaction) {
         read_version++;
+        if (previous_reaction.deps !== null) {
+          for (let i2 = 0; i2 < previous_skipped_deps; i2 += 1) {
+            previous_reaction.deps[i2].rv = read_version;
+          }
+        }
+        if (previous_deps !== null) {
+          for (const dep of previous_deps) {
+            dep.rv = read_version;
+          }
+        }
         if (untracked_writes !== null) {
           if (previous_untracked_writes === null) {
             previous_untracked_writes = untracked_writes;
@@ -1993,7 +2190,6 @@ untracked_writes);
       skipped_deps = previous_skipped_deps;
       untracked_writes = previous_untracked_writes;
       active_reaction = previous_reaction;
-      skip_reaction = previous_skip_reaction;
       current_sources = previous_sources;
       set_component_context(previous_component_context);
       untracking = previous_untracking;
@@ -2017,18 +2213,17 @@ untracked_writes);
     if (reactions === null && (dependency.f & DERIVED) !== 0 &&
 
 
-(new_deps === null || !new_deps.includes(dependency))) {
-      set_signal_status(dependency, MAYBE_DIRTY);
-      if ((dependency.f & (UNOWNED | DISCONNECTED)) === 0) {
-        dependency.f ^= DISCONNECTED;
-      }
-      destroy_derived_effects(
+(new_deps === null || !includes.call(new_deps, dependency))) {
+      var derived2 = (
 dependency
       );
-      remove_reactions(
-dependency,
-        0
-      );
+      if ((derived2.f & CONNECTED) !== 0) {
+        derived2.f ^= CONNECTED;
+        derived2.f &= ~WAS_MARKED;
+      }
+      update_derived_status(derived2);
+      destroy_derived_effects(derived2);
+      remove_reactions(derived2, 0);
     }
   }
   function remove_reactions(signal, start_index) {
@@ -2049,7 +2244,7 @@ dependency,
     active_effect = effect2;
     is_updating_effect = true;
     try {
-      if ((flags2 & BLOCK_EFFECT) !== 0) {
+      if ((flags2 & (BLOCK_EFFECT | MANAGED_EFFECT)) !== 0) {
         destroy_block_effect_children(effect2);
       } else {
         destroy_effect_children(effect2);
@@ -2074,7 +2269,7 @@ dependency,
     var is_derived = (flags2 & DERIVED) !== 0;
     if (active_reaction !== null && !untracking) {
       var destroyed = active_effect !== null && (active_effect.f & DESTROYED) !== 0;
-      if (!destroyed && !current_sources?.includes(signal)) {
+      if (!destroyed && (current_sources === null || !includes.call(current_sources, signal))) {
         var deps = active_reaction.deps;
         if ((active_reaction.f & REACTION_IS_UPDATING) !== 0) {
           if (signal.rv < read_version) {
@@ -2083,7 +2278,7 @@ dependency,
               skipped_deps++;
             } else if (new_deps === null) {
               new_deps = [signal];
-            } else if (!skip_reaction || !new_deps.includes(signal)) {
+            } else {
               new_deps.push(signal);
             }
           }
@@ -2092,29 +2287,20 @@ dependency,
           var reactions = signal.reactions;
           if (reactions === null) {
             signal.reactions = [active_reaction];
-          } else if (!reactions.includes(active_reaction)) {
+          } else if (!includes.call(reactions, active_reaction)) {
             reactions.push(active_reaction);
           }
         }
       }
-    } else if (is_derived &&
-signal.deps === null &&
-signal.effects === null) {
+    }
+    if (is_destroying_effect && old_values.has(signal)) {
+      return old_values.get(signal);
+    }
+    if (is_derived) {
       var derived2 = (
 signal
       );
-      var parent = derived2.parent;
-      if (parent !== null && (parent.f & UNOWNED) === 0) {
-        derived2.f ^= UNOWNED;
-      }
-    }
-    if (is_destroying_effect) {
-      if (old_values.has(signal)) {
-        return old_values.get(signal);
-      }
-      if (is_derived) {
-        derived2 =
-signal;
+      if (is_destroying_effect) {
         var value = derived2.v;
         if ((derived2.f & CLEAN) === 0 && derived2.reactions !== null || depends_on_old_values(derived2)) {
           value = execute_derived(derived2);
@@ -2122,17 +2308,37 @@ signal;
         old_values.set(derived2, value);
         return value;
       }
-    } else if (is_derived) {
-      derived2 =
-signal;
+      var should_connect = (derived2.f & CONNECTED) === 0 && !untracking && active_reaction !== null && (is_updating_effect || (active_reaction.f & CONNECTED) !== 0);
+      var is_new = derived2.deps === null;
       if (is_dirty(derived2)) {
+        if (should_connect) {
+          derived2.f |= CONNECTED;
+        }
         update_derived(derived2);
       }
+      if (should_connect && !is_new) {
+        reconnect(derived2);
+      }
+    }
+    if (batch_values?.has(signal)) {
+      return batch_values.get(signal);
     }
     if ((signal.f & ERROR_VALUE) !== 0) {
       throw signal.v;
     }
     return signal.v;
+  }
+  function reconnect(derived2) {
+    if (derived2.deps === null) return;
+    derived2.f |= CONNECTED;
+    for (const dep of derived2.deps) {
+      (dep.reactions ??= []).push(derived2);
+      if ((dep.f & DERIVED) !== 0 && (dep.f & CONNECTED) === 0) {
+        reconnect(
+dep
+        );
+      }
+    }
   }
   function depends_on_old_values(derived2) {
     if (derived2.v === UNINITIALIZED) return true;
@@ -2157,10 +2363,6 @@ dep
     } finally {
       untracking = previous_untracking;
     }
-  }
-  const STATUS_MASK = -7169;
-  function set_signal_status(signal, status) {
-    signal.f = signal.f & STATUS_MASK | status;
   }
   function deep_read_state(value) {
     if (typeof value !== "object" || !value || value instanceof EventTarget) {
@@ -2311,12 +2513,7 @@ current_target.host || null;
 current_target.disabled ||
 
 event2.target === current_target)) {
-            if (is_array(delegated)) {
-              var [fn, ...data2] = delegated;
-              fn.apply(current_target, [event2, ...data2]);
-            } else {
-              delegated.call(current_target, event2);
-            }
+            delegated.call(current_target, event2);
           }
         } catch (error) {
           if (throw_error) {
@@ -2345,16 +2542,6 @@ event2.target === current_target)) {
       set_active_effect(previous_effect);
     }
   }
-  function head(render_fn) {
-    var anchor;
-    {
-      anchor = document.head.appendChild(create_text());
-    }
-    try {
-      block(() => render_fn(anchor), HEAD_EFFECT);
-    } finally {
-    }
-  }
   function create_fragment_from_html(html2) {
     var elem = document.createElement("template");
     elem.innerHTML = html2.replaceAll("<!>", "<!---->");
@@ -2364,9 +2551,8 @@ event2.target === current_target)) {
     var effect2 = (
 active_effect
     );
-    if (effect2.nodes_start === null) {
-      effect2.nodes_start = start;
-      effect2.nodes_end = end;
+    if (effect2.nodes === null) {
+      effect2.nodes = { start, end, a: null, t: null };
     }
   }
 function from_html(content, flags2) {
@@ -2537,174 +2723,245 @@ document_listeners.get(event_name)
     return component;
   }
   let mounted_components = new WeakMap();
-  const PENDING = 0;
-  const THEN = 1;
-  const CATCH = 2;
-  function await_block(node, get_input, pending_fn, then_fn, catch_fn) {
-    var anchor = node;
-    var runes = is_runes();
-    var active_component_context = component_context;
-    var input = UNINITIALIZED;
-    var pending_effect;
-    var then_effect;
-    var catch_effect;
-    var input_source = runes ? source(
-void 0
-    ) : mutable_source(
-void 0,
-      false,
-      false
-    );
-    var error_source = runes ? source(void 0) : mutable_source(void 0, false, false);
-    var resolved = false;
-    function update(state2, restore) {
-      resolved = true;
-      if (restore) {
-        set_active_effect(effect2);
-        set_active_reaction(effect2);
-        set_component_context(active_component_context);
+  class BranchManager {
+anchor;
+#batches = new Map();
+#onscreen = new Map();
+#offscreen = new Map();
+#outroing = new Set();
+#transition = true;
+constructor(anchor, transition2 = true) {
+      this.anchor = anchor;
+      this.#transition = transition2;
+    }
+    #commit = () => {
+      var batch = (
+current_batch
+      );
+      if (!this.#batches.has(batch)) return;
+      var key = (
+this.#batches.get(batch)
+      );
+      var onscreen = this.#onscreen.get(key);
+      if (onscreen) {
+        resume_effect(onscreen);
+        this.#outroing.delete(key);
+      } else {
+        var offscreen = this.#offscreen.get(key);
+        if (offscreen) {
+          this.#onscreen.set(key, offscreen.effect);
+          this.#offscreen.delete(key);
+          offscreen.fragment.lastChild.remove();
+          this.anchor.before(offscreen.fragment);
+          onscreen = offscreen.effect;
+        }
       }
-      try {
-        if (state2 === PENDING && pending_fn) ;
-        if (state2 === THEN && then_fn) {
-          if (then_effect) resume_effect(then_effect);
-          else then_effect = branch(() => then_fn(anchor, input_source));
+      for (const [b, k] of this.#batches) {
+        this.#batches.delete(b);
+        if (b === batch) {
+          break;
         }
-        if (state2 === CATCH && catch_fn) ;
-        if (state2 !== PENDING && pending_effect) {
-          pause_effect(pending_effect, () => pending_effect = null);
+        const offscreen2 = this.#offscreen.get(k);
+        if (offscreen2) {
+          destroy_effect(offscreen2.effect);
+          this.#offscreen.delete(k);
         }
-        if (state2 !== THEN && then_effect) {
-          pause_effect(then_effect, () => then_effect = null);
+      }
+      for (const [k, effect2] of this.#onscreen) {
+        if (k === key || this.#outroing.has(k)) continue;
+        const on_destroy = () => {
+          const keys = Array.from(this.#batches.values());
+          if (keys.includes(k)) {
+            var fragment = document.createDocumentFragment();
+            move_effect(effect2, fragment);
+            fragment.append(create_text());
+            this.#offscreen.set(k, { effect: effect2, fragment });
+          } else {
+            destroy_effect(effect2);
+          }
+          this.#outroing.delete(k);
+          this.#onscreen.delete(k);
+        };
+        if (this.#transition || !onscreen) {
+          this.#outroing.add(k);
+          pause_effect(effect2, on_destroy, false);
+        } else {
+          on_destroy();
         }
-        if (state2 !== CATCH && catch_effect) {
-          pause_effect(catch_effect, () => catch_effect = null);
+      }
+    };
+#discard = (batch) => {
+      this.#batches.delete(batch);
+      const keys = Array.from(this.#batches.values());
+      for (const [k, branch2] of this.#offscreen) {
+        if (!keys.includes(k)) {
+          destroy_effect(branch2.effect);
+          this.#offscreen.delete(k);
         }
-      } finally {
-        if (restore) {
-          set_component_context(null);
-          set_active_reaction(null);
-          set_active_effect(null);
-          flushSync();
+      }
+    };
+ensure(key, fn) {
+      var batch = (
+current_batch
+      );
+      if (fn && !this.#onscreen.has(key) && !this.#offscreen.has(key)) {
+        {
+          this.#onscreen.set(
+            key,
+            branch(() => fn(this.anchor))
+          );
         }
+      }
+      this.#batches.set(batch, key);
+      {
+        this.#commit();
       }
     }
-    var effect2 = block(() => {
-      if (input === (input = get_input())) return;
+  }
+  const PENDING = 0;
+  const THEN = 1;
+  function await_block(node, get_input, pending_fn, then_fn, catch_fn) {
+    var runes = is_runes();
+    var v = (
+UNINITIALIZED
+    );
+    var value = runes ? source(v) : mutable_source(v, false, false);
+    var error = runes ? source(v) : mutable_source(v, false, false);
+    var branches = new BranchManager(node);
+    block(() => {
+      var input = get_input();
+      var destroyed = false;
       if (is_promise(input)) {
-        var promise = input;
-        resolved = false;
-        promise.then(
-          (value) => {
-            if (promise !== input) return;
-            internal_set(input_source, value);
-            update(THEN, true);
+        var restore = capture();
+        var resolved = false;
+        const resolve = (fn) => {
+          if (destroyed) return;
+          resolved = true;
+          restore(false);
+          Batch.ensure();
+          try {
+            fn();
+          } finally {
+            unset_context();
+            if (!is_flushing_sync) flushSync();
+          }
+        };
+        input.then(
+          (v2) => {
+            resolve(() => {
+              internal_set(value, v2);
+              branches.ensure(THEN, then_fn && ((target) => then_fn(target, value)));
+            });
           },
-          (error) => {
-            if (promise !== input) return;
-            internal_set(error_source, error);
-            update(CATCH, true);
-            {
-              throw error_source.v;
-            }
+          (e) => {
+            resolve(() => {
+              internal_set(error, e);
+              branches.ensure(THEN, catch_fn && ((target) => catch_fn(target, error)));
+              if (!catch_fn) {
+                throw error.v;
+              }
+            });
           }
         );
         {
           queue_micro_task(() => {
-            if (!resolved) update(PENDING, true);
+            if (!resolved) {
+              resolve(() => {
+                branches.ensure(PENDING, pending_fn);
+              });
+            }
           });
         }
       } else {
-        internal_set(input_source, input);
-        update(THEN, false);
+        internal_set(value, input);
+        branches.ensure(THEN, then_fn && ((target) => then_fn(target, value)));
       }
-      return () => input = UNINITIALIZED;
+      return () => {
+        destroyed = true;
+      };
     });
   }
   function if_block(node, fn, elseif = false) {
-    var anchor = node;
-    var consequent_effect = null;
-    var alternate_effect = null;
-    var condition = UNINITIALIZED;
+    var branches = new BranchManager(node);
     var flags2 = elseif ? EFFECT_TRANSPARENT : 0;
-    var has_branch = false;
-    const set_branch = (fn2, flag = true) => {
-      has_branch = true;
-      update_branch(flag, fn2);
-    };
-    function commit() {
-      var active = condition ? consequent_effect : alternate_effect;
-      var inactive = condition ? alternate_effect : consequent_effect;
-      if (active) {
-        resume_effect(active);
-      }
-      if (inactive) {
-        pause_effect(inactive, () => {
-          if (condition) {
-            alternate_effect = null;
-          } else {
-            consequent_effect = null;
-          }
-        });
-      }
+    function update_branch(condition, fn2) {
+      branches.ensure(condition, fn2);
     }
-    const update_branch = (new_condition, fn2) => {
-      if (condition === (condition = new_condition)) return;
-      var target = anchor;
-      if (condition) {
-        consequent_effect ??= fn2 && branch(() => fn2(target));
-      } else {
-        alternate_effect ??= fn2 && branch(() => fn2(target));
-      }
-      {
-        commit();
-      }
-    };
     block(() => {
-      has_branch = false;
-      fn(set_branch);
+      var has_branch = false;
+      fn((fn2, flag = true) => {
+        has_branch = true;
+        update_branch(flag, fn2);
+      });
       if (!has_branch) {
-        update_branch(null, null);
+        update_branch(false, null);
       }
     }, flags2);
   }
   function index(_, i) {
     return i;
   }
-  function pause_effects(state2, items, controlled_anchor) {
-    var items_map = state2.items;
+  function pause_effects(state2, to_destroy, controlled_anchor) {
     var transitions = [];
-    var length = items.length;
+    var length = to_destroy.length;
+    var group;
+    var remaining = to_destroy.length;
     for (var i = 0; i < length; i++) {
-      pause_children(items[i].e, transitions, true);
-    }
-    var is_controlled = length > 0 && transitions.length === 0 && controlled_anchor !== null;
-    if (is_controlled) {
-      var parent_node = (
-
-controlled_anchor.parentNode
+      let effect2 = to_destroy[i];
+      pause_effect(
+        effect2,
+        () => {
+          if (group) {
+            group.pending.delete(effect2);
+            group.done.add(effect2);
+            if (group.pending.size === 0) {
+              var groups = (
+state2.outrogroups
+              );
+              destroy_effects(array_from(group.done));
+              groups.delete(group);
+              if (groups.size === 0) {
+                state2.outrogroups = null;
+              }
+            }
+          } else {
+            remaining -= 1;
+          }
+        },
+        false
       );
-      clear_text_content(parent_node);
-      parent_node.append(
+    }
+    if (remaining === 0) {
+      var fast_path = transitions.length === 0 && controlled_anchor !== null;
+      if (fast_path) {
+        var anchor = (
 controlled_anchor
-      );
-      items_map.clear();
-      link(state2, items[0].prev, items[length - 1].next);
-    }
-    run_out_transitions(transitions, () => {
-      for (var i2 = 0; i2 < length; i2++) {
-        var item = items[i2];
-        if (!is_controlled) {
-          items_map.delete(item.k);
-          link(state2, item.prev, item.next);
-        }
-        destroy_effect(item.e, !is_controlled);
+        );
+        var parent_node = (
+anchor.parentNode
+        );
+        clear_text_content(parent_node);
+        parent_node.append(anchor);
+        state2.items.clear();
       }
-    });
+      destroy_effects(to_destroy, !fast_path);
+    } else {
+      group = {
+        pending: new Set(to_destroy),
+        done: new Set()
+      };
+      (state2.outrogroups ??= new Set()).add(group);
+    }
   }
+  function destroy_effects(to_destroy, remove_dom = true) {
+    for (var i = 0; i < to_destroy.length; i++) {
+      destroy_effect(to_destroy[i], remove_dom);
+    }
+  }
+  var offscreen_anchor;
   function each(node, flags2, get_collection, get_key, render_fn, fallback_fn = null) {
     var anchor = node;
-    var state2 = { flags: flags2, items: new Map(), first: null };
+    var items = new Map();
     var is_controlled = (flags2 & EACH_IS_CONTROLLED) !== 0;
     if (is_controlled) {
       var parent_node = (
@@ -2713,65 +2970,89 @@ node
       anchor = parent_node.appendChild(create_text());
     }
     var fallback = null;
-    var was_empty = false;
-    var offscreen_items = new Map();
     var each_array = derived_safe_equal(() => {
       var collection = get_collection();
       return is_array(collection) ? collection : collection == null ? [] : array_from(collection);
     });
     var array;
-    var each_effect;
+    var first_run = true;
     function commit() {
-      reconcile(
-        each_effect,
-        array,
-        state2,
-        offscreen_items,
-        anchor,
-        render_fn,
-        flags2,
-        get_key,
-        get_collection
-      );
-      if (fallback_fn !== null) {
+      state2.fallback = fallback;
+      reconcile(state2, array, anchor, flags2, get_key);
+      if (fallback !== null) {
         if (array.length === 0) {
-          if (fallback) {
+          if ((fallback.f & EFFECT_OFFSCREEN) === 0) {
             resume_effect(fallback);
           } else {
-            fallback = branch(() => fallback_fn(anchor));
+            fallback.f ^= EFFECT_OFFSCREEN;
+            move(fallback, null, anchor);
           }
-        } else if (fallback !== null) {
+        } else {
           pause_effect(fallback, () => {
             fallback = null;
           });
         }
       }
     }
-    block(() => {
-      each_effect ??=
-active_effect;
+    var effect2 = block(() => {
       array =
 get(each_array);
       var length = array.length;
-      if (was_empty && length === 0) {
-        return;
+      var keys = new Set();
+      for (var index2 = 0; index2 < length; index2 += 1) {
+        var value = array[index2];
+        var key = get_key(value, index2);
+        var item = first_run ? null : items.get(key);
+        if (item) {
+          if (item.v) internal_set(item.v, value);
+          if (item.i) internal_set(item.i, index2);
+        } else {
+          item = create_item(
+            items,
+            first_run ? anchor : offscreen_anchor ??= create_text(),
+            value,
+            key,
+            index2,
+            render_fn,
+            flags2,
+            get_collection
+          );
+          if (!first_run) {
+            item.e.f |= EFFECT_OFFSCREEN;
+          }
+          items.set(key, item);
+        }
+        keys.add(key);
       }
-      was_empty = length === 0;
-      {
+      if (length === 0 && fallback_fn && !fallback) {
+        if (first_run) {
+          fallback = branch(() => fallback_fn(anchor));
+        } else {
+          fallback = branch(() => fallback_fn(offscreen_anchor ??= create_text()));
+          fallback.f |= EFFECT_OFFSCREEN;
+        }
+      }
+      if (!first_run) {
         {
           commit();
         }
       }
       get(each_array);
     });
+    var state2 = { effect: effect2, items, outrogroups: null, fallback };
+    first_run = false;
   }
-  function reconcile(each_effect, array, state2, offscreen_items, anchor, render_fn, flags2, get_key, get_collection) {
+  function skip_to_branch(effect2) {
+    while (effect2 !== null && (effect2.f & BRANCH_EFFECT) === 0) {
+      effect2 = effect2.next;
+    }
+    return effect2;
+  }
+  function reconcile(state2, array, anchor, flags2, get_key) {
     var is_animated = (flags2 & EACH_IS_ANIMATED) !== 0;
-    var should_update = (flags2 & (EACH_ITEM_REACTIVE | EACH_INDEX_REACTIVE)) !== 0;
     var length = array.length;
     var items = state2.items;
-    var first = state2.first;
-    var current = first;
+    var current = skip_to_branch(state2.effect.first);
     var seen;
     var prev = null;
     var to_animate;
@@ -2779,68 +3060,61 @@ get(each_array);
     var stashed = [];
     var value;
     var key;
-    var item;
+    var effect2;
     var i;
     if (is_animated) {
       for (i = 0; i < length; i += 1) {
         value = array[i];
         key = get_key(value, i);
-        item = items.get(key);
-        if (item !== void 0) {
-          item.a?.measure();
-          (to_animate ??= new Set()).add(item);
+        effect2 =
+items.get(key).e;
+        if ((effect2.f & EFFECT_OFFSCREEN) === 0) {
+          effect2.nodes?.a?.measure();
+          (to_animate ??= new Set()).add(effect2);
         }
       }
     }
     for (i = 0; i < length; i += 1) {
       value = array[i];
       key = get_key(value, i);
-      item = items.get(key);
-      if (item === void 0) {
-        var pending = offscreen_items.get(key);
-        if (pending !== void 0) {
-          offscreen_items.delete(key);
-          items.set(key, pending);
-          var next = prev ? prev.next : current;
-          link(state2, prev, pending);
-          link(state2, pending, next);
-          move(pending, next, anchor);
-          prev = pending;
+      effect2 =
+items.get(key).e;
+      if (state2.outrogroups !== null) {
+        for (const group of state2.outrogroups) {
+          group.pending.delete(effect2);
+          group.done.delete(effect2);
+        }
+      }
+      if ((effect2.f & EFFECT_OFFSCREEN) !== 0) {
+        effect2.f ^= EFFECT_OFFSCREEN;
+        if (effect2 === current) {
+          move(effect2, null, anchor);
         } else {
-          var child_anchor = current ? (
-current.e.nodes_start
-          ) : anchor;
-          prev = create_item(
-            child_anchor,
-            state2,
-            prev,
-            prev === null ? state2.first : prev.next,
-            value,
-            key,
-            i,
-            render_fn,
-            flags2,
-            get_collection
-          );
+          var next = prev ? prev.next : current;
+          if (effect2 === state2.effect.last) {
+            state2.effect.last = effect2.prev;
+          }
+          if (effect2.prev) effect2.prev.next = effect2.next;
+          if (effect2.next) effect2.next.prev = effect2.prev;
+          link(state2, prev, effect2);
+          link(state2, effect2, next);
+          move(effect2, next, anchor);
+          prev = effect2;
+          matched = [];
+          stashed = [];
+          current = skip_to_branch(prev.next);
+          continue;
         }
-        items.set(key, prev);
-        matched = [];
-        stashed = [];
-        current = prev.next;
-        continue;
       }
-      if (should_update) {
-        update_item(item, value, i, flags2);
-      }
-      if ((item.e.f & INERT) !== 0) {
-        resume_effect(item.e);
+      if ((effect2.f & INERT) !== 0) {
+        resume_effect(effect2);
         if (is_animated) {
-          item.a?.unfix();
-          (to_animate ??= new Set()).delete(item);
+          effect2.nodes?.a?.unfix();
+          (to_animate ??= new Set()).delete(effect2);
         }
       }
-      if (item !== current) {
-        if (seen !== void 0 && seen.has(item)) {
+      if (effect2 !== current) {
+        if (seen !== void 0 && seen.has(effect2)) {
           if (matched.length < stashed.length) {
             var start = stashed[0];
             var j;
@@ -2862,50 +3136,67 @@ current.e.nodes_start
             matched = [];
             stashed = [];
           } else {
-            seen.delete(item);
-            move(item, current, anchor);
-            link(state2, item.prev, item.next);
-            link(state2, item, prev === null ? state2.first : prev.next);
-            link(state2, prev, item);
-            prev = item;
+            seen.delete(effect2);
+            move(effect2, current, anchor);
+            link(state2, effect2.prev, effect2.next);
+            link(state2, effect2, prev === null ? state2.effect.first : prev.next);
+            link(state2, prev, effect2);
+            prev = effect2;
           }
           continue;
         }
         matched = [];
         stashed = [];
-        while (current !== null && current.k !== key) {
-          if ((current.e.f & INERT) === 0) {
-            (seen ??= new Set()).add(current);
-          }
+        while (current !== null && current !== effect2) {
+          (seen ??= new Set()).add(current);
           stashed.push(current);
-          current = current.next;
+          current = skip_to_branch(current.next);
         }
         if (current === null) {
           continue;
         }
-        item = current;
       }
-      matched.push(item);
-      prev = item;
-      current = item.next;
+      if ((effect2.f & EFFECT_OFFSCREEN) === 0) {
+        matched.push(effect2);
+      }
+      prev = effect2;
+      current = skip_to_branch(effect2.next);
+    }
+    if (state2.outrogroups !== null) {
+      for (const group of state2.outrogroups) {
+        if (group.pending.size === 0) {
+          destroy_effects(array_from(group.done));
+          state2.outrogroups?.delete(group);
+        }
+      }
+      if (state2.outrogroups.size === 0) {
+        state2.outrogroups = null;
+      }
     }
     if (current !== null || seen !== void 0) {
-      var to_destroy = seen === void 0 ? [] : array_from(seen);
+      var to_destroy = [];
+      if (seen !== void 0) {
+        for (effect2 of seen) {
+          if ((effect2.f & INERT) === 0) {
+            to_destroy.push(effect2);
+          }
+        }
+      }
       while (current !== null) {
-        if ((current.e.f & INERT) === 0) {
+        if ((current.f & INERT) === 0 && current !== state2.fallback) {
           to_destroy.push(current);
         }
-        current = current.next;
+        current = skip_to_branch(current.next);
       }
       var destroy_length = to_destroy.length;
       if (destroy_length > 0) {
         var controlled_anchor = (flags2 & EACH_IS_CONTROLLED) !== 0 && length === 0 ? anchor : null;
         if (is_animated) {
           for (i = 0; i < destroy_length; i += 1) {
-            to_destroy[i].a?.measure();
+            to_destroy[i].nodes?.a?.measure();
           }
           for (i = 0; i < destroy_length; i += 1) {
-            to_destroy[i].a?.fix();
+            to_destroy[i].nodes?.a?.fix();
           }
         }
         pause_effects(state2, to_destroy, controlled_anchor);
@@ -2914,103 +3205,55 @@ current.e.nodes_start
     if (is_animated) {
       queue_micro_task(() => {
         if (to_animate === void 0) return;
-        for (item of to_animate) {
-          item.a?.apply();
+        for (effect2 of to_animate) {
+          effect2.nodes?.a?.apply();
         }
       });
     }
-    each_effect.first = state2.first && state2.first.e;
-    each_effect.last = prev && prev.e;
-    for (var unused of offscreen_items.values()) {
-      destroy_effect(unused.e);
-    }
-    offscreen_items.clear();
   }
-  function update_item(item, value, index2, type) {
-    if ((type & EACH_ITEM_REACTIVE) !== 0) {
-      internal_set(item.v, value);
-    }
-    if ((type & EACH_INDEX_REACTIVE) !== 0) {
-      internal_set(
-item.i,
-        index2
-      );
-    } else {
-      item.i = index2;
-    }
-  }
-  function create_item(anchor, state2, prev, next, value, key, index2, render_fn, flags2, get_collection, deferred2) {
-    var reactive = (flags2 & EACH_ITEM_REACTIVE) !== 0;
-    var mutable = (flags2 & EACH_ITEM_IMMUTABLE) === 0;
-    var v = reactive ? mutable ? mutable_source(value, false, false) : source(value) : value;
-    var i = (flags2 & EACH_INDEX_REACTIVE) === 0 ? index2 : source(index2);
-    var item = {
-      i,
+  function create_item(items, anchor, value, key, index2, render_fn, flags2, get_collection) {
+    var v = (flags2 & EACH_ITEM_REACTIVE) !== 0 ? (flags2 & EACH_ITEM_IMMUTABLE) === 0 ? mutable_source(value, false, false) : source(value) : null;
+    var i = (flags2 & EACH_INDEX_REACTIVE) !== 0 ? source(index2) : null;
+    return {
       v,
-      k: key,
-      a: null,
-e: null,
-      prev,
-      next
+      i,
+      e: branch(() => {
+        render_fn(anchor, v ?? value, i ?? index2, get_collection);
+        return () => {
+          items.delete(key);
+        };
+      })
     };
-    try {
-      if (anchor === null) {
-        var fragment = document.createDocumentFragment();
-        fragment.append(anchor = create_text());
-      }
-      item.e = branch(() => render_fn(
-anchor,
-        v,
-        i,
-        get_collection
-      ), hydrating);
-      item.e.prev = prev && prev.e;
-      item.e.next = next && next.e;
-      if (prev === null) {
-        if (!deferred2) {
-          state2.first = item;
-        }
-      } else {
-        prev.next = item;
-        prev.e.next = item.e;
-      }
-      if (next !== null) {
-        next.prev = item;
-        next.e.prev = item.e;
-      }
-      return item;
-    } finally {
-    }
   }
-  function move(item, next, anchor) {
-    var end = item.next ? (
-item.next.e.nodes_start
+  function move(effect2, next, anchor) {
+    if (!effect2.nodes) return;
+    var node = effect2.nodes.start;
+    var end = effect2.nodes.end;
+    var dest = next && (next.f & EFFECT_OFFSCREEN) === 0 ? (
+next.nodes.start
     ) : anchor;
-    var dest = next ? (
-next.e.nodes_start
-    ) : anchor;
-    var node = (
-item.e.nodes_start
-    );
-    while (node !== null && node !== end) {
+    while (node !== null) {
       var next_node = (
 
 get_next_sibling(node)
       );
       dest.before(node);
+      if (node === end) {
+        return;
+      }
       node = next_node;
     }
   }
   function link(state2, prev, next) {
     if (prev === null) {
-      state2.first = next;
+      state2.effect.first = next;
     } else {
       prev.next = next;
-      prev.e.next = next && next.e;
     }
-    if (next !== null) {
+    if (next === null) {
+      state2.effect.last = prev;
+    } else {
       next.prev = prev;
-      next.e.prev = prev && prev.e;
     }
   }
   function html(node, get_value, svg = false, mathml = false, skip_warning = false) {
@@ -3023,12 +3266,12 @@ active_effect
       if (value === (value = get_value() ?? "")) {
         return;
       }
-      if (effect2.nodes_start !== null) {
+      if (effect2.nodes !== null) {
         remove_effect_dom(
-          effect2.nodes_start,
-effect2.nodes_end
+          effect2.nodes.start,
+effect2.nodes.end
         );
-        effect2.nodes_start = effect2.nodes_end = null;
+        effect2.nodes = null;
       }
       if (value === "") return;
       var html2 = value + "";
@@ -3058,24 +3301,278 @@ get_first_child(node2)
     });
   }
   function snippet(node, get_snippet, ...args) {
-    var anchor = node;
-    var snippet2 = noop;
-    var snippet_effect;
+    var branches = new BranchManager(node);
     block(() => {
-      if (snippet2 === (snippet2 = get_snippet())) return;
-      if (snippet_effect) {
-        destroy_effect(snippet_effect);
-        snippet_effect = null;
-      }
-      snippet_effect = branch(() => (
-snippet2(anchor, ...args)
-      ));
+      const snippet2 = get_snippet() ?? null;
+      branches.ensure(snippet2, snippet2 && ((anchor) => snippet2(anchor, ...args)));
     }, EFFECT_TRANSPARENT);
+  }
+  const now = () => performance.now();
+  const raf = {
+
+
+tick: (
+(_) => requestAnimationFrame(_)
+    ),
+    now: () => now(),
+    tasks: new Set()
+  };
+  function run_tasks() {
+    const now2 = raf.now();
+    raf.tasks.forEach((task) => {
+      if (!task.c(now2)) {
+        raf.tasks.delete(task);
+        task.f();
+      }
+    });
+    if (raf.tasks.size !== 0) {
+      raf.tick(run_tasks);
+    }
+  }
+  function loop(callback) {
+    let task;
+    if (raf.tasks.size === 0) {
+      raf.tick(run_tasks);
+    }
+    return {
+      promise: new Promise((fulfill) => {
+        raf.tasks.add(task = { c: callback, f: fulfill });
+      }),
+      abort() {
+        raf.tasks.delete(task);
+      }
+    };
+  }
+  function dispatch_event(element, type) {
+    without_reactive_context(() => {
+      element.dispatchEvent(new CustomEvent(type));
+    });
+  }
+  function css_property_to_camelcase(style) {
+    if (style === "float") return "cssFloat";
+    if (style === "offset") return "cssOffset";
+    if (style.startsWith("--")) return style;
+    const parts = style.split("-");
+    if (parts.length === 1) return parts[0];
+    return parts[0] + parts.slice(1).map(
+(word) => word[0].toUpperCase() + word.slice(1)
+    ).join("");
+  }
+  function css_to_keyframe(css) {
+    const keyframe = {};
+    const parts = css.split(";");
+    for (const part of parts) {
+      const [property, value] = part.split(":");
+      if (!property || value === void 0) break;
+      const formatted_property = css_property_to_camelcase(property.trim());
+      keyframe[formatted_property] = value.trim();
+    }
+    return keyframe;
+  }
+  const linear$1 = (t) => t;
+  function transition(flags2, element, get_fn, get_params) {
+    var is_intro = (flags2 & TRANSITION_IN) !== 0;
+    var is_outro = (flags2 & TRANSITION_OUT) !== 0;
+    var is_both = is_intro && is_outro;
+    var is_global = (flags2 & TRANSITION_GLOBAL) !== 0;
+    var direction = is_both ? "both" : is_intro ? "in" : "out";
+    var current_options;
+    var inert = element.inert;
+    var overflow = element.style.overflow;
+    var intro;
+    var outro;
+    function get_options() {
+      return without_reactive_context(() => {
+        return current_options ??= get_fn()(element, get_params?.() ??
+{}, {
+          direction
+        });
+      });
+    }
+    var transition2 = {
+      is_global,
+      in() {
+        element.inert = inert;
+        if (!is_intro) {
+          outro?.abort();
+          outro?.reset?.();
+          return;
+        }
+        if (!is_outro) {
+          intro?.abort();
+        }
+        intro = animate(element, get_options(), outro, 1, () => {
+          dispatch_event(element, "introend");
+          intro?.abort();
+          intro = current_options = void 0;
+          element.style.overflow = overflow;
+        });
+      },
+      out(fn) {
+        if (!is_outro) {
+          fn?.();
+          current_options = void 0;
+          return;
+        }
+        element.inert = true;
+        outro = animate(element, get_options(), intro, 0, () => {
+          dispatch_event(element, "outroend");
+          fn?.();
+        });
+      },
+      stop: () => {
+        intro?.abort();
+        outro?.abort();
+      }
+    };
+    var e = (
+active_effect
+    );
+    (e.nodes.t ??= []).push(transition2);
+    if (is_intro && should_intro) {
+      var run2 = is_global;
+      if (!run2) {
+        var block2 = (
+e.parent
+        );
+        while (block2 && (block2.f & EFFECT_TRANSPARENT) !== 0) {
+          while (block2 = block2.parent) {
+            if ((block2.f & BLOCK_EFFECT) !== 0) break;
+          }
+        }
+        run2 = !block2 || (block2.f & EFFECT_RAN) !== 0;
+      }
+      if (run2) {
+        effect(() => {
+          untrack(() => transition2.in());
+        });
+      }
+    }
+  }
+  function animate(element, options, counterpart, t2, on_finish) {
+    var is_intro = t2 === 1;
+    if (is_function(options)) {
+      var a;
+      var aborted = false;
+      queue_micro_task(() => {
+        if (aborted) return;
+        var o = options({ direction: is_intro ? "in" : "out" });
+        a = animate(element, o, counterpart, t2, on_finish);
+      });
+      return {
+        abort: () => {
+          aborted = true;
+          a?.abort();
+        },
+        deactivate: () => a.deactivate(),
+        reset: () => a.reset(),
+        t: () => a.t()
+      };
+    }
+    counterpart?.deactivate();
+    if (!options?.duration && !options?.delay) {
+      dispatch_event(element, is_intro ? "introstart" : "outrostart");
+      on_finish();
+      return {
+        abort: noop,
+        deactivate: noop,
+        reset: noop,
+        t: () => t2
+      };
+    }
+    const { delay = 0, css, tick: tick2, easing = linear$1 } = options;
+    var keyframes = [];
+    if (is_intro && counterpart === void 0) {
+      if (tick2) {
+        tick2(0, 1);
+      }
+      if (css) {
+        var styles = css_to_keyframe(css(0, 1));
+        keyframes.push(styles, styles);
+      }
+    }
+    var get_t = () => 1 - t2;
+    var animation = element.animate(keyframes, { duration: delay, fill: "forwards" });
+    animation.onfinish = () => {
+      animation.cancel();
+      dispatch_event(element, is_intro ? "introstart" : "outrostart");
+      var t1 = counterpart?.t() ?? 1 - t2;
+      counterpart?.abort();
+      var delta = t2 - t1;
+      var duration = (
+options.duration * Math.abs(delta)
+      );
+      var keyframes2 = [];
+      if (duration > 0) {
+        var needs_overflow_hidden = false;
+        if (css) {
+          var n = Math.ceil(duration / (1e3 / 60));
+          for (var i = 0; i <= n; i += 1) {
+            var t = t1 + delta * easing(i / n);
+            var styles2 = css_to_keyframe(css(t, 1 - t));
+            keyframes2.push(styles2);
+            needs_overflow_hidden ||= styles2.overflow === "hidden";
+          }
+        }
+        if (needs_overflow_hidden) {
+          element.style.overflow = "hidden";
+        }
+        get_t = () => {
+          var time = (
+
+animation.currentTime
+          );
+          return t1 + delta * easing(time / duration);
+        };
+        if (tick2) {
+          loop(() => {
+            if (animation.playState !== "running") return false;
+            var t3 = get_t();
+            tick2(t3, 1 - t3);
+            return true;
+          });
+        }
+      }
+      animation = element.animate(keyframes2, { duration, fill: "forwards" });
+      animation.onfinish = () => {
+        get_t = () => t2;
+        tick2?.(t2, 1 - t2);
+        on_finish();
+      };
+    };
+    return {
+      abort: () => {
+        if (animation) {
+          animation.cancel();
+          animation.effect = null;
+          animation.onfinish = noop;
+        }
+      },
+      deactivate: () => {
+        on_finish = noop;
+      },
+      reset: () => {
+        if (t2 === 0) {
+          tick2?.(1, 0);
+        }
+      },
+      t: () => get_t()
+    };
+  }
+  function head(hash, render_fn) {
+    var anchor;
+    {
+      anchor = document.head.appendChild(create_text());
+    }
+    try {
+      block(() => render_fn(anchor), HEAD_EFFECT);
+    } finally {
+    }
   }
   function attach(node, get_fn) {
     var fn = void 0;
     var e;
-    block(() => {
+    managed(() => {
       if (fn !== (fn = get_fn())) {
         if (e) {
           destroy_effect(e);
@@ -3271,258 +3768,6 @@ element.__attributes ??= {
     }
     return setters;
   }
-  const now = () => performance.now();
-  const raf = {
-
-
-tick: (
-(_) => requestAnimationFrame(_)
-    ),
-    now: () => now(),
-    tasks: new Set()
-  };
-  function run_tasks() {
-    const now2 = raf.now();
-    raf.tasks.forEach((task) => {
-      if (!task.c(now2)) {
-        raf.tasks.delete(task);
-        task.f();
-      }
-    });
-    if (raf.tasks.size !== 0) {
-      raf.tick(run_tasks);
-    }
-  }
-  function loop(callback) {
-    let task;
-    if (raf.tasks.size === 0) {
-      raf.tick(run_tasks);
-    }
-    return {
-      promise: new Promise((fulfill) => {
-        raf.tasks.add(task = { c: callback, f: fulfill });
-      }),
-      abort() {
-        raf.tasks.delete(task);
-      }
-    };
-  }
-  function dispatch_event(element, type) {
-    without_reactive_context(() => {
-      element.dispatchEvent(new CustomEvent(type));
-    });
-  }
-  function css_property_to_camelcase(style) {
-    if (style === "float") return "cssFloat";
-    if (style === "offset") return "cssOffset";
-    if (style.startsWith("--")) return style;
-    const parts = style.split("-");
-    if (parts.length === 1) return parts[0];
-    return parts[0] + parts.slice(1).map(
-(word) => word[0].toUpperCase() + word.slice(1)
-    ).join("");
-  }
-  function css_to_keyframe(css) {
-    const keyframe = {};
-    const parts = css.split(";");
-    for (const part of parts) {
-      const [property, value] = part.split(":");
-      if (!property || value === void 0) break;
-      const formatted_property = css_property_to_camelcase(property.trim());
-      keyframe[formatted_property] = value.trim();
-    }
-    return keyframe;
-  }
-  const linear$1 = (t) => t;
-  function transition(flags2, element, get_fn, get_params) {
-    var is_intro = (flags2 & TRANSITION_IN) !== 0;
-    var is_outro = (flags2 & TRANSITION_OUT) !== 0;
-    var is_both = is_intro && is_outro;
-    var is_global = (flags2 & TRANSITION_GLOBAL) !== 0;
-    var direction = is_both ? "both" : is_intro ? "in" : "out";
-    var current_options;
-    var inert = element.inert;
-    var overflow = element.style.overflow;
-    var intro;
-    var outro;
-    function get_options() {
-      return without_reactive_context(() => {
-        return current_options ??= get_fn()(element, get_params?.() ??
-{}, {
-          direction
-        });
-      });
-    }
-    var transition2 = {
-      is_global,
-      in() {
-        element.inert = inert;
-        if (!is_intro) {
-          outro?.abort();
-          outro?.reset?.();
-          return;
-        }
-        if (!is_outro) {
-          intro?.abort();
-        }
-        dispatch_event(element, "introstart");
-        intro = animate(element, get_options(), outro, 1, () => {
-          dispatch_event(element, "introend");
-          intro?.abort();
-          intro = current_options = void 0;
-          element.style.overflow = overflow;
-        });
-      },
-      out(fn) {
-        if (!is_outro) {
-          fn?.();
-          current_options = void 0;
-          return;
-        }
-        element.inert = true;
-        dispatch_event(element, "outrostart");
-        outro = animate(element, get_options(), intro, 0, () => {
-          dispatch_event(element, "outroend");
-          fn?.();
-        });
-      },
-      stop: () => {
-        intro?.abort();
-        outro?.abort();
-      }
-    };
-    var e = (
-active_effect
-    );
-    (e.transitions ??= []).push(transition2);
-    if (is_intro && should_intro) {
-      var run2 = is_global;
-      if (!run2) {
-        var block2 = (
-e.parent
-        );
-        while (block2 && (block2.f & EFFECT_TRANSPARENT) !== 0) {
-          while (block2 = block2.parent) {
-            if ((block2.f & BLOCK_EFFECT) !== 0) break;
-          }
-        }
-        run2 = !block2 || (block2.f & EFFECT_RAN) !== 0;
-      }
-      if (run2) {
-        effect(() => {
-          untrack(() => transition2.in());
-        });
-      }
-    }
-  }
-  function animate(element, options, counterpart, t2, on_finish) {
-    var is_intro = t2 === 1;
-    if (is_function(options)) {
-      var a;
-      var aborted = false;
-      queue_micro_task(() => {
-        if (aborted) return;
-        var o = options({ direction: is_intro ? "in" : "out" });
-        a = animate(element, o, counterpart, t2, on_finish);
-      });
-      return {
-        abort: () => {
-          aborted = true;
-          a?.abort();
-        },
-        deactivate: () => a.deactivate(),
-        reset: () => a.reset(),
-        t: () => a.t()
-      };
-    }
-    counterpart?.deactivate();
-    if (!options?.duration) {
-      on_finish();
-      return {
-        abort: noop,
-        deactivate: noop,
-        reset: noop,
-        t: () => t2
-      };
-    }
-    const { delay = 0, css, tick: tick2, easing = linear$1 } = options;
-    var keyframes = [];
-    if (is_intro && counterpart === void 0) {
-      if (tick2) {
-        tick2(0, 1);
-      }
-      if (css) {
-        var styles = css_to_keyframe(css(0, 1));
-        keyframes.push(styles, styles);
-      }
-    }
-    var get_t = () => 1 - t2;
-    var animation = element.animate(keyframes, { duration: delay, fill: "forwards" });
-    animation.onfinish = () => {
-      animation.cancel();
-      var t1 = counterpart?.t() ?? 1 - t2;
-      counterpart?.abort();
-      var delta = t2 - t1;
-      var duration = (
-options.duration * Math.abs(delta)
-      );
-      var keyframes2 = [];
-      if (duration > 0) {
-        var needs_overflow_hidden = false;
-        if (css) {
-          var n = Math.ceil(duration / (1e3 / 60));
-          for (var i = 0; i <= n; i += 1) {
-            var t = t1 + delta * easing(i / n);
-            var styles2 = css_to_keyframe(css(t, 1 - t));
-            keyframes2.push(styles2);
-            needs_overflow_hidden ||= styles2.overflow === "hidden";
-          }
-        }
-        if (needs_overflow_hidden) {
-          element.style.overflow = "hidden";
-        }
-        get_t = () => {
-          var time = (
-
-animation.currentTime
-          );
-          return t1 + delta * easing(time / duration);
-        };
-        if (tick2) {
-          loop(() => {
-            if (animation.playState !== "running") return false;
-            var t3 = get_t();
-            tick2(t3, 1 - t3);
-            return true;
-          });
-        }
-      }
-      animation = element.animate(keyframes2, { duration, fill: "forwards" });
-      animation.onfinish = () => {
-        get_t = () => t2;
-        tick2?.(t2, 1 - t2);
-        on_finish();
-      };
-    };
-    return {
-      abort: () => {
-        if (animation) {
-          animation.cancel();
-          animation.effect = null;
-          animation.onfinish = noop;
-        }
-      },
-      deactivate: () => {
-        on_finish = noop;
-      },
-      reset: () => {
-        if (t2 === 0) {
-          tick2?.(1, 0);
-        }
-      },
-      t: () => get_t()
-    };
-  }
   function bind_value(input, get2, set2 = get2) {
     var batches2 = new WeakSet();
     listen_to_event_and_reset_event(input, "input", async (is_reset) => {
@@ -3536,10 +3781,17 @@ animation.currentTime
       if (value !== (value = get2())) {
         var start = input.selectionStart;
         var end = input.selectionEnd;
+        var length = input.value.length;
         input.value = value ?? "";
         if (end !== null) {
-          input.selectionStart = start;
-          input.selectionEnd = Math.min(end, input.value.length);
+          var new_length = input.value.length;
+          if (start === end && end === length && new_length > length) {
+            input.selectionStart = new_length;
+            input.selectionEnd = new_length;
+          } else {
+            input.selectionStart = start;
+            input.selectionEnd = Math.min(end, new_length);
+          }
         }
       }
     });
@@ -4184,13 +4436,14 @@ context.l
   }
   const TAG_RE = /\[([^\]]+)]/g;
   const BRACKETS_RE = /\(([^)]+)\)|\{([^}]+)\}/g;
-  const SEPARATORS = [",", "|", "/", "&", "-", "—", "aka"];
+  const SEPARATORS = [",", "|", "/", "&", "-", "—", "–", "aka"];
   const SEP_RE = new RegExp(
     SEPARATORS.map((str) => {
       const escaped = str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
       switch (str) {
 case "-":
         case "—":
+        case "–":
         case "/":
         case "aka":
           return `(?<=\\s)${escaped}(?=\\s)`;
@@ -4470,7 +4723,7 @@ default:
     localStorage.setItem(COLUMN_COUNT_KEY, DEFAULT_COUNT.toString());
     store.columnCount = DEFAULT_COUNT;
   }
-  const parser$3 = new DOMParser();
+  const parser$4 = new DOMParser();
   const decoder = new TextDecoder("windows-1251");
   const regex = /\b\d+[pk]\b/gi;
   async function getRelated(title) {
@@ -4505,7 +4758,7 @@ default:
     });
     const buffer = await response.arrayBuffer();
     const result = decoder.decode(buffer);
-    const doc = parser$3.parseFromString(result, "text/html");
+    const doc = parser$4.parseFromString(result, "text/html");
     const nothingFound = doc.querySelector(".info_msg_wrap");
     if (nothingFound) return [];
     const related = doc.querySelectorAll(".med.tLink.bold");
@@ -4887,10 +5140,6 @@ location.reload();
     };
     append($$anchor, fragment_3);
   };
-  function disableUserscript(event2) {
-    event2.preventDefault();
-    setUserscript(true);
-  }
   var root_1$d = from_html(`<div class="item svelte-zne36e"><!></div>`);
   var root_5$6 = from_html(`<a>Profile</a>`);
   var root_6$5 = from_html(`<a href="/">Login</a>`);
@@ -4973,13 +5222,17 @@ location.reload();
     };
     const Disable = ($$anchor2) => {
       var a_6 = root_12$1();
-      a_6.__click = [disableUserscript];
+      a_6.__click = disableUserscript;
       append($$anchor2, a_6);
     };
     let incognito = user_derived(() => getSettings("incognito"));
     let floatingDownload = user_derived(() => getSettings("floatingDownload"));
     let messagesTitle = user_derived(() => data.messages ? "Unread" : "Messages");
     let searchQuery = state$1("");
+    function disableUserscript(event2) {
+      event2.preventDefault();
+      setUserscript(true);
+    }
     function handleSearch2() {
       const url = "/forum/tracker.php?search_id=&nm=";
       window.location.href = `${url}${encodeURIComponent(get(searchQuery))}`;
@@ -5021,17 +5274,11 @@ location.reload();
     var input = child(div_6);
     var button = sibling(input, 2);
     button.__click = handleSearch2;
-    template_effect(
-      ($0, $1) => {
-        classes = set_class(div_1, 1, "svelte-zne36e", null, classes, $0);
-        set_attribute(img, "src", data.logo);
-        classes_1 = set_class(img, 1, "svelte-zne36e", null, classes_1, $1);
-      },
-      [
-        () => ({ floatingDownload: get(floatingDownload) }),
-        () => ({ incognito: get(incognito) })
-      ]
-    );
+    template_effect(() => {
+      classes = set_class(div_1, 1, "svelte-zne36e", null, classes, { floatingDownload: get(floatingDownload) });
+      set_attribute(img, "src", data.logo);
+      classes_1 = set_class(img, 1, "svelte-zne36e", null, classes_1, { incognito: get(incognito) });
+    });
     event("keypress", input, (event2) => {
       if (event2.key === "Enter") handleSearch2();
     });
@@ -5040,18 +5287,6 @@ location.reload();
     pop();
   }
   delegate(["click"]);
-  function onchange(event2) {
-    const checkbox = event2.target;
-    if (!checkbox) return;
-    const handleToggleFileList = checkbox.id === "expandFiles" && store.showFileList !== checkbox.checked;
-    if (handleToggleFileList) store.toggleFileList();
-    const handleClearCache = checkbox.id === "cacheImages" && !checkbox.checked;
-    if (handleClearCache) clearCache();
-    saveOptions();
-  }
-  var on_click$4 = (event2) => {
-    event2.currentTarget?.blur();
-  };
   var root_3$5 = from_html(`<span class="description svelte-1emp0k3"> </span>`);
   var root_2$6 = from_html(`<label><input type="checkbox" class="svelte-1emp0k3"/> <span class="svelte-1emp0k3"><!> <!></span></label>`);
   var root_1$c = from_html(`<div class="column svelte-1emp0k3"><h2 class="svelte-1emp0k3"> </h2> <!></div>`);
@@ -5059,57 +5294,59 @@ location.reload();
   function Options($$anchor, $$props) {
     push($$props, true);
     let parseTitle = user_derived(() => getSettings("parseTitle"));
+    function onchange(event2) {
+      const checkbox = event2.target;
+      if (!checkbox) return;
+      const handleToggleFileList = checkbox.id === "expandFiles" && store.showFileList !== checkbox.checked;
+      if (handleToggleFileList) store.toggleFileList();
+      const handleClearCache = checkbox.id === "cacheImages" && !checkbox.checked;
+      if (handleClearCache) clearCache();
+      saveOptions();
+    }
     var div = root$5();
-    each(
-      div,
-      21,
-      () => Object.entries(store.options),
-      ([title, items]) => title,
-      ($$anchor2, $$item) => {
-        var $$array = user_derived(() => to_array(get($$item), 2));
-        let title = () => get($$array)[0];
-        let items = () => get($$array)[1];
-        var div_1 = root_1$c();
-        var h2 = child(div_1);
-        var text2 = child(h2);
-        var node = sibling(h2, 2);
-        each(node, 17, items, (item) => item.key, ($$anchor3, item, $$index) => {
-          const disabled = user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags") || get(item).key === "spaceImageAnchor" && store.columnCount !== 1);
-          var label = root_2$6();
-          let classes;
-          var input = child(label);
-          input.__change = [onchange];
-          input.__click = [on_click$4];
-          var span = sibling(input, 2);
-          var node_1 = child(span);
-          html(node_1, () => get(item).label);
-          var node_2 = sibling(node_1, 2);
-          {
-            var consequent = ($$anchor4) => {
-              var span_1 = root_3$5();
-              var text_1 = child(span_1);
-              template_effect(() => set_text(text_1, get(item).description));
-              append($$anchor4, span_1);
-            };
-            if_block(node_2, ($$render) => {
-              if (get(item).description) $$render(consequent);
-            });
-          }
-          template_effect(
-            ($0) => {
-              classes = set_class(label, 1, "svelte-1emp0k3", null, classes, $0);
-              set_attribute(input, "id", get(item).key);
-              input.disabled = get(disabled);
-            },
-            [() => ({ disabled: get(disabled) })]
-          );
-          bind_checked(input, () => get(item).value, ($$value) => get(item).value = $$value);
-          append($$anchor3, label);
+    each(div, 21, () => Object.entries(store.options), ([title, items]) => title, ($$anchor2, $$item) => {
+      var $$array = user_derived(() => to_array(get($$item), 2));
+      let title = () => get($$array)[0];
+      let items = () => get($$array)[1];
+      var div_1 = root_1$c();
+      var h2 = child(div_1);
+      var text2 = child(h2);
+      var node = sibling(h2, 2);
+      each(node, 17, items, (item) => item.key, ($$anchor3, item, $$index) => {
+        const disabled = user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags") || get(item).key === "spaceImageAnchor" && store.columnCount !== 1);
+        var label = root_2$6();
+        let classes;
+        var input = child(label);
+        input.__change = onchange;
+        input.__click = (event2) => {
+          event2.currentTarget?.blur();
+        };
+        var span = sibling(input, 2);
+        var node_1 = child(span);
+        html(node_1, () => get(item).label);
+        var node_2 = sibling(node_1, 2);
+        {
+          var consequent = ($$anchor4) => {
+            var span_1 = root_3$5();
+            var text_1 = child(span_1);
+            template_effect(() => set_text(text_1, get(item).description));
+            append($$anchor4, span_1);
+          };
+          if_block(node_2, ($$render) => {
+            if (get(item).description) $$render(consequent);
+          });
+        }
+        template_effect(() => {
+          classes = set_class(label, 1, "svelte-1emp0k3", null, classes, { disabled: get(disabled) });
+          set_attribute(input, "id", get(item).key);
+          input.disabled = get(disabled);
         });
-        template_effect(() => set_text(text2, title()));
-        append($$anchor2, div_1);
-      }
-    );
+        bind_checked(input, () => get(item).value, ($$value) => get(item).value = $$value);
+        append($$anchor3, label);
+      });
+      template_effect(() => set_text(text2, title()));
+      append($$anchor2, div_1);
+    });
     append($$anchor, div);
     pop();
   }
@@ -5172,10 +5409,6 @@ location.reload();
 		`
     };
   }
-  function onclick(_, $$props, handleTransition) {
-    $$props.onclick?.();
-    handleTransition();
-  }
   var root_1$b = from_html(`<span><!></span>`);
   var root_2$5 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-1obhcw8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-1obhcw8"></path></svg>`);
   var root$4 = from_html(`<button class="svelte-1obhcw8"><!></button>`);
@@ -5187,6 +5420,10 @@ location.reload();
     let clientWidth = state$1(0);
     let clientHeight = state$1(0);
     let opts = user_derived(() => ({ ...store.transition, start: 0.6 }));
+    function onclick() {
+      $$props.onclick?.();
+      handleTransition();
+    }
     function handleTransition() {
       set(clicked, true);
       if (timeout) clearTimeout(timeout);
@@ -5202,7 +5439,7 @@ location.reload();
       if (timeout) clearTimeout(timeout);
     });
     var button = root$4();
-    button.__click = [onclick, $$props, handleTransition];
+    button.__click = onclick;
     let styles;
     var node = child(button);
     {
@@ -5226,19 +5463,14 @@ location.reload();
         else $$render(alternate, false);
       });
     }
-    template_effect(
-      ($0) => {
-        set_attribute(button, "title", $$props.title);
-        button.disabled = $$props.disabled;
-        styles = set_style(button, "", styles, $0);
-      },
-      [
-        () => ({
-          width: `${get(clientWidth) ?? ""}px`,
-          height: `${get(clientHeight) ?? ""}px`
-        })
-      ]
-    );
+    template_effect(() => {
+      set_attribute(button, "title", $$props.title);
+      button.disabled = $$props.disabled;
+      styles = set_style(button, "", styles, {
+        width: `${get(clientWidth) ?? ""}px`,
+        height: `${get(clientHeight) ?? ""}px`
+      });
+    });
     append($$anchor, button);
     pop();
   }
@@ -5362,13 +5594,11 @@ style[`border${capitalized_secondary_properties[1]}Width`]
   };
   const Remove = ($$anchor, index2 = noop) => {
     var button = root_4$3();
-    button.__click = [on_click$3, index2];
+    button.__click = () => removePerformerLink(index2());
     append($$anchor, button);
   };
   var root_2$4 = from_html(`<img class="svelte-kvmnko"/>`);
-  var on_input = (_, index2, key, link2) => updatePerformerLink(index2(), { [key()]: link2()[key()] });
   var root_3$4 = from_html(`<input type="text" class="svelte-kvmnko"/>`);
-  var on_click$3 = (__1, index2) => removePerformerLink(index2());
   var root_4$3 = from_html(`<button title="Remove link" class="svelte-kvmnko">×</button>`);
   var root_6$4 = from_html(`<div class="item svelte-kvmnko"><!> <!> <!> <!></div>`);
   var root_5$5 = from_html(`<div class="container svelte-kvmnko"></div>`);
@@ -5376,7 +5606,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     push($$props, true);
     const Input = ($$anchor2, key = noop, link2 = noop, index2 = noop) => {
       var input = root_3$4();
-      input.__input = [on_input, index2, key, link2];
+      input.__input = () => updatePerformerLink(index2(), { [key()]: link2()[key()] });
       template_effect(() => {
         set_attribute(input, "name", placeholders[key()]);
         set_attribute(input, "placeholder", placeholders[key()]);
@@ -5472,7 +5702,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
   delegate(["click"]);
   var root_3$3 = from_html(`<link rel="prefetch" as="image"/>`);
   var root_6$3 = from_html(`<a class="svelte-vtocc6"><img class="svelte-vtocc6"/> </a>`);
-  var root_4$2 = from_html(`<div class="container svelte-vtocc6"><div class="indicator svelte-vtocc6"></div> <div class="items svelte-vtocc6"></div></div>`);
+  var root_4$2 = from_html(`<div role="tooltip" class="container svelte-vtocc6"><div class="indicator svelte-vtocc6"></div> <div class="items svelte-vtocc6"></div></div>`);
   function Dropdown$1($$anchor, $$props) {
     push($$props, true);
     let top = state$1(0);
@@ -5512,7 +5742,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
       store.closeDropdown();
     }
     var fragment_2 = comment();
-    head(($$anchor2) => {
+    head("vtocc6", ($$anchor2) => {
       var fragment = comment();
       var node = first_child(fragment);
       each(node, 17, () => store.performerLinks, (link2) => link2.id, ($$anchor3, link2) => {
@@ -5565,9 +5795,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
           append($$anchor3, fragment_3);
         });
         bind_this(div, ($$value) => set(container, $$value), () => get(container));
-        template_effect(($0) => styles = set_style(div, "", styles, $0), [
-          () => ({ top: `${get(top) ?? ""}px`, left: `${get(left) ?? ""}px` })
-        ]);
+        template_effect(() => styles = set_style(div, "", styles, { top: `${get(top) ?? ""}px`, left: `${get(left) ?? ""}px` }));
         event("pointerleave", div, onpointerleave);
         transition(2, div, () => fade, () => store.transition);
         append($$anchor2, div);
@@ -5581,7 +5809,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
   }
   const Dropdown = ($$anchor, item = noop) => {
     var span = root_3$2();
-    span.__click = [on_click$2, item];
+    span.__click = (event2) => store.openDropdown(event2, item(), ["title-item--hover"]);
     var text2 = child(span);
     template_effect(() => set_text(text2, item()));
     append($$anchor, span);
@@ -5600,7 +5828,6 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     });
     append($$anchor, fragment_1);
   };
-  var on_click$2 = (event2, item) => store.openDropdown(event2, item(), ["title-item--hover"]);
   var root_3$2 = from_html(`<span class="title-item svelte-1gft3h5"> </span>`);
   var root_5$4 = from_html(` <!>`, 1);
   var root_9$1 = from_html(`<a class="title-item svelte-1gft3h5"> </a>`);
@@ -5752,12 +5979,14 @@ style[`border${capitalized_secondary_properties[1]}Width`]
       }
     );
     var fragment_10 = comment();
-    head(($$anchor2) => {
+    head("1gft3h5", ($$anchor2) => {
       var fragment = comment();
       var node = first_child(fragment);
       {
         var consequent = ($$anchor3) => {
-          template_effect(() => $document.title = get(documentTitle));
+          deferred_template_effect(() => {
+            $document.title = get(documentTitle) ?? "";
+          });
         };
         if_block(node, ($$render) => {
           if (get(documentTitle)) $$render(consequent);
@@ -5891,7 +6120,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
         return () => thank.remove();
       };
     }
-    function onclick2(event2) {
+    function onclick(event2) {
       if (get(disabled) || get(clicked)) return;
       set(clicked, true);
       observer2?.disconnect();
@@ -5917,7 +6146,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     {
       var consequent = ($$anchor2) => {
         var button = root_1$8();
-        button.__click = onclick2;
+        button.__click = onclick;
         attach(button, () => handleElement(data.thank.element));
         template_effect(() => {
           set_attribute(button, "title", get(title));
@@ -5970,17 +6199,6 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     template_effect(() => set_text(text_2, `${title() ?? ""}:`));
     append($$anchor, div_1);
   };
-  function handleDateClick(_, showFullDate) {
-    set(showFullDate, !get(showFullDate));
-  }
-  function handleFileListClick(__1, fileListState) {
-    if (store.showFileList) {
-      set(fileListState, "idle");
-    } else {
-      set(fileListState, "loading");
-    }
-    store.toggleFileList();
-  }
   var root_2$3 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span> </span></div>`);
   var root_4$1 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span class="error svelte-cjprq">N/A</span></div>`);
   var root_6$2 = from_html(`<button class="item svelte-cjprq"><span class="title">Date:</span> <!></button>`);
@@ -6013,6 +6231,17 @@ style[`border${capitalized_secondary_properties[1]}Width`]
         }
       }
     );
+    function handleDateClick() {
+      set(showFullDate, !get(showFullDate));
+    }
+    function handleFileListClick() {
+      if (store.showFileList) {
+        set(fileListState, "idle");
+      } else {
+        set(fileListState, "loading");
+      }
+      store.toggleFileList();
+    }
     var fragment_2 = comment();
     var node_1 = first_child(fragment_2);
     {
@@ -6028,7 +6257,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
         {
           var consequent_2 = ($$anchor3) => {
             var button = root_6$2();
-            button.__click = [handleDateClick, showFullDate];
+            button.__click = handleDateClick;
             var node_6 = sibling(child(button), 2);
             {
               var consequent_1 = ($$anchor4) => {
@@ -6057,7 +6286,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
           });
         }
         var button_1 = sibling(node_5, 2);
-        button_1.__click = [handleFileListClick, fileListState];
+        button_1.__click = handleFileListClick;
         var node_7 = sibling(child(button_1), 2);
         {
           var consequent_3 = ($$anchor3) => {
@@ -6218,7 +6447,6 @@ style[`border${capitalized_secondary_properties[1]}Width`]
   delegate(["click"]);
   var root_3$1 = from_html(`<a> </a>`);
   var root_6$1 = from_html(`<a> </a>`);
-  var on_click$1 = (event2, item) => store.openDropdown(event2, get(item), ["tag-item--hover"]);
   var root_7$2 = from_html(`<span> </span>`);
   var root_1$7 = from_html(`<div id="x-tags" class="svelte-ttnt4a"></div>`);
   function Tags($$anchor, $$props) {
@@ -6289,7 +6517,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
                 };
                 var alternate = ($$anchor5) => {
                   var span = root_7$2();
-                  span.__click = [on_click$1, item];
+                  span.__click = (event2) => store.openDropdown(event2, get(item), ["tag-item--hover"]);
                   var text_2 = child(span);
                   template_effect(() => {
                     set_class(span, 1, clsx(get(classList)), "svelte-ttnt4a");
@@ -6403,7 +6631,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     append($$anchor, fragment);
     pop();
   }
-  const parser$2 = new DOMParser();
+  const parser$3 = new DOMParser();
   async function generic(href, selector, headers) {
     const { response, responseText, finalUrl } = await GM_fetch(
       "GET",
@@ -6414,7 +6642,7 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     if (response.type.startsWith("image/")) {
       return finalUrl;
     }
-    const doc = parser$2.parseFromString(responseText, "text/html");
+    const doc = parser$3.parseFromString(responseText, "text/html");
     const img = doc.querySelector(selector);
     const src = img?.getAttribute("src");
     if (!src) {
@@ -6476,14 +6704,14 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     const selector = "#img";
     return generic(href, selector);
   }
-  const parser$1 = new DOMParser();
+  const parser$2 = new DOMParser();
   async function imgbum(href) {
     const { responseText } = await GM_fetch("GET", href, "text");
-    const doc = parser$1.parseFromString(responseText, "text/html");
+    const doc = parser$2.parseFromString(responseText, "text/html");
     const selector = "table > tbody > tr > td > img";
     const img = doc.querySelector(selector);
-    const onclick2 = img?.getAttribute("onclick");
-    const match = onclick2?.match(/\/\*mshow\('([^']+)'\);\*\//);
+    const onclick = img?.getAttribute("onclick");
+    const match = onclick?.match(/\/\*mshow\('([^']+)'\);\*\//);
     const imgSrc = match?.[1];
     if (!imgSrc) {
       throw new Error(`image not found: ${href}`);
@@ -6522,14 +6750,14 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     }
     return imgSrc.replace("http://", "https://").replace("/img_thumb/", "/img_full/").replace("-thumb.", ".");
   }
-  const parser = new DOMParser();
+  const parser$1 = new DOMParser();
   async function picforall(href) {
     const { responseText } = await GM_fetch("GET", href, "text");
     const selector = "#pay_thumb_img img";
-    const doc = parser.parseFromString(responseText, "text/html");
+    const doc = parser$1.parseFromString(responseText, "text/html");
     const img = doc.querySelector(selector);
-    const onclick2 = img?.getAttribute("onclick");
-    const match = onclick2?.match(/mshow\('([^']+)'\)/);
+    const onclick = img?.getAttribute("onclick");
+    const match = onclick?.match(/mshow\('([^']+)'\)/);
     const imgSrc = match?.[1];
     if (!imgSrc) {
       throw new Error(`image not found: ${href}`);
@@ -6572,6 +6800,33 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     const selector = "#imageid";
     return generic(href, selector);
   }
+  const parser = new DOMParser();
+  async function imx(href) {
+    const body = new URLSearchParams();
+    body.append("imgContinue", "Continue to image ... ");
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded"
+    };
+    const response = await GM_fetch(
+      "POST",
+      href,
+      "text",
+      headers,
+      body.toString()
+    );
+    const doc = parser.parseFromString(response.responseText, "text/html");
+    const selector = "img.centred";
+    const imgSrc = doc.querySelector(selector);
+    if (!imgSrc) {
+      throw new Error(`image not found: ${href}`);
+    }
+    return imgSrc.src;
+  }
+  async function imgxxt(href) {
+    const selector = "#image-viewer-container > img";
+    const imgSrc = await generic(href, selector);
+    return imgSrc.replace(".md.", ".");
+  }
   const HANDLERS = {
     "fastpic.": (href) => generic(href, "#imglink > img.image.img-fluid"),
     "imgsto.com": (href) => generic(href, ".main-content-image > img"),
@@ -6586,6 +6841,9 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     "picclick.ru": (href, src) => imgbase(href, src),
     "adult-images.ru": (href, src) => imgbase(href, src),
     "payforpic.ru": (href, src) => imgbase(href, src),
+    "xxxpicture.de": (href, src) => imgbase(href, src),
+    "imgbum.de": (href, src) => imgbase(href, src),
+    "adultimages.de": (href, src) => imgbase(href, src),
     "imgbox.com": (href) => imgbox(href),
     "imgbum.ru": (href) => imgbum(href),
     "imgdrive.net": (href, src) => imgdrive(href, src),
@@ -6598,7 +6856,9 @@ style[`border${capitalized_secondary_properties[1]}Width`]
     "imgclick.ru": (href) => picforall(href),
     "freescreens.ru": (href) => picforall(href),
     "picshick.com": (href, src) => picshick(href, src),
-    "turboimagehost.com": (href) => turboimagehost(href)
+    "turboimagehost.com": (href) => turboimagehost(href),
+    "imx.to": (href) => imx(href),
+    "imgxxt.in": (href) => imgxxt(href)
   };
   function updateStatus(imageId, data2) {
     store.upgradeImgData[imageId] = {
@@ -6732,13 +6992,10 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     if (!unobserved.length) return;
     unobserved.forEach((img) => {
       observed.add(img);
-    });
-    if (unobserved[0]) await upgradeImg(unobserved[0]);
-    unobserved.slice(1).forEach((img) => {
       observer.observe(img);
     });
   }
-  var root$2 = from_html(`<div><!></div>`);
+  var root$2 = from_html(`<div role="img"><!></div>`);
   function Resize($$anchor, $$props) {
     push($$props, true);
     let clicked = prop($$props, "clicked", 15), resized = prop($$props, "resized", 15);
@@ -6835,19 +7092,13 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     let styles;
     var node = child(div);
     snippet(node, () => $$props.children);
-    template_effect(
-      ($0, $1) => {
-        classes = set_class(div, 1, "svelte-x5vner", null, classes, $0);
-        styles = set_style(div, "", styles, $1);
-      },
-      [
-        () => ({ dragging: clicked() && resized() }),
-        () => ({
-          width: `${(get(dragResize) ? store.resizeWidth : 100) ?? ""}%`,
-          "column-count": get(fitColumnCount)
-        })
-      ]
-    );
+    template_effect(() => {
+      classes = set_class(div, 1, "svelte-x5vner", null, classes, { dragging: clicked() && resized() });
+      styles = set_style(div, "", styles, {
+        width: `${(get(dragResize) ? store.resizeWidth : 100) ?? ""}%`,
+        "column-count": get(fitColumnCount)
+      });
+    });
     append($$anchor, div);
     pop();
   }
@@ -6983,7 +7234,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     pop();
   }
   var root_1$3 = from_html(`<div class="slider svelte-1bzlgy6"><input type="range" min="1" max="5" step="1" class="svelte-1bzlgy6"/> <span class="value svelte-1bzlgy6" title="Max columns"><span class="text svelte-1bzlgy6"> </span></span></div>`);
-  var root = from_html(`<div class="image-columns svelte-1bzlgy6"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-1bzlgy6"><path d="M22 9.999V20a1 1 0 0 1-1 1h-8V9.999zm-11 6V21H3a1 1 0 0 1-1-1v-4.001zM11 3v10.999H2V4a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v3.999h-9V3z"></path></svg> <!></div>`);
+  var root = from_html(`<div role="img" class="image-columns svelte-1bzlgy6"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-1bzlgy6"><path d="M22 9.999V20a1 1 0 0 1-1 1h-8V9.999zm-11 6V21H3a1 1 0 0 1-1-1v-4.001zM11 3v10.999H2V4a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v3.999h-9V3z"></path></svg> <!></div>`);
   function Columns($$anchor, $$props) {
     push($$props, true);
     let open = state$1(false);
@@ -6993,7 +7244,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     function onpointerleave() {
       set(open, false);
     }
-    function onchange2() {
+    function onchange() {
       saveColumnCount(store.columnCount);
     }
     var div = root();
@@ -7003,7 +7254,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
         const opts = user_derived(() => ({ ...store.transition, axis: "x" }));
         var div_1 = root_1$3();
         var input = child(div_1);
-        input.__change = onchange2;
+        input.__change = onchange;
         var span = sibling(input, 2);
         var span_1 = child(span);
         var text2 = child(span_1);
@@ -7070,22 +7321,18 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
           });
         }
         template_effect(
-          ($0, $1, $2) => {
+          ($0) => {
             set_attribute(div, "data-id", get(img).id);
             styles = set_style(div, "", styles, $0);
             set_attribute(a, "href", get(img)?.href);
-            classes = set_class(a, 1, "svelte-27jg01", null, classes, $1);
+            classes = set_class(a, 1, "svelte-27jg01", null, classes, { gif: get(gif) });
             set_attribute(img_1, "loading", get(loading));
             set_attribute(img_1, "id", get(img).id);
             set_attribute(img_1, "src", get(img)?.src);
             set_attribute(img_1, "alt", get(img)?.src);
-            classes_1 = set_class(img_1, 1, "svelte-27jg01", null, classes_1, $2);
+            classes_1 = set_class(img_1, 1, "svelte-27jg01", null, classes_1, { incognito: get(incognito), gif: get(gif) });
           },
-          [
-            () => ({ order: handleOrder(get(i)) }),
-            () => ({ gif: get(gif) }),
-            () => ({ incognito: get(incognito), gif: get(gif) })
-          ]
+          [() => ({ order: handleOrder(get(i)) })]
         );
         event("error", img_1, onerror);
         append($$anchor3, div);
@@ -7157,7 +7404,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
           $$slots: { default: true }
         });
         bind_this(div_1, ($$value) => store.ultraImages = $$value, () => store?.ultraImages);
-        template_effect(($0) => classes_2 = set_class(div_1, 1, "section svelte-27jg01", null, classes_2, $0), [() => ({ dragging: get(clicked) && get(resized) })]);
+        template_effect(() => classes_2 = set_class(div_1, 1, "section svelte-27jg01", null, classes_2, { dragging: get(clicked) && get(resized) }));
         bind_element_size(div_1, "offsetWidth", ($$value) => set(containerWidth, $$value));
         append($$anchor2, div_1);
       };
@@ -7171,7 +7418,10 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
   const Incognito = ($$anchor) => {
     var div = root_1$2();
     var a = sibling(child(div));
-    a.__click = [on_click];
+    a.__click = (event2) => {
+      event2.preventDefault();
+      updateOption("incognito", false);
+    };
     set_style(a, "", {}, { cursor: "pointer" });
     append($$anchor, div);
   };
@@ -7292,10 +7542,6 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
     }
     append($$anchor, fragment_4);
   };
-  var on_click = (event2) => {
-    event2.preventDefault();
-    updateOption("incognito", false);
-  };
   var root_1$2 = from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-wfy26x">turn off incognito</a></div>`);
   var root_3 = from_html(`<h3>Information</h3> <br/> <p><!></p> <br/> <a href="/forum/index.php" class="svelte-wfy26x">Return to home page</a>`, 1);
   var root_5 = from_html(`<h3> </h3> <!>`, 1);
@@ -7305,7 +7551,6 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
   var root_7 = from_html(`<a class="no-avatar svelte-wfy26x"><!></a>`);
   var root_12 = from_html(`<a class="svelte-wfy26x"> </a>`);
   var root_11 = from_html(`<span class="nick svelte-wfy26x"><!></span>`);
-  var on_click_1 = (_, toggleFullDate, i) => toggleFullDate(i());
   var root_15 = from_html(`<button class="date svelte-wfy26x"><!></button>`);
   var root_23 = from_html(`<div class="post svelte-wfy26x"><div class="avatar svelte-wfy26x"><!></div> <div class="content svelte-wfy26x"><div class="header svelte-wfy26x"><!> <!></div> <div class="message svelte-wfy26x"></div></div></div>`);
   var root_19 = from_html(`<div id="x-post"><!></div>`);
@@ -7318,7 +7563,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
         var consequent_6 = ($$anchor3) => {
           const paredDate = user_derived(() => handleDate(date()));
           var button = root_15();
-          button.__click = [on_click_1, toggleFullDate, i];
+          button.__click = () => toggleFullDate(i());
           var node_9 = child(button);
           {
             var consequent_5 = ($$anchor4) => {
@@ -7414,7 +7659,7 @@ rootMargin: `${getSettings("limitConcurrent") ? "200%" : "1000%"} 0%`
           });
         }
         bind_this(div_2, ($$value) => store.ultraPost = $$value, () => store?.ultraPost);
-        template_effect(($0) => classes = set_class(div_2, 1, "svelte-wfy26x", null, classes, $0), [() => ({ section: data.forumline || data.posts?.length })]);
+        template_effect(() => classes = set_class(div_2, 1, "svelte-wfy26x", null, classes, { section: data.forumline || data.posts?.length }));
         append($$anchor2, div_2);
       };
       if_block(node_10, ($$render) => {
