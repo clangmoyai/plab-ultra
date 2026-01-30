@@ -12,6 +12,8 @@ import { piccash } from "../domains/piccash";
 import { picforall } from "../domains/picforall";
 import { picshick } from "../domains/picshick";
 import { turboimagehost } from "../domains/turboimagehost";
+import { imx } from "../domains/imx";
+import { imgxxt } from "../domains/imgxxt";
 import { store, type ImgData } from "./store.svelte";
 import { getCache, setCache } from "./handleCache";
 import { getSettings } from "../settings/handleSettings";
@@ -37,6 +39,9 @@ const HANDLERS: Record<
   "picclick.ru": (href, src) => imgbase(href, src),
   "adult-images.ru": (href, src) => imgbase(href, src),
   "payforpic.ru": (href, src) => imgbase(href, src),
+  "xxxpicture.de": (href, src) => imgbase(href, src),
+  "imgbum.de": (href, src) => imgbase(href, src),
+  "adultimages.de": (href, src) => imgbase(href, src),
   "imgbox.com": (href) => imgbox(href),
   "imgbum.ru": (href) => imgbum(href),
   "imgdrive.net": (href, src) => imgdrive(href, src),
@@ -50,6 +55,8 @@ const HANDLERS: Record<
   "freescreens.ru": (href) => picforall(href),
   "picshick.com": (href, src) => picshick(href, src),
   "turboimagehost.com": (href) => turboimagehost(href),
+  "imx.to": (href) => imx(href),
+  "imgxxt.in": (href) => imgxxt(href),
 };
 
 /**
@@ -94,7 +101,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
           () => {
             updateStatus(img.id, { status: "cached", resolved: cached });
           },
-          { once: true }
+          { once: true },
         );
 
         on(
@@ -106,7 +113,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
               error: `Failed to load cached image: ${cached}`,
             });
           },
-          { once: true }
+          { once: true },
         );
       }
 
@@ -117,7 +124,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
 
   // cache miss
   const entry = Object.entries(HANDLERS).find(([domain]) =>
-    anchor.href.includes(domain)
+    anchor.href.includes(domain),
   );
 
   if (!entry)
@@ -139,7 +146,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
           URL.revokeObjectURL(src);
           updateStatus(img.id, { status: "resolved", resolved: src });
         },
-        { once: true }
+        { once: true },
       );
 
       on(
@@ -152,7 +159,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
             error: `Failed to load blob`,
           });
         },
-        { once: true }
+        { once: true },
       );
     }
     // only cache non-blob
@@ -164,7 +171,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
           setCache(anchor.href, src);
           updateStatus(img.id, { status: "resolved", resolved: src });
         },
-        { once: true }
+        { once: true },
       );
 
       on(
@@ -176,7 +183,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
             error: `Failed to load image from: ${src}`,
           });
         },
-        { once: true }
+        { once: true },
       );
     }
 
@@ -199,7 +206,7 @@ async function upgradeImg(img: HTMLImageElement): Promise<void> {
  */
 function onIntersect(
   entries: IntersectionObserverEntry[],
-  observer: IntersectionObserver
+  observer: IntersectionObserver,
 ): void {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -234,11 +241,6 @@ export async function observeImg(imgRefs: HTMLImageElement[]): Promise<void> {
 
   unobserved.forEach((img) => {
     observed.add(img);
-  });
-
-  if (unobserved[0]) await upgradeImg(unobserved[0]);
-
-  unobserved.slice(1).forEach((img) => {
     observer.observe(img);
   });
 }

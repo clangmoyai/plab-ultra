@@ -4,6 +4,9 @@
  * - picclick.ru
  * - adult-images.ru
  * - payforpic.ru
+ * - xxxpicture.de
+ * - imgbum.de
+ * - adultimages.de
  */
 export async function imgbase(href: string, src?: string): Promise<string> {
   if (!src) return href;
