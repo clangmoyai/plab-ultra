@@ -62,7 +62,7 @@ Renders post and comments
   }}
 
   {@const currentError = Object.keys(errorMessages).find((key) =>
-    forumline?.textContent?.includes(key)
+    forumline?.textContent?.includes(key),
   ) as keyof typeof errorMessages}
 
   <div class="forumline">
@@ -222,6 +222,7 @@ Renders post and comments
     cursor: pointer;
     justify-content: center;
     align-items: center;
+    overflow: clip;
   }
 
   .no-avatar svg {

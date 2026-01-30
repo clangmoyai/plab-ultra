@@ -31,7 +31,7 @@ if it's in the title it will mess up whitespace
 
       const rect = getClickedRect(
         store.dropdown.clientX,
-        store.dropdown.clientY
+        store.dropdown.clientY,
       );
 
       if (!rect) return;
@@ -43,7 +43,7 @@ if it's in the title it will mess up whitespace
         currentTarget.classList.add(...store.dropdown.classList);
 
       return on(currentTarget, "pointerleave", onpointerleave);
-    }
+    },
   );
 
   /**
@@ -103,6 +103,7 @@ if it's in the title it will mess up whitespace
 
 {#if store.dropdown}
   <div
+    role="tooltip"
     class="container"
     style:top="{top}px"
     style:left="{left}px"

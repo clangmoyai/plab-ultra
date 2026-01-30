@@ -32,7 +32,7 @@ Renders column count control for `Images.svelte`
   }
 </script>
 
-<div class="image-columns" {onpointerenter} {onpointerleave}>
+<div role="img" class="image-columns" {onpointerenter} {onpointerleave}>
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path
       d="M22 9.999V20a1 1 0 0 1-1 1h-8V9.999zm-11 6V21H3a1 1 0 0 1-1-1v-4.001zM11 3v10.999H2V4a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v3.999h-9V3z"

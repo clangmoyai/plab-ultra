@@ -125,8 +125,8 @@ Resize component for `Images.svelte`
           ? Promise.resolve()
           : new Promise((resolve) => {
               img.onload = img.onerror = resolve;
-            })
-      )
+            }),
+      ),
     );
   }
 
@@ -158,7 +158,7 @@ Resize component for `Images.svelte`
     if (store.columnCount === 1) return;
 
     const containerEl = store.ultraImages?.querySelector(
-      '[style*="column-count"]'
+      '[style*="column-count"]',
     );
 
     if (containerEl) {
@@ -177,6 +177,7 @@ Resize component for `Images.svelte`
 <svelte:document {onpointermove} {onpointerup} />
 
 <div
+  role="img"
   class:dragging={clicked && resized}
   style:width="{dragResize ? store.resizeWidth : 100}%"
   style:column-count={fitColumnCount}
