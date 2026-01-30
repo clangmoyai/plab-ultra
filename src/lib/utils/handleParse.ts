@@ -84,7 +84,7 @@ export function handlePosts(posts?: NodeListOf<Element>): Data["posts"] {
       const dateEl = row?.querySelector<HTMLElement>(".small");
       const avatarImg = row?.querySelector<HTMLImageElement>(".avatar img");
       const profileLink = row?.querySelector<HTMLAnchorElement>(
-        'a.txtb[href*="viewprofile"]'
+        'a.txtb[href*="viewprofile"]',
       );
 
       return {
@@ -122,7 +122,7 @@ export function handleDate(dateString?: string): Data["torrent"]["date"] {
   };
 
   const match = dateString.match(
-    /(\d{2})-([А-Яа-я]{3})-(\d{2}) (\d{2}:\d{2}:\d{2})/
+    /(\d{2})-([А-Яа-я]{3})-(\d{2}) (\d{2}:\d{2}:\d{2})/,
   );
 
   if (!match) return null;
@@ -248,7 +248,7 @@ const TAG_RE = /\[([^\]]+)]/g;
 // ( … )  or  { … }
 const BRACKETS_RE = /\(([^)]+)\)|\{([^}]+)\}/g;
 
-const SEPARATORS = [",", "|", "/", "&", "-", "—", "aka"];
+const SEPARATORS = [",", "|", "/", "&", "-", "—", "–", "aka"];
 const SEP_RE = new RegExp(
   SEPARATORS.map((str) => {
     const escaped = str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
@@ -257,6 +257,7 @@ const SEP_RE = new RegExp(
       // require whitespace around separators
       case "-":
       case "—":
+      case "–":
       case "/":
       case "aka":
         return `(?<=\\s)${escaped}(?=\\s)`;
@@ -266,5 +267,5 @@ const SEP_RE = new RegExp(
         return escaped;
     }
   }).join("|"),
-  "g"
+  "g",
 );
