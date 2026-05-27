@@ -70,6 +70,7 @@ Renders column count control for `Images.svelte`
     background: transparent !important;
     padding: 0.75rem;
     z-index: 2;
+    height: 1.25rem;
 
     /* dropdown style */
     background: var(--overlay-bg) !important;
