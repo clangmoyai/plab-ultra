@@ -4,12 +4,13 @@ import { GM_fetch } from "../utils/GM_fetch";
  * Handles
  * - imgfrost.net
  * - imgblaze.net
+ * - imagefly.cc
  */
 export async function imgfrost(href: string, src?: string): Promise<string> {
   if (!src) return Promise.resolve(href);
 
   const parsed = new URL(src);
-  parsed.hostname = "prcf.imglomalr.site";
+  parsed.hostname = "prcf.imgsourmaf.sbs";
   parsed.pathname = parsed.pathname.replace("/small/small_", "/big/");
 
   // imgfrost redirects to one of ["imgair.net", "cloudgallery.net", "imghot.net"]
@@ -20,7 +21,7 @@ export async function imgfrost(href: string, src?: string): Promise<string> {
     "GET",
     parsed.href,
     "blob",
-    headers
+    headers,
   );
 
   if (!response.type.startsWith("image/")) {

@@ -8,7 +8,8 @@ export async function turboimagehost(href: string): Promise<string> {
   const { response, responseText, finalUrl } = await GM_fetch(
     "GET",
     href,
-    "blob"
+    "blob",
+    { Referer: href },
   );
 
   if (response.type.startsWith("image/")) {
@@ -16,7 +17,7 @@ export async function turboimagehost(href: string): Promise<string> {
   }
 
   const match = responseText.match(/"og:image" content="([^"]+)"/);
-  if (match[1]) {
+  if (match && match[1]) {
     return new URL(match[1], href).href;
   }
 

@@ -3,6 +3,7 @@ import { generic } from "../domains/generic";
 import { imagebam } from "../domains/imagebam";
 import { imagenimage } from "../domains/imagenimage";
 import { imagetwist } from "../domains/imagetwist";
+import { imagevenue } from "../domains/imagevenue";
 import { imgbase } from "../domains/imgbase";
 import { imgbox } from "../domains/imgbox";
 import { imgbum } from "../domains/imgbum";
@@ -27,14 +28,14 @@ const HANDLERS: Record<
   (href: string, src?: string) => Promise<string>
 > = {
   "fastpic.": (href) => generic(href, "#imglink > img.image.img-fluid"),
-  "imgsto.com": (href) => generic(href, ".main-content-image > img"),
+  // "imgsto.com": (href) => generic(href, ".main-content-image > img"),
   "imagebam.com": (href) => imagebam(href, "img.main-image"),
   "imageban.ru": (href) => generic(href, "#img_main"),
   "imagenimage.com": (href, src) => imagenimage(href, src),
   "imagetwist.com": (href, src) => imagetwist(href, src),
   "picturelol.com": (href, src) => imagetwist(href, src),
   "vipr.im": (href, src) => imagetwist(href, src),
-  "imagevenue.com": (href) => generic(href, "#main-image"),
+  "imagevenue.com": (href) => imagevenue(href, "#main-image"),
   "imgbase.ru": (href, src) => imgbase(href, src),
   "picclick.ru": (href, src) => imgbase(href, src),
   "adult-images.ru": (href, src) => imgbase(href, src),
@@ -42,6 +43,8 @@ const HANDLERS: Record<
   "xxxpicture.de": (href, src) => imgbase(href, src),
   "imgbum.de": (href, src) => imgbase(href, src),
   "adultimages.de": (href, src) => imgbase(href, src),
+  "picforall.eu": (href, src) => imgbase(href, src),
+  "pornoimages.de": (href, src) => imgbase(href, src),
   "imgbox.com": (href) => imgbox(href),
   "imgbum.ru": (href) => imgbum(href),
   "imgdrive.net": (href, src) => imgdrive(href, src),
@@ -49,6 +52,7 @@ const HANDLERS: Record<
   "imgwallet.com": (href, src) => imgdrive(href, src),
   "imgfrost.net": (href, src) => imgfrost(href, src),
   "imgblaze.net": (href, src) => imgfrost(href, src),
+  "imagefly.cc": (href, src) => imgfrost(href, src),
   "piccash.net": (href, src) => piccash(href, src),
   "picforall.ru": (href) => picforall(href),
   "imgclick.ru": (href) => picforall(href),
