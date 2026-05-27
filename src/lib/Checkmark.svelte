@@ -23,7 +23,7 @@ Component for button with checkmark animation
   const DURATION = 1000;
 
   let clicked = $state(false);
-  let timeout: NodeJS.Timeout | null;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
 
   let clientWidth = $state(0);
   let clientHeight = $state(0);

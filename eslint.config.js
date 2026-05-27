@@ -1,26 +1,25 @@
+import path from "node:path";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import svelte from "eslint-plugin-svelte";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
-import { fileURLToPath } from "node:url";
 import ts from "typescript-eslint";
 import svelteConfig from "./svelte.config.js";
 import jsdoc from "eslint-plugin-jsdoc";
 
-const gitignorePath = fileURLToPath(new URL("./.gitignore", import.meta.url));
+const gitignorePath = path.resolve(import.meta.dirname, ".gitignore");
 
-export default ts.config(
+export default defineConfig(
   includeIgnoreFile(gitignorePath),
   { ignores: ["dist/**"] },
   js.configs.recommended,
-  ...ts.configs.recommended,
-  ...svelte.configs.recommended,
+  ts.configs.recommended,
+  svelte.configs.recommended,
   // jsdoc config
   jsdoc.configs["flat/recommended-typescript"],
   {
-    languageOptions: {
-      globals: { ...globals.browser, ...globals.node },
-    },
+    languageOptions: { globals: { ...globals.browser, ...globals.node } },
     // jsdoc plugin
     plugins: {
       jsdoc,
@@ -48,5 +47,10 @@ export default ts.config(
         svelteConfig,
       },
     },
-  }
+  },
+  {
+    // Override or add rule settings here, such as:
+    // 'svelte/button-has-type': 'error'
+    rules: {},
+  },
 );

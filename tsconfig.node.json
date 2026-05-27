@@ -2,10 +2,7 @@
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
-    // userscript.json
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "moduleResolution": "bundler"
   },
   "include": ["vite.config.ts", "userscript.json"]
 }
