@@ -8,13 +8,13 @@ const parser = new DOMParser();
 export async function generic(
   href: string,
   selector: string,
-  headers?: Record<string, string>
+  headers?: Record<string, string>,
 ): Promise<string> {
   const { response, responseText, finalUrl } = await GM_fetch(
     "GET",
     href,
     "blob",
-    headers
+    headers,
   );
 
   if (response.type.startsWith("image/")) {

@@ -13,7 +13,7 @@ export function loadColumnCount(): number {
   } catch (error) {
     console.warn(
       `Failed to load ${COLUMN_COUNT_KEY} from localStorage:`,
-      error
+      error,
     );
   }
   return DEFAULT_COUNT;

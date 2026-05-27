@@ -25,7 +25,7 @@ Renders tags below title
         return ["tag1", "tag2", "tag3", "tag4", "tag5"];
       const tags = data?.title?.tags || [];
       return [...new Set(tags)];
-    }
+    },
   );
 
   /**

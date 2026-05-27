@@ -34,7 +34,7 @@ Stats
       if (expandFiles) {
         store.toggleFileList();
       }
-    }
+    },
   );
 
   $effect(
@@ -48,7 +48,7 @@ Stats
       if (store.fileListData && fileListState === "loading") {
         fileListState = "loaded";
       }
-    }
+    },
   );
 
   /**
@@ -141,7 +141,7 @@ Stats
     <!-- times -->
     {#if data.torrent?.times != null}
       {@const format = new Intl.NumberFormat("en-US").format(
-        data.torrent.times
+        data.torrent.times,
       )}
       {@render Item("Downloads", format)}
     {:else}
@@ -173,7 +173,7 @@ Stats
       {@const max = 5}
       {#await getRelated(data.title.original) then related}
         {@const results = related.filter(
-          (result) => result.textContent !== data.title?.original
+          (result) => result.textContent !== data.title?.original,
         )}
         {#if results.length > 0 && results.length < max}
           <div class="item">

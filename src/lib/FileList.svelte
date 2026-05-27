@@ -18,7 +18,7 @@ Renders `store.fileListData`
 
     const idx = Math.min(
       Math.floor(Math.log(bytes) / Math.log(1024)),
-      units.length - 1
+      units.length - 1,
     );
 
     let value = bytes / Math.pow(1024, idx);
@@ -85,7 +85,7 @@ Renders `store.fileListData`
       if (!store.fileListData && store.showFileList) {
         getFileList();
       }
-    }
+    },
   );
 </script>
 

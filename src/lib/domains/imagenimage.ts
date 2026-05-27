@@ -6,7 +6,7 @@ import { getBlob } from "../utils/handleCache";
  */
 export async function imagenimage(href: string, src?: string): Promise<string> {
   const match = src?.match(
-    /(https:\/\/img\d+\.imagenimage\.com\/)th\/(.+)\.jpg/
+    /(https:\/\/img\d+\.imagenimage\.com\/)th\/(.+)\.jpg/,
   );
 
   if (!src || !match) {

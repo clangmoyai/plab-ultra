@@ -81,7 +81,7 @@ export function handleData(): Data {
       pagination: "table#pagination",
       logo: "img.site-logo",
       forumline: "table.forumline.message",
-    }).map(([key, value]) => [key, document.querySelectorAll(value)])
+    }).map(([key, value]) => [key, document.querySelectorAll(value)]),
   );
 
   return {

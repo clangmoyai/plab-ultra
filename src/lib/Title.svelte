@@ -24,7 +24,7 @@ Renders (parsed) post title
       const tag = data.title?.tags?.[0];
       if (searchTerms?.length === 0 && tag) return tag;
       return;
-    }
+    },
   );
 
   let items = $derived.by(
@@ -63,7 +63,7 @@ Renders (parsed) post title
       }
 
       return parts.filter((part) => part !== "");
-    }
+    },
   );
 
   let documentTitle = $derived.by(
@@ -81,7 +81,7 @@ Renders (parsed) post title
         }
       }
       return data.title?.original || document.title;
-    }
+    },
   );
 </script>
 
@@ -115,7 +115,7 @@ Renders (parsed) post title
 
 {#snippet ParsedTitle(searchTerms: string[])}
   {@const validLinks = store.performerLinks.filter(
-    (link) => link.url && link.label
+    (link) => link.url && link.label,
   )}
 
   {#each items as item, i (i)}

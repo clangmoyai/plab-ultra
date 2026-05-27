@@ -40,7 +40,7 @@ else {
 
     const callback: MutationCallback = (
       mutationList: MutationRecord[],
-      observer: MutationObserver
+      observer: MutationObserver,
     ): void => {
       for (const mutation of mutationList) {
         if (mutation.type === "childList") {

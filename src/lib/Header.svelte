@@ -37,7 +37,7 @@ Renders page header with logo, links and search
    * Appends theme button
    */
   function appendThemeButton(
-    themeElement: HTMLAnchorElement | null
+    themeElement: HTMLAnchorElement | null,
   ): Attachment {
     return (element) => {
       if (!(themeElement instanceof HTMLAnchorElement)) return;

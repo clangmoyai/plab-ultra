@@ -17,15 +17,15 @@ Renders debug message in `Images.svelte`
    * Copies debug data to clipboard
    */
   async function copyToClipboard(
-    data: { id: string; href: string; src: string } & ImgData
+    data: { id: string; href: string; src: string } & ImgData,
   ): Promise<void> {
     try {
       const dataWithoutId = Object.fromEntries(
-        Object.entries(data).filter(([key]) => key !== "id")
+        Object.entries(data).filter(([key]) => key !== "id"),
       );
 
       await navigator.clipboard.writeText(
-        JSON.stringify(dataWithoutId, null, 2)
+        JSON.stringify(dataWithoutId, null, 2),
       );
     } catch (err) {
       console.error("Failed to copy debug:", err);
@@ -36,7 +36,7 @@ Renders debug message in `Images.svelte`
 {#snippet Item(
   key: string | null | undefined,
   value: string | null | undefined,
-  error?: string | null | undefined
+  error?: string | null | undefined,
 )}
   <p data-key={key}>
     <strong>{key}</strong>:

@@ -20,14 +20,14 @@ async function main(): Promise<void> {
     if (!packageJson.version) {
       handleError(
         "Version not found in package.json",
-        new Error("Version missing")
+        new Error("Version missing"),
       );
     }
 
     if (!userscriptJson.version) {
       handleError(
         "Version not found in userscript.json",
-        new Error("Version missing")
+        new Error("Version missing"),
       );
     }
 
@@ -35,13 +35,13 @@ async function main(): Promise<void> {
       handleError(
         "Version mismatch between files",
         new Error(
-          `package.json: ${packageJson.version}, userscript.json: ${userscriptJson.version}`
-        )
+          `package.json: ${packageJson.version}, userscript.json: ${userscriptJson.version}`,
+        ),
       );
     }
 
     const userInput = await readline.question(
-      `Enter new version (empty to keep ${packageJson.version}): `
+      `Enter new version (empty to keep ${packageJson.version}): `,
     );
 
     const newVersion = userInput.trim() || packageJson.version;
@@ -61,10 +61,10 @@ async function main(): Promise<void> {
 
     console.log("\n🎉 Process completed\n");
     console.log(
-      "• Push any remaining changes and `plab-ultra.user.js` to GitHub"
+      "• Push any remaining changes and `plab-ultra.user.js` to GitHub",
     );
     console.log(
-      "• Create a new GitHub release to trigger the Sleazy Fork webhook"
+      "• Create a new GitHub release to trigger the Sleazy Fork webhook",
     );
   } catch (error) {
     handleError("An unexpected error occurred", error);
@@ -81,7 +81,7 @@ main();
 function writeVersion(
   version: string,
   packageJson: { version: string; [key: string]: unknown },
-  userscriptJson: { version: string; [key: string]: unknown }
+  userscriptJson: { version: string; [key: string]: unknown },
 ): void {
   try {
     // package.json
@@ -93,7 +93,7 @@ function writeVersion(
     userscriptJson.version = version;
     writeFileSync(
       "userscript.json",
-      JSON.stringify(userscriptJson, null, 2) + "\n"
+      JSON.stringify(userscriptJson, null, 2) + "\n",
     );
     console.log("✅ Updated userscript.json");
 

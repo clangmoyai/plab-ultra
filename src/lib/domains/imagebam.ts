@@ -5,7 +5,7 @@ import { generic } from "./generic";
  */
 export async function imagebam(
   href: string,
-  selector: string
+  selector: string,
 ): Promise<string> {
   // need to pass cookie to bypass intermediary page
   const headers = { Cookie: "nsfw_inter=1" };

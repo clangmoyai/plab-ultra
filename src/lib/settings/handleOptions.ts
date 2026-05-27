@@ -174,7 +174,7 @@ export function restoreOptions(): void {
   Object.entries(defaultOptions).forEach(([groupKey, groupSettings]) => {
     groupSettings.forEach((defaultSetting) => {
       const currentOpt = store.options[groupKey as OptionsGroup]?.find(
-        (opt) => opt.key === defaultSetting.key
+        (opt) => opt.key === defaultSetting.key,
       );
       if (currentOpt) {
         currentOpt.value = defaultSetting.value;

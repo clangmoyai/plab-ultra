@@ -4,7 +4,7 @@ import { getSettings } from "../settings/handleSettings";
 const KEY = "resolved-urls";
 
 const cache: Record<string, string> = JSON.parse(
-  sessionStorage.getItem(KEY) || "{}"
+  sessionStorage.getItem(KEY) || "{}",
 );
 
 /**

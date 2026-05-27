@@ -83,7 +83,7 @@ App component mounted from `main.ts`
       const darkMode = Boolean(data.theme?.darkmode);
       document.documentElement.dataset["theme"] = darkMode ? "dark" : "light";
       sessionStorage.setItem("dark-mode", darkMode.toString());
-    }
+    },
   );
 
   $inspect(data);

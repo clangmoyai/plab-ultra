@@ -116,7 +116,7 @@ Attaches event listeners to window and document:
     let imgRefs = [...store.imgRefs];
 
     let filteredImgRefs = imgRefs.filter(
-      (el): el is HTMLImageElement => el.dataset["broken"] !== "true"
+      (el): el is HTMLImageElement => el.dataset["broken"] !== "true",
     );
 
     if (filteredImgRefs.length === 0) return;

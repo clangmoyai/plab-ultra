@@ -130,7 +130,7 @@ export function exportSettings(): void {
   const performerLinks = store.performerLinks.map(stripId);
   const options = Object.values(store.options).flat();
   const optionsJson = Object.fromEntries(
-    options.map((opt) => [opt.key, opt.value])
+    options.map((opt) => [opt.key, opt.value]),
   );
 
   const fileContent = `// Paste this into browser console
@@ -138,13 +138,13 @@ export function exportSettings(): void {
 localStorage.setItem("${OPTIONS_KEY}", JSON.stringify(${JSON.stringify(
     optionsJson,
     null,
-    2
+    2,
   )}));
 
 localStorage.setItem("${LINKS_KEY}", JSON.stringify(${JSON.stringify(
     performerLinks,
     null,
-    2
+    2,
   )}));
 
 localStorage.setItem("${RESIZE_KEY}", "${store.resizeWidth || "100"}");

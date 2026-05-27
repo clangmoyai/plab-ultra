@@ -106,7 +106,7 @@ export const store = $state<Store>({
     return Object.fromEntries(
       this.performerLinks
         .filter((link: PerformerLink) => link.url)
-        .map((link: PerformerLink) => [link.url, getFaviconUrl(link.url)])
+        .map((link: PerformerLink) => [link.url, getFaviconUrl(link.url)]),
     );
   },
 });

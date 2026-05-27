@@ -11,7 +11,7 @@ import type { TransitionConfig } from "svelte/transition";
  */
 export function slideFade(
   node: Element,
-  { delay = 0, duration = 400, easing = cubic_out, axis = "y" } = {}
+  { delay = 0, duration = 400, easing = cubic_out, axis = "y" } = {},
 ): TransitionConfig {
   const style = getComputedStyle(node);
 
@@ -22,32 +22,32 @@ export function slideFade(
     axis === "y" ? ["top", "bottom"] : ["left", "right"];
   const capitalized_secondary_properties = secondary_properties.map(
     // @ts-expect-error - Object is possibly 'undefined'
-    (e) => `${e[0].toUpperCase()}${e.slice(1)}`
+    (e) => `${e[0].toUpperCase()}${e.slice(1)}`,
   );
 
   const padding_start_value = parseFloat(
     // @ts-expect-error - Element implicitly has an 'any' type ...
-    style[`padding${capitalized_secondary_properties[0]}`]
+    style[`padding${capitalized_secondary_properties[0]}`],
   );
   const padding_end_value = parseFloat(
     // @ts-expect-error - Element implicitly has an 'any' type ...
-    style[`padding${capitalized_secondary_properties[1]}`]
+    style[`padding${capitalized_secondary_properties[1]}`],
   );
   const margin_start_value = parseFloat(
     // @ts-expect-error - Element implicitly has an 'any' type ...
-    style[`margin${capitalized_secondary_properties[0]}`]
+    style[`margin${capitalized_secondary_properties[0]}`],
   );
   const margin_end_value = parseFloat(
     // @ts-expect-error - Element implicitly has an 'any' type ...
-    style[`margin${capitalized_secondary_properties[1]}`]
+    style[`margin${capitalized_secondary_properties[1]}`],
   );
   const border_width_start_value = parseFloat(
     // @ts-expect-error - Element implicitly has an 'any' type ...
-    style[`border${capitalized_secondary_properties[0]}Width`]
+    style[`border${capitalized_secondary_properties[0]}Width`],
   );
   const border_width_end_value = parseFloat(
     // @ts-expect-error - Element implicitly has an 'any' type ...
-    style[`border${capitalized_secondary_properties[1]}Width`]
+    style[`border${capitalized_secondary_properties[1]}Width`],
   );
 
   return {

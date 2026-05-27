@@ -29,7 +29,7 @@ Attaches `data.thank` button
       if (!userId) return false;
 
       return data.thank?.list.has(userId);
-    }
+    },
   );
 
   let title = $derived.by<string | undefined>(
@@ -38,7 +38,7 @@ Attaches `data.thank` button
      */ () => {
       if (disabled) return "Already thanked";
       return;
-    }
+    },
   );
 
   /**

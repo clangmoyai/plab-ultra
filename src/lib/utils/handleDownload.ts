@@ -16,7 +16,7 @@ function state(state: DownloadState): void {
  * {@link https://github.com/valpackett/transmitter Transmitter}
  */
 export async function handleDownload(
-  event: MouseEvent | KeyboardEvent
+  event: MouseEvent | KeyboardEvent,
 ): Promise<void> {
   event.preventDefault();
 
@@ -43,7 +43,7 @@ export async function handleDownload(
       encodeURIComponent(data.torrent.link);
 
     const bgColor = getComputedStyle(document.documentElement).getPropertyValue(
-      "--main-bg"
+      "--main-bg",
     );
 
     // hack, open new NON-https window
@@ -66,7 +66,7 @@ export async function handleDownload(
     window.open(
       URL.createObjectURL(new Blob([page], { type: "text/html" })),
       "_blank",
-      "noopener"
+      "noopener",
     );
 
     state("success");

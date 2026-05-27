@@ -56,7 +56,7 @@ Renders images within post
         observeImg(store.imgRefs);
       }
       return (): void => observer.disconnect();
-    }
+    },
   );
 
   let images = $derived.by<Image[]>(() => {
