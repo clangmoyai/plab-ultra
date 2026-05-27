@@ -93,7 +93,7 @@ export function removePerformerLink(index: number): void {
  */
 export function updatePerformerLink(
   index: number,
-  data: Partial<PerformerLink>
+  data: Partial<PerformerLink>,
 ): void {
   if (index < 0 || index >= store.performerLinks.length) return;
 
@@ -122,9 +122,9 @@ export function getLinkUrl(link: PerformerLink, query: string): string {
 export function getFaviconUrl(url: string): string {
   try {
     const domain = new URL(url).host;
-    return `https://icons.duckduckgo.com/ip3/${domain}.ico`;
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
   } catch {
-    return "https://icons.duckduckgo.com/ip3/invalid.ico";
+    return "https://www.google.com/s2/favicons?domain=invalid&sz=64";
   }
 }
 
