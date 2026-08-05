@@ -171,7 +171,8 @@ Stats
     <!-- related -->
     {#if data.title?.original}
       {@const max = 5}
-      {#await getRelated(data.title.original) then related}
+      {@const relatedPromise = getRelated(data.title.original)}
+      {#await relatedPromise then related}
         {@const results = related.filter(
           (result) => result.textContent !== data.title?.original,
         )}

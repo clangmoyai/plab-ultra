@@ -9,9 +9,9 @@ Renders performer links in `Settings.svelte`
   import {
     updatePerformerLink,
     removePerformerLink,
-    getFaviconUrl,
     type PerformerLink,
   } from "./handleLinks";
+  import { getFaviconUrl } from "../utils/handleFavicon";
   import { slideFade } from "../utils/slideFade";
 
   const placeholders = {

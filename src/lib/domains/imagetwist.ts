@@ -1,6 +1,6 @@
 import { generic } from "./generic";
 import { GM_fetch } from "../utils/GM_fetch";
-import { getBlob } from "../utils/handleCache";
+import { getBlob } from "../utils/handleBlob";
 
 /**
  * Handles

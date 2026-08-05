@@ -6,7 +6,6 @@ import { imagetwist } from "../domains/imagetwist";
 import { imagevenue } from "../domains/imagevenue";
 import { imgbase } from "../domains/imgbase";
 import { imgbox } from "../domains/imgbox";
-import { imgbum } from "../domains/imgbum";
 import { imgdrive } from "../domains/imgdrive";
 import { imgfrost } from "../domains/imgfrost";
 import { piccash } from "../domains/piccash";
@@ -46,7 +45,6 @@ const HANDLERS: Record<
   "picforall.eu": (href, src) => imgbase(href, src),
   "pornoimages.de": (href, src) => imgbase(href, src),
   "imgbox.com": (href) => imgbox(href),
-  "imgbum.ru": (href) => imgbum(href),
   "imgdrive.net": (href, src) => imgdrive(href, src),
   "imgadult.com": (href, src) => imgdrive(href, src),
   "imgwallet.com": (href, src) => imgdrive(href, src),
@@ -57,6 +55,7 @@ const HANDLERS: Record<
   "picforall.ru": (href) => picforall(href),
   "imgclick.ru": (href) => picforall(href),
   "freescreens.ru": (href) => picforall(href),
+  "imgbum.ru": (href) => picforall(href),
   "picshick.com": (href, src) => picshick(href, src),
   "turboimagehost.com": (href) => turboimagehost(href),
   "imx.to": (href) => imx(href),

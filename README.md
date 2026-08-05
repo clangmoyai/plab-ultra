@@ -51,7 +51,6 @@ The dev server doesn't work with Firefox, but Chrome does... ([open issue?](http
 brew install node pnpm
 
 # install
-cd ~/Developer/
 git clone https://github.com/clangmoyai/plab-ultra/
 cd plab-ultra
 pnpm i
@@ -60,12 +59,13 @@ pnpm i
 pnpm dev
 
 # check and lint
-pnpx sv check && \
+pnpm check && \
   pnpm lint && \
-  pnpm knip
+  pnpm fallow dead-code && \
+  pnpm fallow dupes
 
 # update dependencies
-pnpm up -L
+pnpm up
 
 # build -> dist
 pnpm build

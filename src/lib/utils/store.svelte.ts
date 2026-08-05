@@ -1,5 +1,6 @@
 import { quadInOut } from "svelte/easing";
-import { getFaviconUrl, type PerformerLink } from "../settings/handleLinks";
+import { getFaviconUrl } from "./handleFavicon";
+import type { PerformerLink } from "../settings/handleLinks";
 import type { Options } from "../settings/handleOptions";
 import type { DownloadState } from "./handleDownload";
 

@@ -1,4 +1,4 @@
-import { getBlob } from "../utils/handleCache";
+import { getBlob } from "../utils/handleBlob";
 
 /**
  * Handles

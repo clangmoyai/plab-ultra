@@ -7,12 +7,16 @@ const parser = new DOMParser();
  * - picforall.ru
  * - imgclick.ru
  * - freescreens.ru
+ * - imgbum.ru
  */
 export async function picforall(href: string): Promise<string> {
   const { responseText } = await GM_fetch("GET", href, "text");
-
-  const selector = "#pay_thumb_img img";
   const doc = parser.parseFromString(responseText, "text/html");
+
+  let selector = "#pay_thumb_img img";
+  if (new URL(href).hostname.endsWith("imgbum.ru")) {
+    selector = "table > tbody > tr > td > img";
+  }
 
   const img = doc.querySelector<HTMLImageElement>(selector);
   const onclick = img?.getAttribute("onclick");
@@ -23,5 +27,5 @@ export async function picforall(href: string): Promise<string> {
     throw new Error(`image not found: ${href}`);
   }
 
-  return imgSrc;
+  return new URL(imgSrc, href).href;
 }
