@@ -1,4 +1,5 @@
 import { on } from "svelte/events";
+import { fastpic } from "../domains/fastpic";
 import { generic } from "../domains/generic";
 import { imagebam } from "../domains/imagebam";
 import { imagenimage } from "../domains/imagenimage";
@@ -26,8 +27,7 @@ const HANDLERS: Record<
   string,
   (href: string, src?: string) => Promise<string>
 > = {
-  "fastpic.": (href) => generic(href, "#imglink > img.image.img-fluid"),
-  // "imgsto.com": (href) => generic(href, ".main-content-image > img"),
+  "fastpic.": (href) => fastpic(href),
   "imagebam.com": (href) => imagebam(href, "img.main-image"),
   "imageban.ru": (href) => generic(href, "#img_main"),
   "imagenimage.com": (href, src) => imagenimage(href, src),
