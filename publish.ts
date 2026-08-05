@@ -53,9 +53,10 @@ async function main(): Promise<void> {
     }
 
     run("pnpm --version");
-    run("pnpx sv check", "🔍 Running svelte-check");
+    run("pnpm check", "🔍 Running check");
     run("pnpm lint", "🔍 Running lint");
-    run("pnpm knip", "🔍 Running knip.");
+    run("pnpm fallow dead-code", "🔍 Running fallow dead-code");
+    run("pnpm fallow dupes", "🔍 Running fallow dupes");
     run("pnpm up", "🔄 Updating dependencies");
     run("pnpm build", "🔧 Building project");
 

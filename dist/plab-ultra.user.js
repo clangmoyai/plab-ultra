@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2026.05.28
+// @version      2026.08.05
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -20,7 +20,7 @@
 // ==/UserScript==
 
 (function() {
-  'use strict';
+	"use strict";
 	var s = new Set();
 	var _css = async (t) => {
 		if (s.has(t)) return;
@@ -288,6 +288,7 @@
 		invoke_error_boundary(error, effect);
 	}
 	function invoke_error_boundary(error, effect) {
+		if (effect !== null && (effect.f & 16384) !== 0) return;
 		while (effect !== null) {
 			if ((effect.f & 128) !== 0) {
 				if ((effect.f & 32768) === 0) throw error;
@@ -335,6 +336,544 @@
 			is_store_binding = previous_is_store_binding;
 		}
 	}
+	var listening_to_form_reset = false;
+	function add_form_reset_listener() {
+		if (!listening_to_form_reset) {
+			listening_to_form_reset = true;
+			document.addEventListener("reset", (evt) => {
+				Promise.resolve().then(() => {
+					if (!evt.defaultPrevented) for (const e of evt.target.elements) e[FORM_RESET_HANDLER]?.();
+				});
+			}, { capture: true });
+		}
+	}
+	function without_reactive_context(fn) {
+		var previous_reaction = active_reaction;
+		var previous_effect = active_effect;
+		set_active_reaction(null);
+		set_active_effect(null);
+		try {
+			return fn();
+		} finally {
+			set_active_reaction(previous_reaction);
+			set_active_effect(previous_effect);
+		}
+	}
+	function listen_to_event_and_reset_event(element, event, handler, on_reset = handler) {
+		element.addEventListener(event, () => without_reactive_context(handler));
+		const prev = element[FORM_RESET_HANDLER];
+		if (prev) element[FORM_RESET_HANDLER] = () => {
+			prev();
+			on_reset(true);
+		};
+		else element[FORM_RESET_HANDLER] = () => on_reset(true);
+		add_form_reset_listener();
+	}
+	function createSubscriber(start) {
+		let subscribers = 0;
+		let version = source(0);
+		let stop;
+		return () => {
+			if (effect_tracking()) {
+				get(version);
+				render_effect(() => {
+					if (subscribers === 0) stop = untrack(() => start(() => increment(version)));
+					subscribers += 1;
+					return () => {
+						queue_micro_task(() => {
+							subscribers -= 1;
+							if (subscribers === 0) {
+								stop?.();
+								stop = void 0;
+								increment(version);
+							}
+						});
+					};
+				});
+			}
+		};
+	}
+	var flags = EFFECT_TRANSPARENT | EFFECT_PRESERVED;
+	function boundary(node, props, children, transform_error) {
+		new Boundary(node, props, children, transform_error);
+	}
+	var Boundary = class {
+		parent;
+		is_pending = false;
+		transform_error;
+		#anchor;
+		#hydrate_open = hydrating ? hydrate_node : null;
+		#props;
+		#children;
+		#effect;
+		#main_effect = null;
+		#pending_effect = null;
+		#failed_effect = null;
+		#offscreen_fragment = null;
+		#local_pending_count = 0;
+		#pending_count = 0;
+		#pending_count_update_queued = false;
+		#dirty_effects = new Set();
+		#maybe_dirty_effects = new Set();
+		#effect_pending = null;
+		#effect_pending_subscriber = createSubscriber(() => {
+			this.#effect_pending = source(this.#local_pending_count);
+			return () => {
+				this.#effect_pending = null;
+			};
+		});
+		constructor(node, props, children, transform_error) {
+			this.#anchor = node;
+			this.#props = props;
+			this.#children = (anchor) => {
+				var effect = active_effect;
+				effect.b = this;
+				effect.f |= 128;
+				children(anchor);
+			};
+			this.parent = active_effect.b;
+			this.transform_error = transform_error ?? this.parent?.transform_error ?? ((e) => e);
+			this.#effect = block(() => {
+				if (hydrating) {
+					const comment = this.#hydrate_open;
+					hydrate_next();
+					const server_rendered_pending = comment.data === "[!";
+					if (comment.data.startsWith("[?")) {
+						const serialized_error = JSON.parse(comment.data.slice(2));
+						this.#hydrate_failed_content(serialized_error);
+					} else if (server_rendered_pending) this.#hydrate_pending_content();
+					else this.#hydrate_resolved_content();
+				} else this.#render();
+			}, flags);
+			if (hydrating) this.#anchor = hydrate_node;
+		}
+		#hydrate_resolved_content() {
+			try {
+				this.#main_effect = branch(() => this.#children(this.#anchor));
+			} catch (error) {
+				this.error(error);
+			}
+		}
+		#hydrate_failed_content(error) {
+			const failed = this.#props.failed;
+			const { reset, invoke_onerror } = this.#create_reset(error);
+			queue_micro_task(invoke_onerror);
+			if (!failed) return;
+			this.#failed_effect = branch(() => {
+				failed(this.#anchor, () => error, () => reset);
+			});
+		}
+		#create_reset(error) {
+			var did_reset = false;
+			var calling_on_error = false;
+			const reset = () => {
+				if (did_reset) {
+					svelte_boundary_reset_noop();
+					return;
+				}
+				did_reset = true;
+				if (calling_on_error) svelte_boundary_reset_onerror();
+				if (this.#failed_effect !== null) pause_effect(this.#failed_effect, () => {
+					this.#failed_effect = null;
+				});
+				this.#run(() => {
+					this.#render();
+				});
+			};
+			const invoke_onerror = () => {
+				try {
+					calling_on_error = true;
+					this.#props.onerror?.(error, reset);
+					calling_on_error = false;
+				} catch (err) {
+					invoke_error_boundary(err, this.#effect && this.#effect.parent);
+				}
+			};
+			return {
+				reset,
+				invoke_onerror
+			};
+		}
+		#hydrate_pending_content() {
+			const pending = this.#props.pending;
+			if (!pending) return;
+			this.is_pending = true;
+			this.#pending_effect = branch(() => pending(this.#anchor));
+			queue_micro_task(() => {
+				var fragment = this.#offscreen_fragment = document.createDocumentFragment();
+				var anchor = create_text();
+				fragment.append(anchor);
+				this.#main_effect = this.#run(() => {
+					return branch(() => this.#children(anchor));
+				});
+				if (this.#pending_count === 0) {
+					this.#anchor.before(fragment);
+					this.#offscreen_fragment = null;
+					pause_effect(this.#pending_effect, () => {
+						this.#pending_effect = null;
+					});
+					this.#resolve(current_batch);
+				}
+			});
+		}
+		#render() {
+			try {
+				this.is_pending = this.has_pending_snippet();
+				this.#pending_count = 0;
+				this.#local_pending_count = 0;
+				this.#main_effect = branch(() => {
+					this.#children(this.#anchor);
+				});
+				if (this.#pending_count > 0) {
+					var fragment = this.#offscreen_fragment = document.createDocumentFragment();
+					move_effect(this.#main_effect, fragment);
+					const pending = this.#props.pending;
+					this.#pending_effect = branch(() => pending(this.#anchor));
+				} else this.#resolve(current_batch);
+			} catch (error) {
+				this.error(error);
+			}
+		}
+		#resolve(batch) {
+			this.is_pending = false;
+			batch.transfer_effects(this.#dirty_effects, this.#maybe_dirty_effects);
+		}
+		defer_effect(effect) {
+			defer_effect(effect, this.#dirty_effects, this.#maybe_dirty_effects);
+		}
+		is_rendered() {
+			return !this.is_pending && (!this.parent || this.parent.is_rendered());
+		}
+		has_pending_snippet() {
+			return !!this.#props.pending;
+		}
+		#run(fn) {
+			var previous_effect = active_effect;
+			var previous_reaction = active_reaction;
+			var previous_ctx = component_context;
+			set_active_effect(this.#effect);
+			set_active_reaction(this.#effect);
+			set_component_context(this.#effect.ctx);
+			try {
+				Batch.ensure();
+				return fn();
+			} catch (e) {
+				handle_error(e);
+				return null;
+			} finally {
+				set_active_effect(previous_effect);
+				set_active_reaction(previous_reaction);
+				set_component_context(previous_ctx);
+			}
+		}
+		#update_pending_count(d, batch) {
+			if (!this.has_pending_snippet()) {
+				if (this.parent) this.parent.#update_pending_count(d, batch);
+				return;
+			}
+			this.#pending_count += d;
+			if (this.#pending_count === 0) {
+				this.#resolve(batch);
+				if (this.#pending_effect) pause_effect(this.#pending_effect, () => {
+					this.#pending_effect = null;
+				});
+				if (this.#offscreen_fragment) {
+					this.#anchor.before(this.#offscreen_fragment);
+					this.#offscreen_fragment = null;
+				}
+			}
+		}
+		update_pending_count(d, batch) {
+			this.#update_pending_count(d, batch);
+			this.#local_pending_count += d;
+			if (!this.#effect_pending || this.#pending_count_update_queued) return;
+			this.#pending_count_update_queued = true;
+			queue_micro_task(() => {
+				this.#pending_count_update_queued = false;
+				if (this.#effect_pending) internal_set(this.#effect_pending, this.#local_pending_count);
+			});
+		}
+		get_effect_pending() {
+			this.#effect_pending_subscriber();
+			return get(this.#effect_pending);
+		}
+		error(error) {
+			if (!this.#props.onerror && !this.#props.failed) throw error;
+			if (current_batch?.is_fork) {
+				if (this.#main_effect) current_batch.skip_effect(this.#main_effect);
+				if (this.#pending_effect) current_batch.skip_effect(this.#pending_effect);
+				if (this.#failed_effect) current_batch.skip_effect(this.#failed_effect);
+				current_batch.oncommit(() => {
+					this.#handle_error(error);
+				});
+			} else this.#handle_error(error);
+		}
+		#handle_error(error) {
+			if (this.#main_effect) {
+				destroy_effect(this.#main_effect);
+				this.#main_effect = null;
+			}
+			if (this.#pending_effect) {
+				destroy_effect(this.#pending_effect);
+				this.#pending_effect = null;
+			}
+			if (this.#failed_effect) {
+				destroy_effect(this.#failed_effect);
+				this.#failed_effect = null;
+			}
+			if (hydrating) {
+				set_hydrate_node(this.#hydrate_open);
+				next();
+				set_hydrate_node(skip_nodes());
+			}
+			let failed = this.#props.failed;
+			const handle_error_result = (transformed_error) => {
+				const { reset, invoke_onerror } = this.#create_reset(transformed_error);
+				invoke_onerror();
+				if (failed) this.#failed_effect = this.#run(() => {
+					try {
+						return branch(() => {
+							var effect = active_effect;
+							effect.b = this;
+							effect.f |= 128;
+							failed(this.#anchor, () => transformed_error, () => reset);
+						});
+					} catch (error) {
+						invoke_error_boundary(error, this.#effect.parent);
+						return null;
+					}
+				});
+			};
+			queue_micro_task(() => {
+				var result;
+				try {
+					result = this.transform_error(error);
+				} catch (e) {
+					invoke_error_boundary(e, this.#effect && this.#effect.parent);
+					return;
+				}
+				if (result !== null && typeof result === "object" && typeof result.then === "function") result.then(handle_error_result, (e) => invoke_error_boundary(e, this.#effect && this.#effect.parent));
+				else handle_error_result(result);
+			});
+		}
+	};
+	function flatten(blockers, sync, async, fn) {
+		const d = is_runes() ? derived : derived_safe_equal;
+		var pending = blockers.filter((b) => !b.settled);
+		var deriveds = sync.map(d);
+		if (async.length === 0 && pending.length === 0) {
+			fn(deriveds);
+			return;
+		}
+		var parent = active_effect;
+		var restore = capture();
+		var blocker_promise = pending.length === 1 ? pending[0].promise : pending.length > 1 ? Promise.all(pending.map((b) => b.promise)) : null;
+		function finish(async) {
+			if ((parent.f & 16384) !== 0) return;
+			restore();
+			try {
+				fn([...deriveds, ...async]);
+			} catch (error) {
+				invoke_error_boundary(error, parent);
+			}
+			unset_context();
+		}
+		var decrement_pending = increment_pending();
+		if (async.length === 0) {
+			blocker_promise.then(() => finish([])).finally(decrement_pending);
+			return;
+		}
+		function run() {
+			Promise.all(async.map((expression) => async_derived(expression))).then(finish).catch((error) => invoke_error_boundary(error, parent)).finally(decrement_pending);
+		}
+		if (blocker_promise) blocker_promise.then(() => {
+			restore();
+			run();
+			unset_context();
+		});
+		else run();
+	}
+	function capture() {
+		var previous_effect = active_effect;
+		var previous_reaction = active_reaction;
+		var previous_component_context = component_context;
+		var previous_batch = current_batch;
+		return function restore(activate_batch = true) {
+			set_active_effect(previous_effect);
+			set_active_reaction(previous_reaction);
+			set_component_context(previous_component_context);
+			if (activate_batch && (previous_effect.f & 16384) === 0) {
+				previous_batch?.activate();
+				previous_batch?.apply();
+			}
+		};
+	}
+	function unset_context(deactivate_batch = true) {
+		set_active_effect(null);
+		set_active_reaction(null);
+		set_component_context(null);
+		if (deactivate_batch) current_batch?.deactivate();
+	}
+	function increment_pending() {
+		var effect = active_effect;
+		var boundary = effect.b;
+		var batch = current_batch;
+		var blocking = !!boundary?.is_rendered();
+		boundary?.update_pending_count(1, batch);
+		batch.increment(blocking, effect);
+		return () => {
+			boundary?.update_pending_count(-1, batch);
+			batch.decrement(blocking, effect);
+		};
+	}
+	function derived(fn) {
+		var flags = 2 | DIRTY;
+		if (active_effect !== null) active_effect.f |= EFFECT_PRESERVED;
+		return {
+			ctx: component_context,
+			deps: null,
+			effects: null,
+			equals,
+			f: flags,
+			fn,
+			reactions: null,
+			rv: 0,
+			v: UNINITIALIZED,
+			wv: 0,
+			parent: active_effect,
+			ac: null
+		};
+	}
+	var OBSOLETE = Symbol("obsolete");
+	function async_derived(fn, label, location) {
+		let parent = active_effect;
+		if (parent === null) async_derived_orphan();
+		var promise = void 0;
+		var signal = source(UNINITIALIZED);
+		var should_suspend = !active_reaction;
+		var deferreds = new Set();
+		async_effect(() => {
+			var effect = active_effect;
+			var d = deferred();
+			promise = d.promise;
+			try {
+				Promise.resolve(fn()).then(d.resolve, (e) => {
+					if (e !== STALE_REACTION) d.reject(e);
+				}).finally(unset_context);
+			} catch (error) {
+				d.reject(error);
+				unset_context();
+			}
+			var batch = current_batch;
+			if (should_suspend) {
+				if ((effect.f & 32768) !== 0) var decrement_pending = increment_pending();
+				if (parent.b?.is_rendered()) batch.async_deriveds.get(effect)?.reject(OBSOLETE);
+				else for (const d of deferreds.values()) d.reject(OBSOLETE);
+				deferreds.add(d);
+				batch.async_deriveds.set(effect, d);
+			}
+			const handler = (value, error = void 0) => {
+				decrement_pending?.();
+				deferreds.delete(d);
+				if (error === OBSOLETE) return;
+				batch.activate();
+				if (error) {
+					signal.f |= ERROR_VALUE;
+					internal_set(signal, error);
+				} else {
+					if ((signal.f & 8388608) !== 0) signal.f ^= ERROR_VALUE;
+					internal_set(signal, value);
+				}
+				batch.deactivate();
+			};
+			d.promise.then(handler, (e) => handler(null, e || "unknown"));
+		});
+		teardown(() => {
+			for (const d of deferreds) d.reject(OBSOLETE);
+		});
+		return new Promise((fulfil) => {
+			function next(p) {
+				function go() {
+					if (p === promise) fulfil(signal);
+					else next(promise);
+				}
+				p.then(go, go);
+			}
+			next(promise);
+		});
+	}
+	function user_derived(fn) {
+		const d = derived(fn);
+		if (!async_mode_flag) push_reaction_value(d);
+		return d;
+	}
+	function derived_safe_equal(fn) {
+		const signal = derived(fn);
+		signal.equals = safe_equals;
+		return signal;
+	}
+	function destroy_derived_effects(derived) {
+		var effects = derived.effects;
+		if (effects !== null) {
+			derived.effects = null;
+			for (var i = 0; i < effects.length; i += 1) destroy_effect(effects[i]);
+		}
+	}
+	function execute_derived(derived) {
+		var value;
+		var prev_active_effect = active_effect;
+		var parent = derived.parent;
+		if (!is_destroying_effect && parent !== null && derived.v !== UNINITIALIZED && (parent.f & 24576) !== 0) {
+			derived_inert();
+			return derived.v;
+		}
+		set_active_effect(parent);
+		try {
+			derived.f &= ~WAS_MARKED;
+			destroy_derived_effects(derived);
+			value = update_reaction(derived);
+		} finally {
+			set_active_effect(prev_active_effect);
+		}
+		return value;
+	}
+	function update_derived(derived) {
+		var value = execute_derived(derived);
+		if (!derived.equals(value)) {
+			derived.wv = increment_write_version();
+			if (!current_batch?.is_fork || derived.deps === null) {
+				if (current_batch !== null) {
+					current_batch.capture(derived, value, true);
+					previous_batch?.capture(derived, value, true);
+				} else derived.v = value;
+				if (derived.deps === null) {
+					set_signal_status(derived, CLEAN);
+					return;
+				}
+			}
+		}
+		if (is_destroying_effect) return;
+		if (batch_values !== null) {
+			if (effect_tracking() || current_batch?.is_fork) batch_values.set(derived, value);
+		} else update_derived_status(derived);
+	}
+	function freeze_derived_effects(derived) {
+		if (derived.effects === null) return;
+		for (const e of derived.effects) if (e.teardown || e.ac) {
+			e.teardown?.();
+			if (e.ac !== null) without_reactive_context(() => {
+				e.ac.abort(STALE_REACTION);
+				e.ac = null;
+			});
+			if (e.fn !== null) e.teardown = noop;
+			remove_reactions(e, 0);
+			destroy_effect_children(e);
+		}
+	}
+	function unfreeze_derived_effects(derived) {
+		if (derived.effects === null) return;
+		for (const e of derived.effects) if (e.teardown && e.fn !== null) update_effect(e);
+	}
 	var first_batch = null;
 	var last_batch = null;
 	var current_batch = null;
@@ -356,10 +895,8 @@
 		async_deriveds = new Map();
 		current = new Map();
 		previous = new Map();
-		unblocked = new Set();
 		#commit_callbacks = new Set();
 		#discard_callbacks = new Set();
-		#fork_commit_callbacks = new Set();
 		#pending = 0;
 		#blocking_pending = new Map();
 		#deferred = null;
@@ -371,6 +908,14 @@
 		#unskipped_branches = new Set();
 		is_fork = false;
 		#decrement_queued = false;
+		constructor() {
+			if (last_batch === null) first_batch = last_batch = this;
+			else {
+				last_batch.#next = this;
+				this.#prev = last_batch;
+			}
+			last_batch = this;
+		}
 		#is_deferred() {
 			if (this.is_fork) return true;
 			for (const effect of this.#blocking_pending.keys()) {
@@ -415,16 +960,14 @@
 				this.#unlink();
 				infinite_loop_guard();
 			}
-			if (!this.#is_deferred()) {
-				for (const e of this.#dirty_effects) {
-					this.#maybe_dirty_effects.delete(e);
-					set_signal_status(e, DIRTY);
-					this.schedule(e);
-				}
-				for (const e of this.#maybe_dirty_effects) {
-					set_signal_status(e, MAYBE_DIRTY);
-					this.schedule(e);
-				}
+			for (const e of this.#dirty_effects) {
+				this.#maybe_dirty_effects.delete(e);
+				set_signal_status(e, DIRTY);
+				this.schedule(e);
+			}
+			for (const e of this.#maybe_dirty_effects) {
+				set_signal_status(e, MAYBE_DIRTY);
+				this.schedule(e);
 			}
 			const roots = this.#roots;
 			this.#roots = [];
@@ -436,6 +979,7 @@
 				this.#traverse(root, effects, render_effects);
 			} catch (e) {
 				reset_all(root);
+				if (!this.#is_deferred()) this.discard();
 				throw e;
 			}
 			current_batch = null;
@@ -454,6 +998,8 @@
 			}
 			const earlier_batch = this.#find_earlier_batch();
 			if (earlier_batch) {
+				this.#defer_effects(render_effects);
+				this.#defer_effects(effects);
 				earlier_batch.#merge(this);
 				return;
 			}
@@ -467,19 +1013,17 @@
 			previous_batch = null;
 			this.#deferred?.resolve();
 			var next_batch = current_batch;
-			if (this.linked && this.#pending === 0) this.#unlink();
-			if (async_mode_flag && !this.linked) {
-				this.#commit();
-				current_batch = next_batch;
-			}
-			if (this.#roots.length > 0) {
-				if (next_batch === null) {
-					next_batch = this;
-					this.#link();
+			if (this.#pending === 0 && (this.#roots.length === 0 || next_batch !== null)) {
+				this.#unlink();
+				if (async_mode_flag) {
+					this.#commit();
+					current_batch = next_batch;
 				}
+			}
+			if (this.#roots.length > 0) if (next_batch !== null) {
 				const batch = next_batch;
 				batch.#roots.push(...this.#roots.filter((r) => !batch.#roots.includes(r)));
-			}
+			} else next_batch = this;
 			if (next_batch !== null) next_batch.#process();
 		}
 		#traverse(root, effects, render_effects) {
@@ -529,11 +1073,14 @@
 			}
 			for (const [effect, deferred] of batch.async_deriveds) {
 				const d = this.async_deriveds.get(effect);
-				if (d) deferred.promise.then(d.resolve);
+				if (d) deferred.promise.then(d.resolve).catch(d.reject);
 			}
+			batch.async_deriveds.clear();
+			this.transfer_effects(batch.#dirty_effects, batch.#maybe_dirty_effects);
 			const mark = (value) => {
 				var reactions = value.reactions;
 				if (reactions === null) return;
+				if ((value.f & 2) !== 0 && (value.f & 6144) === 0) return;
 				for (const reaction of reactions) {
 					var flags = reaction.f;
 					if ((flags & 2) !== 0) mark(reaction);
@@ -590,14 +1137,14 @@
 		discard() {
 			for (const fn of this.#discard_callbacks) fn(this);
 			this.#discard_callbacks.clear();
-			this.#fork_commit_callbacks.clear();
+			for (const deferred of this.async_deriveds.values()) deferred.reject(OBSOLETE);
 			this.#unlink();
+			this.#deferred?.resolve();
 		}
 		register_created_effect(effect) {
 			this.#new_effects.push(effect);
 		}
 		#commit() {
-			this.#unlink();
 			for (let batch = first_batch; batch !== null; batch = batch.#next) {
 				var is_earlier = batch.id < this.id;
 				var sources = [];
@@ -611,10 +1158,11 @@
 				}
 				if (is_earlier) for (const [effect, deferred] of this.async_deriveds) {
 					const d = batch.async_deriveds.get(effect);
-					if (d) deferred.promise.then(d.resolve);
+					if (d) deferred.promise.then(d.resolve).catch(d.reject);
 				}
-				if (!batch.#started) continue;
-				var others = [...batch.current.keys()].filter((s) => !this.current.has(s));
+				var current = [...batch.current.keys()].filter((source) => !batch.current.get(source)[1]);
+				if (!batch.#started || current.length === 0) continue;
+				var others = current.filter((source) => !this.current.has(source));
 				if (others.length === 0) {
 					if (is_earlier) batch.discard();
 				} else if (sources.length > 0) {
@@ -627,7 +1175,11 @@
 					var checked = new Map();
 					for (var source of sources) mark_effects(source, others, marked, checked);
 					checked = new Map();
-					var current_unequal = [...batch.current.keys()].filter((c) => this.current.has(c) ? this.current.get(c)[0] !== c.v : true);
+					var current_unequal = [...batch.current].filter(([c, v1]) => {
+						const v2 = this.current.get(c);
+						if (!v2) return true;
+						return v2[0] !== v1[0] || v2[1] !== v1[1];
+					}).map(([c]) => c);
 					if (current_unequal.length > 0) {
 						for (const effect of this.#new_effects) if ((effect.f & 155648) === 0 && depends_on(effect, current_unequal, checked)) if ((effect.f & 4194320) !== 0) {
 							set_signal_status(effect, DIRTY);
@@ -676,20 +1228,12 @@
 		ondiscard(fn) {
 			this.#discard_callbacks.add(fn);
 		}
-		on_fork_commit(fn) {
-			this.#fork_commit_callbacks.add(fn);
-		}
-		run_fork_commit_callbacks() {
-			for (const fn of this.#fork_commit_callbacks) fn(this);
-			this.#fork_commit_callbacks.clear();
-		}
 		settled() {
 			return (this.#deferred ??= deferred()).promise;
 		}
 		static ensure() {
 			if (current_batch === null) {
 				const batch = current_batch = new Batch();
-				batch.#link();
 				if (!is_processing && !is_flushing_sync) queue_micro_task(() => {
 					if (!batch.#started) batch.flush();
 				});
@@ -739,15 +1283,8 @@
 			}
 			this.#roots.push(e);
 		}
-		#link() {
-			if (last_batch === null) first_batch = last_batch = this;
-			else {
-				last_batch.#next = this;
-				this.#prev = last_batch;
-			}
-			last_batch = this;
-		}
 		#unlink() {
+			if (!this.linked) return;
 			var prev = this.#prev;
 			var next = this.#next;
 			if (prev === null) first_batch = next;
@@ -865,497 +1402,6 @@
 			e = e.next;
 		}
 	}
-	function createSubscriber(start) {
-		let subscribers = 0;
-		let version = source(0);
-		let stop;
-		return () => {
-			if (effect_tracking()) {
-				get(version);
-				render_effect(() => {
-					if (subscribers === 0) stop = untrack(() => start(() => increment(version)));
-					subscribers += 1;
-					return () => {
-						queue_micro_task(() => {
-							subscribers -= 1;
-							if (subscribers === 0) {
-								stop?.();
-								stop = void 0;
-								increment(version);
-							}
-						});
-					};
-				});
-			}
-		};
-	}
-	var flags = EFFECT_TRANSPARENT | EFFECT_PRESERVED;
-	function boundary(node, props, children, transform_error) {
-		new Boundary(node, props, children, transform_error);
-	}
-	var Boundary = class {
-		parent;
-		is_pending = false;
-		transform_error;
-		#anchor;
-		#hydrate_open = hydrating ? hydrate_node : null;
-		#props;
-		#children;
-		#effect;
-		#main_effect = null;
-		#pending_effect = null;
-		#failed_effect = null;
-		#offscreen_fragment = null;
-		#local_pending_count = 0;
-		#pending_count = 0;
-		#pending_count_update_queued = false;
-		#dirty_effects = new Set();
-		#maybe_dirty_effects = new Set();
-		#effect_pending = null;
-		#effect_pending_subscriber = createSubscriber(() => {
-			this.#effect_pending = source(this.#local_pending_count);
-			return () => {
-				this.#effect_pending = null;
-			};
-		});
-		constructor(node, props, children, transform_error) {
-			this.#anchor = node;
-			this.#props = props;
-			this.#children = (anchor) => {
-				var effect = active_effect;
-				effect.b = this;
-				effect.f |= 128;
-				children(anchor);
-			};
-			this.parent = active_effect.b;
-			this.transform_error = transform_error ?? this.parent?.transform_error ?? ((e) => e);
-			this.#effect = block(() => {
-				if (hydrating) {
-					const comment = this.#hydrate_open;
-					hydrate_next();
-					const server_rendered_pending = comment.data === "[!";
-					if (comment.data.startsWith("[?")) {
-						const serialized_error = JSON.parse(comment.data.slice(2));
-						this.#hydrate_failed_content(serialized_error);
-					} else if (server_rendered_pending) this.#hydrate_pending_content();
-					else this.#hydrate_resolved_content();
-				} else this.#render();
-			}, flags);
-			if (hydrating) this.#anchor = hydrate_node;
-		}
-		#hydrate_resolved_content() {
-			try {
-				this.#main_effect = branch(() => this.#children(this.#anchor));
-			} catch (error) {
-				this.error(error);
-			}
-		}
-		#hydrate_failed_content(error) {
-			const failed = this.#props.failed;
-			if (!failed) return;
-			this.#failed_effect = branch(() => {
-				failed(this.#anchor, () => error, () => () => {});
-			});
-		}
-		#hydrate_pending_content() {
-			const pending = this.#props.pending;
-			if (!pending) return;
-			this.is_pending = true;
-			this.#pending_effect = branch(() => pending(this.#anchor));
-			queue_micro_task(() => {
-				var fragment = this.#offscreen_fragment = document.createDocumentFragment();
-				var anchor = create_text();
-				fragment.append(anchor);
-				this.#main_effect = this.#run(() => {
-					return branch(() => this.#children(anchor));
-				});
-				if (this.#pending_count === 0) {
-					this.#anchor.before(fragment);
-					this.#offscreen_fragment = null;
-					pause_effect(this.#pending_effect, () => {
-						this.#pending_effect = null;
-					});
-					this.#resolve(current_batch);
-				}
-			});
-		}
-		#render() {
-			try {
-				this.is_pending = this.has_pending_snippet();
-				this.#pending_count = 0;
-				this.#local_pending_count = 0;
-				this.#main_effect = branch(() => {
-					this.#children(this.#anchor);
-				});
-				if (this.#pending_count > 0) {
-					var fragment = this.#offscreen_fragment = document.createDocumentFragment();
-					move_effect(this.#main_effect, fragment);
-					const pending = this.#props.pending;
-					this.#pending_effect = branch(() => pending(this.#anchor));
-				} else this.#resolve(current_batch);
-			} catch (error) {
-				this.error(error);
-			}
-		}
-		#resolve(batch) {
-			this.is_pending = false;
-			batch.transfer_effects(this.#dirty_effects, this.#maybe_dirty_effects);
-		}
-		defer_effect(effect) {
-			defer_effect(effect, this.#dirty_effects, this.#maybe_dirty_effects);
-		}
-		is_rendered() {
-			return !this.is_pending && (!this.parent || this.parent.is_rendered());
-		}
-		has_pending_snippet() {
-			return !!this.#props.pending;
-		}
-		#run(fn) {
-			var previous_effect = active_effect;
-			var previous_reaction = active_reaction;
-			var previous_ctx = component_context;
-			set_active_effect(this.#effect);
-			set_active_reaction(this.#effect);
-			set_component_context(this.#effect.ctx);
-			try {
-				Batch.ensure();
-				return fn();
-			} catch (e) {
-				handle_error(e);
-				return null;
-			} finally {
-				set_active_effect(previous_effect);
-				set_active_reaction(previous_reaction);
-				set_component_context(previous_ctx);
-			}
-		}
-		#update_pending_count(d, batch) {
-			if (!this.has_pending_snippet()) {
-				if (this.parent) this.parent.#update_pending_count(d, batch);
-				return;
-			}
-			this.#pending_count += d;
-			if (this.#pending_count === 0) {
-				this.#resolve(batch);
-				if (this.#pending_effect) pause_effect(this.#pending_effect, () => {
-					this.#pending_effect = null;
-				});
-				if (this.#offscreen_fragment) {
-					this.#anchor.before(this.#offscreen_fragment);
-					this.#offscreen_fragment = null;
-				}
-			}
-		}
-		update_pending_count(d, batch) {
-			this.#update_pending_count(d, batch);
-			this.#local_pending_count += d;
-			if (!this.#effect_pending || this.#pending_count_update_queued) return;
-			this.#pending_count_update_queued = true;
-			queue_micro_task(() => {
-				this.#pending_count_update_queued = false;
-				if (this.#effect_pending) internal_set(this.#effect_pending, this.#local_pending_count);
-			});
-		}
-		get_effect_pending() {
-			this.#effect_pending_subscriber();
-			return get(this.#effect_pending);
-		}
-		error(error) {
-			if (!this.#props.onerror && !this.#props.failed) throw error;
-			if (current_batch?.is_fork) {
-				if (this.#main_effect) current_batch.skip_effect(this.#main_effect);
-				if (this.#pending_effect) current_batch.skip_effect(this.#pending_effect);
-				if (this.#failed_effect) current_batch.skip_effect(this.#failed_effect);
-				current_batch.on_fork_commit(() => {
-					this.#handle_error(error);
-				});
-			} else this.#handle_error(error);
-		}
-		#handle_error(error) {
-			if (this.#main_effect) {
-				destroy_effect(this.#main_effect);
-				this.#main_effect = null;
-			}
-			if (this.#pending_effect) {
-				destroy_effect(this.#pending_effect);
-				this.#pending_effect = null;
-			}
-			if (this.#failed_effect) {
-				destroy_effect(this.#failed_effect);
-				this.#failed_effect = null;
-			}
-			if (hydrating) {
-				set_hydrate_node(this.#hydrate_open);
-				next();
-				set_hydrate_node(skip_nodes());
-			}
-			var onerror = this.#props.onerror;
-			let failed = this.#props.failed;
-			var did_reset = false;
-			var calling_on_error = false;
-			const reset = () => {
-				if (did_reset) {
-					svelte_boundary_reset_noop();
-					return;
-				}
-				did_reset = true;
-				if (calling_on_error) svelte_boundary_reset_onerror();
-				if (this.#failed_effect !== null) pause_effect(this.#failed_effect, () => {
-					this.#failed_effect = null;
-				});
-				this.#run(() => {
-					this.#render();
-				});
-			};
-			const handle_error_result = (transformed_error) => {
-				try {
-					calling_on_error = true;
-					onerror?.(transformed_error, reset);
-					calling_on_error = false;
-				} catch (error) {
-					invoke_error_boundary(error, this.#effect && this.#effect.parent);
-				}
-				if (failed) this.#failed_effect = this.#run(() => {
-					try {
-						return branch(() => {
-							var effect = active_effect;
-							effect.b = this;
-							effect.f |= 128;
-							failed(this.#anchor, () => transformed_error, () => reset);
-						});
-					} catch (error) {
-						invoke_error_boundary(error, this.#effect.parent);
-						return null;
-					}
-				});
-			};
-			queue_micro_task(() => {
-				var result;
-				try {
-					result = this.transform_error(error);
-				} catch (e) {
-					invoke_error_boundary(e, this.#effect && this.#effect.parent);
-					return;
-				}
-				if (result !== null && typeof result === "object" && typeof result.then === "function") result.then(handle_error_result, (e) => invoke_error_boundary(e, this.#effect && this.#effect.parent));
-				else handle_error_result(result);
-			});
-		}
-	};
-	function flatten(blockers, sync, async, fn) {
-		const d = is_runes() ? derived : derived_safe_equal;
-		var pending = blockers.filter((b) => !b.settled);
-		if (async.length === 0 && pending.length === 0) {
-			fn(sync.map(d));
-			return;
-		}
-		var parent = active_effect;
-		var restore = capture();
-		var blocker_promise = pending.length === 1 ? pending[0].promise : pending.length > 1 ? Promise.all(pending.map((b) => b.promise)) : null;
-		function finish(values) {
-			if ((parent.f & 16384) !== 0) return;
-			restore();
-			try {
-				fn(values);
-			} catch (error) {
-				invoke_error_boundary(error, parent);
-			}
-			unset_context();
-		}
-		var decrement_pending = increment_pending();
-		if (async.length === 0) {
-			blocker_promise.then(() => finish(sync.map(d))).finally(decrement_pending);
-			return;
-		}
-		function run() {
-			Promise.all(async.map((expression) => async_derived(expression))).then((result) => finish([...sync.map(d), ...result])).catch((error) => invoke_error_boundary(error, parent)).finally(decrement_pending);
-		}
-		if (blocker_promise) blocker_promise.then(() => {
-			restore();
-			run();
-			unset_context();
-		});
-		else run();
-	}
-	function capture() {
-		var previous_effect = active_effect;
-		var previous_reaction = active_reaction;
-		var previous_component_context = component_context;
-		var previous_batch = current_batch;
-		return function restore(activate_batch = true) {
-			set_active_effect(previous_effect);
-			set_active_reaction(previous_reaction);
-			set_component_context(previous_component_context);
-			if (activate_batch && (previous_effect.f & 16384) === 0) {
-				previous_batch?.activate();
-				previous_batch?.apply();
-			}
-		};
-	}
-	function unset_context(deactivate_batch = true) {
-		set_active_effect(null);
-		set_active_reaction(null);
-		set_component_context(null);
-		if (deactivate_batch) current_batch?.deactivate();
-	}
-	function increment_pending() {
-		var effect = active_effect;
-		var boundary = effect.b;
-		var batch = current_batch;
-		var blocking = boundary.is_rendered();
-		boundary.update_pending_count(1, batch);
-		batch.increment(blocking, effect);
-		return () => {
-			boundary.update_pending_count(-1, batch);
-			batch.decrement(blocking, effect);
-		};
-	}
-	function derived(fn) {
-		var flags = 2 | DIRTY;
-		if (active_effect !== null) active_effect.f |= EFFECT_PRESERVED;
-		return {
-			ctx: component_context,
-			deps: null,
-			effects: null,
-			equals,
-			f: flags,
-			fn,
-			reactions: null,
-			rv: 0,
-			v: UNINITIALIZED,
-			wv: 0,
-			parent: active_effect,
-			ac: null
-		};
-	}
-	var OBSOLETE = Symbol("obsolete");
-	function async_derived(fn, label, location) {
-		let parent = active_effect;
-		if (parent === null) async_derived_orphan();
-		var promise = void 0;
-		var signal = source(UNINITIALIZED);
-		var should_suspend = !active_reaction;
-		var deferreds = new Set();
-		async_effect(() => {
-			var effect = active_effect;
-			var d = deferred();
-			promise = d.promise;
-			try {
-				Promise.resolve(fn()).then(d.resolve, (e) => {
-					if (e !== STALE_REACTION) d.reject(e);
-				}).finally(unset_context);
-			} catch (error) {
-				d.reject(error);
-				unset_context();
-			}
-			var batch = current_batch;
-			if (should_suspend) {
-				if ((effect.f & 32768) !== 0) var decrement_pending = increment_pending();
-				if (parent.b.is_rendered()) batch.async_deriveds.get(effect)?.reject(OBSOLETE);
-				else for (const d of deferreds.values()) d.reject(OBSOLETE);
-				deferreds.add(d);
-				batch.async_deriveds.set(effect, d);
-			}
-			const handler = (value, error = void 0) => {
-				decrement_pending?.();
-				deferreds.delete(d);
-				if (error === OBSOLETE) return;
-				batch.activate();
-				if (error) {
-					signal.f |= ERROR_VALUE;
-					internal_set(signal, error);
-				} else {
-					if ((signal.f & 8388608) !== 0) signal.f ^= ERROR_VALUE;
-					internal_set(signal, value);
-				}
-				batch.deactivate();
-			};
-			d.promise.then(handler, (e) => handler(null, e || "unknown"));
-		});
-		teardown(() => {
-			for (const d of deferreds) d.reject(OBSOLETE);
-		});
-		return new Promise((fulfil) => {
-			function next(p) {
-				function go() {
-					if (p === promise) fulfil(signal);
-					else next(promise);
-				}
-				p.then(go, go);
-			}
-			next(promise);
-		});
-	}
-	function user_derived(fn) {
-		const d = derived(fn);
-		if (!async_mode_flag) push_reaction_value(d);
-		return d;
-	}
-	function derived_safe_equal(fn) {
-		const signal = derived(fn);
-		signal.equals = safe_equals;
-		return signal;
-	}
-	function destroy_derived_effects(derived) {
-		var effects = derived.effects;
-		if (effects !== null) {
-			derived.effects = null;
-			for (var i = 0; i < effects.length; i += 1) destroy_effect(effects[i]);
-		}
-	}
-	function execute_derived(derived) {
-		var value;
-		var prev_active_effect = active_effect;
-		var parent = derived.parent;
-		if (!is_destroying_effect && parent !== null && derived.v !== UNINITIALIZED && (parent.f & 24576) !== 0) {
-			derived_inert();
-			return derived.v;
-		}
-		set_active_effect(parent);
-		try {
-			derived.f &= ~WAS_MARKED;
-			destroy_derived_effects(derived);
-			value = update_reaction(derived);
-		} finally {
-			set_active_effect(prev_active_effect);
-		}
-		return value;
-	}
-	function update_derived(derived) {
-		var value = execute_derived(derived);
-		if (!derived.equals(value)) {
-			derived.wv = increment_write_version();
-			if (!current_batch?.is_fork || derived.deps === null) {
-				if (current_batch !== null) {
-					current_batch.capture(derived, value, true);
-					previous_batch?.capture(derived, value, true);
-				} else derived.v = value;
-				if (derived.deps === null) {
-					set_signal_status(derived, CLEAN);
-					return;
-				}
-			}
-		}
-		if (is_destroying_effect) return;
-		if (batch_values !== null) {
-			if (effect_tracking() || current_batch?.is_fork) batch_values.set(derived, value);
-		} else update_derived_status(derived);
-	}
-	function freeze_derived_effects(derived) {
-		if (derived.effects === null) return;
-		for (const e of derived.effects) if (e.teardown || e.ac) {
-			e.teardown?.();
-			e.ac?.abort(STALE_REACTION);
-			if (e.fn !== null) e.teardown = noop;
-			e.ac = null;
-			remove_reactions(e, 0);
-			destroy_effect_children(e);
-		}
-	}
-	function unfreeze_derived_effects(derived) {
-		if (derived.effects === null) return;
-		for (const e of derived.effects) if (e.teardown && e.fn !== null) update_effect(e);
-	}
 	var eager_effects = new Set();
 	var old_values = new Map();
 	var eager_effects_deferred = false;
@@ -1381,7 +1427,7 @@
 		return s;
 	}
 	function set(source, value, should_proxy = false) {
-		if (active_reaction !== null && (!untracking || (active_reaction.f & 131072) !== 0) && is_runes() && (active_reaction.f & 4325394) !== 0 && (current_sources === null || !includes.call(current_sources, source))) state_unsafe_mutation();
+		if (active_reaction !== null && (!untracking || (active_reaction.f & 131072) !== 0) && is_runes() && (active_reaction.f & 4325394) !== 0 && (current_sources === null || !current_sources.has(source))) state_unsafe_mutation();
 		return internal_set(source, should_proxy ? proxy(value) : value, legacy_updates);
 	}
 	function internal_set(source, value, updated_during_traversal = null) {
@@ -1682,8 +1728,8 @@
 		return (active_effect.f & REACTION_RAN) !== 0;
 	}
 	function create_element(tag, namespace, is) {
-		let options = is ? { is } : void 0;
-		return document.createElementNS(namespace ?? "http://www.w3.org/1999/xhtml", tag, options);
+		if (namespace == null || namespace === "http://www.w3.org/1999/xhtml") return is ? document.createElement(tag, { is }) : document.createElement(tag);
+		return is ? document.createElementNS(namespace, tag, { is }) : document.createElementNS(namespace, tag);
 	}
 	function merge_text_nodes(text) {
 		if (text.nodeValue.length < 65536) return;
@@ -1693,39 +1739,6 @@
 			text.nodeValue += next.nodeValue;
 			next = text.nextSibling;
 		}
-	}
-	var listening_to_form_reset = false;
-	function add_form_reset_listener() {
-		if (!listening_to_form_reset) {
-			listening_to_form_reset = true;
-			document.addEventListener("reset", (evt) => {
-				Promise.resolve().then(() => {
-					if (!evt.defaultPrevented) for (const e of evt.target.elements) e[FORM_RESET_HANDLER]?.();
-				});
-			}, { capture: true });
-		}
-	}
-	function without_reactive_context(fn) {
-		var previous_reaction = active_reaction;
-		var previous_effect = active_effect;
-		set_active_reaction(null);
-		set_active_effect(null);
-		try {
-			return fn();
-		} finally {
-			set_active_reaction(previous_reaction);
-			set_active_effect(previous_effect);
-		}
-	}
-	function listen_to_event_and_reset_event(element, event, handler, on_reset = handler) {
-		element.addEventListener(event, () => without_reactive_context(handler));
-		const prev = element[FORM_RESET_HANDLER];
-		if (prev) element[FORM_RESET_HANDLER] = () => {
-			prev();
-			on_reset(true);
-		};
-		else element[FORM_RESET_HANDLER] = () => on_reset(true);
-		add_form_reset_listener();
 	}
 	function validate_effect(rune) {
 		if (active_effect === null) {
@@ -1800,7 +1813,7 @@
 	function user_effect(fn) {
 		validate_effect("$effect");
 		var flags = active_effect.f;
-		if (!active_reaction && (flags & 32) !== 0 && (flags & 32768) === 0) {
+		if (!active_reaction && (flags & 32) !== 0 && component_context !== null && !component_context.i) {
 			var context = component_context;
 			(context.e ??= []).push(fn);
 		} else return create_user_effect(fn);
@@ -1839,7 +1852,9 @@
 	}
 	function template_effect(fn, sync = [], async = [], blockers = []) {
 		flatten(blockers, sync, async, (values) => {
-			create_effect(8, () => fn(...values.map(get)));
+			create_effect(8, () => {
+				fn(...values.map(get));
+			});
 		});
 	}
 	function deferred_template_effect(fn, sync = [], async = [], blockers = []) {
@@ -1899,7 +1914,7 @@
 			remove_effect_dom(effect.nodes.start, effect.nodes.end);
 			removed = true;
 		}
-		set_signal_status(effect, DESTROYING);
+		effect.f |= DESTROYING;
 		destroy_effect_children(effect, remove_dom && !removed);
 		remove_reactions(effect, 0);
 		var transitions = effect.nodes && effect.nodes.t;
@@ -2008,8 +2023,7 @@
 	}
 	var current_sources = null;
 	function push_reaction_value(value) {
-		if (active_reaction !== null && (!async_mode_flag || (active_reaction.f & 2) !== 0)) if (current_sources === null) current_sources = [value];
-		else current_sources.push(value);
+		if (active_reaction !== null && (!async_mode_flag || (active_reaction.f & 2) !== 0)) (current_sources ??= new Set()).add(value);
 	}
 	var new_deps = null;
 	var skipped_deps = 0;
@@ -2045,7 +2059,7 @@
 	function schedule_possible_effect_self_invalidation(signal, effect, root = true) {
 		var reactions = signal.reactions;
 		if (reactions === null) return;
-		if (!async_mode_flag && current_sources !== null && includes.call(current_sources, signal)) return;
+		if (!async_mode_flag && current_sources !== null && current_sources.has(signal)) return;
 		for (var i = 0; i < reactions.length; i++) {
 			var reaction = reactions[i];
 			if ((reaction.f & 2) !== 0) schedule_possible_effect_self_invalidation(reaction, effect, false);
@@ -2143,6 +2157,11 @@
 				derived.f &= ~WAS_MARKED;
 			}
 			if (derived.v !== UNINITIALIZED) update_derived_status(derived);
+			if (derived.ac !== null) without_reactive_context(() => {
+				derived.ac.abort(STALE_REACTION);
+				derived.ac = null;
+				set_signal_status(derived, DIRTY);
+			});
 			freeze_derived_effects(derived);
 			remove_reactions(derived, 0);
 		}
@@ -2159,7 +2178,7 @@
 		var previous_effect = active_effect;
 		var was_updating_effect = is_updating_effect;
 		active_effect = effect;
-		is_updating_effect = true;
+		is_updating_effect = (flags & 96) === 0;
 		try {
 			if ((flags & 16777232) !== 0) destroy_block_effect_children(effect);
 			else destroy_effect_children(effect);
@@ -2184,7 +2203,7 @@
 		var is_derived = (signal.f & 2) !== 0;
 		captured_signals?.add(signal);
 		if (active_reaction !== null && !untracking) {
-			if (!(active_effect !== null && (active_effect.f & 16384) !== 0) && (current_sources === null || !includes.call(current_sources, signal))) {
+			if (!(active_effect !== null && (active_effect.f & 16384) !== 0) && (current_sources === null || !current_sources.has(signal))) {
 				var deps = active_reaction.deps;
 				if ((active_reaction.f & 2097152) !== 0) {
 					if (signal.rv < read_version) {
@@ -2373,7 +2392,7 @@
 			var throw_error;
 			var other_errors = [];
 			while (current_target !== null) {
-				var parent_element = current_target.assignedSlot || current_target.parentNode || current_target.host || null;
+				if (current_target === handler_element) break;
 				try {
 					var delegated = current_target[event_symbol]?.[event_name];
 					if (delegated != null && (!current_target.disabled || event.target === current_target)) delegated.call(current_target, event);
@@ -2381,8 +2400,9 @@
 					if (throw_error) other_errors.push(error);
 					else throw_error = error;
 				}
-				if (event.cancelBubble || parent_element === handler_element || parent_element === null) break;
-				current_target = parent_element;
+				if (event.cancelBubble) break;
+				path_idx++;
+				current_target = path_idx < path.length ? path[path_idx] : null;
 			}
 			if (throw_error) {
 				for (let error of other_errors) queueMicrotask(() => {
@@ -2602,6 +2622,7 @@
 			} else {
 				var offscreen = this.#offscreen.get(key);
 				if (offscreen) {
+					resume_effect(offscreen.effect);
 					this.#onscreen.set(key, offscreen.effect);
 					this.#offscreen.delete(key);
 					offscreen.fragment.lastChild.remove();
@@ -3892,91 +3913,12 @@
 		t--;
 		return -.5 * (t * (t - 2) - 1);
 	}
-	var LINKS_KEY = "performer-links";
-	var defaultLinks = [
-		{
-			label: "Pornolab",
-			url: "http://pornolab.net/forum/tracker.php?search_id=&nm={q}"
-		},
-		{
-			label: "Simpcity",
-			url: "https://simpcity.su/search/1/?page=99&o=date&q={q}"
-		},
-		{
-			label: "MissAV",
-			url: "https://missav.ws/en/search/{q}"
-		},
-		{
-			label: "Bunkr",
-			url: "https://bunkr-albums.io/?search={q}"
-		}
-	];
-	function generateId(link) {
-		const performerLink = { ...link };
-		performerLink.id = crypto.randomUUID();
-		return performerLink;
-	}
-	function stripId(link) {
-		const performerLink = { ...link };
-		delete performerLink.id;
-		return performerLink;
-	}
-	function savePerformerLinks() {
-		const stored = store.performerLinks.map(stripId);
-		localStorage.setItem(LINKS_KEY, JSON.stringify(stored));
-	}
-	function loadPerformerLinks() {
-		try {
-			const stored = localStorage.getItem(LINKS_KEY);
-			if (stored === null) return defaultLinks.map(generateId);
-			return JSON.parse(stored).map(generateId);
-		} catch {
-			return defaultLinks.map(generateId);
-		}
-	}
-	function addPerformerLink() {
-		store.performerLinks.push(generateId({
-			label: "",
-			url: ""
-		}));
-		savePerformerLinks();
-	}
-	function removePerformerLink(index) {
-		if (index < 0 || index >= store.performerLinks.length) return;
-		store.performerLinks.splice(index, 1);
-		savePerformerLinks();
-	}
-	function updatePerformerLink(index, data) {
-		if (index < 0 || index >= store.performerLinks.length) return;
-		const link = store.performerLinks[index];
-		if (link) Object.assign(link, data);
-		savePerformerLinks();
-	}
-	function getLinkUrl(link, query) {
-		const linkUrl = link.url;
-		if (!query || !linkUrl.includes("{q}")) return linkUrl;
-		return linkUrl.replace("{q}", encodeURIComponent(query));
-	}
 	function getFaviconUrl(url) {
 		try {
 			return `https://www.google.com/s2/favicons?domain=${new URL(url).host}&sz=64`;
 		} catch {
 			return "https://www.google.com/s2/favicons?domain=invalid&sz=64";
 		}
-	}
-	function restorePerformerLinks() {
-		localStorage.removeItem(LINKS_KEY);
-		for (let i = 0; i < defaultLinks.length; i++) {
-			const defaultSite = defaultLinks[i];
-			if (i < store.performerLinks.length) {
-				const existingLink = store.performerLinks[i];
-				if (existingLink?.label !== defaultSite?.label || existingLink?.url !== defaultSite?.url) {
-					if (existingLink) Object.assign(existingLink, defaultSite);
-				}
-			} else if (defaultSite) store.performerLinks.push(generateId(defaultSite));
-		}
-		if (store.performerLinks.length > defaultLinks.length) store.performerLinks.splice(defaultLinks.length);
-		savePerformerLinks();
 	}
 	var store = proxy({
 		readyStateComplete: false,
@@ -4243,34 +4185,18 @@
 				size: sel?.["size"]?.[0]?.textContent,
 				date: handleDate(sel?.["date"]?.[0]?.textContent),
 				times: handleTimes(sel?.["times"]?.[2]),
-				link: sel?.["link"]?.[0]?.href
+				link: (sel?.["link"]?.[0])?.href
 			},
 			thank: {
 				element: sel?.["thank"]?.[0],
 				list: handleThankList(sel?.["list"]?.[0])
 			},
 			pagination: sel?.["pagination"]?.[0],
-			logo: sel?.["logo"]?.[0]?.src,
+			logo: (sel?.["logo"]?.[0])?.src,
 			forumline: sel?.["forumline"]?.[0]
 		};
 	}
 	var data = proxy({});
-	var _GM_xmlhttpRequest = typeof GM_xmlhttpRequest != "undefined" ? GM_xmlhttpRequest : void 0;
-	function GM_fetch(method, url, responseType, headers, data) {
-		return new Promise((resolve, reject) => {
-			_GM_xmlhttpRequest({
-				method,
-				url,
-				responseType,
-				headers,
-				data,
-				timeout: 5e3,
-				onload: (response) => resolve(response),
-				onerror: () => reject(new Error(`GM_fetch failed: ${url}`)),
-				ontimeout: () => reject(new Error(`GM_fetch timed out: ${url}`))
-			});
-		});
-	}
 	var KEY$1 = "resolved-urls";
 	var cache = JSON.parse(sessionStorage.getItem(KEY$1) || "{}");
 	function getCache$1(url) {
@@ -4284,10 +4210,84 @@
 		Object.keys(cache).forEach((key) => delete cache[key]);
 		sessionStorage.removeItem(KEY$1);
 	}
-	async function getBlob(url) {
-		if (getSettings("proxyCache")) return "https://corsproxy.io/?url=" + encodeURIComponent(url);
-		const { response } = await GM_fetch("GET", url, "blob");
-		return URL.createObjectURL(response);
+	var LINKS_KEY = "performer-links";
+	var defaultLinks = [
+		{
+			label: "Pornolab",
+			url: "http://pornolab.net/forum/tracker.php?search_id=&nm={q}"
+		},
+		{
+			label: "Simpcity",
+			url: "https://simpcity.su/search/1/?page=99&o=date&q={q}"
+		},
+		{
+			label: "MissAV",
+			url: "https://missav.ws/en/search/{q}"
+		},
+		{
+			label: "Bunkr",
+			url: "https://bunkr-albums.io/?search={q}"
+		}
+	];
+	function generateId(link) {
+		const performerLink = { ...link };
+		performerLink.id = crypto.randomUUID();
+		return performerLink;
+	}
+	function stripId(link) {
+		const performerLink = { ...link };
+		delete performerLink.id;
+		return performerLink;
+	}
+	function savePerformerLinks() {
+		const stored = store.performerLinks.map(stripId);
+		localStorage.setItem(LINKS_KEY, JSON.stringify(stored));
+	}
+	function loadPerformerLinks() {
+		try {
+			const stored = localStorage.getItem(LINKS_KEY);
+			if (stored === null) return defaultLinks.map(generateId);
+			return JSON.parse(stored).map(generateId);
+		} catch {
+			return defaultLinks.map(generateId);
+		}
+	}
+	function addPerformerLink() {
+		store.performerLinks.push(generateId({
+			label: "",
+			url: ""
+		}));
+		savePerformerLinks();
+	}
+	function removePerformerLink(index) {
+		if (index < 0 || index >= store.performerLinks.length) return;
+		store.performerLinks.splice(index, 1);
+		savePerformerLinks();
+	}
+	function updatePerformerLink(index, data) {
+		if (index < 0 || index >= store.performerLinks.length) return;
+		const link = store.performerLinks[index];
+		if (link) Object.assign(link, data);
+		savePerformerLinks();
+	}
+	function getLinkUrl(link, query) {
+		const linkUrl = link.url;
+		if (!query || !linkUrl.includes("{q}")) return linkUrl;
+		return linkUrl.replace("{q}", encodeURIComponent(query));
+	}
+	function restorePerformerLinks() {
+		localStorage.removeItem(LINKS_KEY);
+		for (let i = 0; i < defaultLinks.length; i++) {
+			const defaultSite = defaultLinks[i];
+			if (i < store.performerLinks.length) {
+				const existingLink = store.performerLinks[i];
+				if (existingLink?.label !== defaultSite?.label || existingLink?.url !== defaultSite?.url) {
+					if (existingLink) Object.assign(existingLink, defaultSite);
+				}
+			} else if (defaultSite) store.performerLinks.push(generateId(defaultSite));
+		}
+		if (store.performerLinks.length > defaultLinks.length) store.performerLinks.splice(defaultLinks.length);
+		savePerformerLinks();
 	}
 	var OPTIONS_KEY = "user-settings";
 	var defaultOptions = {
@@ -4820,7 +4820,7 @@ location.reload();
 		pop();
 	}
 	var Item$2 = ($$anchor, title = noop, content = noop) => {
-		var div = root_1$13();
+		var div = root$20();
 		snippet(child(div), content);
 		reset(div);
 		template_effect(() => set_attribute(div, "title", title()));
@@ -4828,7 +4828,7 @@ location.reload();
 	};
 	var Messages = ($$anchor) => {
 		const href = user_derived(() => "/forum/privmsg.php?folder=inbox");
-		var a_2 = root_6$6();
+		var a_2 = root_3$6();
 		set_attribute(a_2, "href", get(href));
 		var i = child(a_2);
 		reset(a_2);
@@ -4840,7 +4840,7 @@ location.reload();
 		append($$anchor, a_2);
 	};
 	var Settings$1 = ($$anchor) => {
-		var fragment_2 = root_10$2();
+		var fragment_2 = root_6$3();
 		var a_4 = first_child(fragment_2);
 		var a_5 = sibling(a_4, 2);
 		delegated("click", a_4, function(...$$args) {
@@ -4851,15 +4851,15 @@ location.reload();
 		});
 		append($$anchor, fragment_2);
 	};
-	var root_1$13 = from_html(`<div class="item svelte-zne36e"><!></div>`);
-	var root_4$5 = from_html(`<a>Profile</a>`);
-	var root_5$6 = from_html(`<a href="/">Login</a>`);
-	var root_6$6 = from_html(`<a aria-label="inbox"><i></i></a>`);
-	var root_8$1 = from_html(`<span class="themeIcon svelte-zne36e"></span>`);
-	var root_9$1 = from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
-	var root_10$2 = from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-zne36e" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
-	var root_11$1 = from_html(`<a href="#disable">Disable</a>`);
-	var root$6 = from_html(`<div id="x-header"><div class="logo svelte-zne36e"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-zne36e"><div class="container svelte-zne36e"><div class="links svelte-zne36e"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-zne36e"><input type="text" name="search" placeholder="Search…" class="svelte-zne36e"/> <button class="svelte-zne36e">»</button></div></div></div></div>`);
+	var root$20 = from_html(`<div class="item svelte-zne36e"><!></div>`);
+	var root_1$11 = from_html(`<a>Profile</a>`);
+	var root_2$9 = from_html(`<a href="/">Login</a>`);
+	var root_3$6 = from_html(`<a aria-label="inbox"><i></i></a>`);
+	var root_4$5 = from_html(`<span class="themeIcon svelte-zne36e"></span>`);
+	var root_5$4 = from_html(`<a href="/" aria-label="placeholder"><i></i></a>`);
+	var root_6$3 = from_html(`<a href="#settings"><img src="https://github.com/clangmoyai/plab-ultra/raw/main/src/assets/logo64.png" class="ultra-logo svelte-zne36e" alt="logo"/></a> <a href="#settings">Settings</a>`, 1);
+	var root_7$2 = from_html(`<a href="#disable">Disable</a>`);
+	var root_9$1 = from_html(`<div id="x-header"><div class="logo svelte-zne36e"><a href="/forum/index.php"><img alt=""/></a></div> <div class="align-right svelte-zne36e"><div class="container svelte-zne36e"><div class="links svelte-zne36e"><!> <!> <!> <!> <!> <!></div> <div class="search svelte-zne36e"><input type="text" name="search" placeholder="Search…" class="svelte-zne36e"/> <button class="svelte-zne36e">»</button></div></div></div></div>`);
 	function Header($$anchor, $$props) {
 		push($$props, true);
 		const Profile = ($$anchor) => {
@@ -4869,7 +4869,7 @@ location.reload();
 				append($$anchor, text("Profile"));
 			};
 			var consequent_1 = ($$anchor) => {
-				var a = root_4$5();
+				var a = root_1$11();
 				template_effect(() => {
 					set_attribute(a, "href", data.user.link);
 					set_attribute(a, "title", data.user?.name);
@@ -4877,7 +4877,7 @@ location.reload();
 				append($$anchor, a);
 			};
 			var alternate = ($$anchor) => {
-				append($$anchor, root_5$6());
+				append($$anchor, root_2$9());
 			};
 			if_block(node_1, ($$render) => {
 				if (get(incognito)) $$render(consequent);
@@ -4890,13 +4890,13 @@ location.reload();
 			var fragment_1 = comment();
 			var node_2 = first_child(fragment_1);
 			var consequent_2 = ($$anchor) => {
-				var span = root_8$1();
+				var span = root_4$5();
 				attach(span, () => appendThemeButton(data.theme.element));
 				append($$anchor, span);
 			};
 			var alternate_1 = ($$anchor) => {
 				const darkMode = user_derived(() => data.theme?.darkmode);
-				var a_3 = root_9$1();
+				var a_3 = root_5$4();
 				var i_1 = child(a_3);
 				reset(a_3);
 				template_effect(() => set_class(i_1, 1, clsx([
@@ -4913,7 +4913,7 @@ location.reload();
 			append($$anchor, fragment_1);
 		};
 		const Disable = ($$anchor) => {
-			var a_6 = root_11$1();
+			var a_6 = root_7$2();
 			delegated("click", a_6, disableUserscript);
 			append($$anchor, a_6);
 		};
@@ -4938,7 +4938,7 @@ location.reload();
 				};
 			};
 		}
-		var div_1 = root$6();
+		var div_1 = root_9$1();
 		let classes;
 		var div_2 = child(div_1);
 		var a_8 = child(div_2);
@@ -4983,10 +4983,10 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_3$6 = from_html(`<span class="description svelte-1emp0k3"> </span>`);
-	var root_2$6 = from_html(`<label><input type="checkbox" class="svelte-1emp0k3"/> <span class="svelte-1emp0k3"><!> <!></span></label>`);
-	var root_1$12 = from_html(`<div class="column svelte-1emp0k3"><h2 class="svelte-1emp0k3"> </h2> <!></div>`);
-	var root$5 = from_html(`<div class="container svelte-1emp0k3"></div>`);
+	var root$19 = from_html(`<span class="description svelte-1emp0k3"> </span>`);
+	var root_1$10 = from_html(`<label><input type="checkbox" class="svelte-1emp0k3"/> <span class="svelte-1emp0k3"><!> <!></span></label>`);
+	var root_2$8 = from_html(`<div class="column svelte-1emp0k3"><h2 class="svelte-1emp0k3"> </h2> <!></div>`);
+	var root_3$5 = from_html(`<div class="container svelte-1emp0k3"></div>`);
 	function Options($$anchor, $$props) {
 		push($$props, true);
 		let parseTitle = user_derived(() => getSettings("parseTitle"));
@@ -4997,18 +4997,18 @@ location.reload();
 			if (checkbox.id === "cacheImages" && !checkbox.checked) clearCache();
 			saveOptions();
 		}
-		var div = root$5();
+		var div = root_3$5();
 		each(div, 21, () => Object.entries(store.options), ([title, items]) => title, ($$anchor, $$item) => {
 			var $$array = user_derived(() => to_array(get($$item), 2));
 			let title = () => get($$array)[0];
 			let items = () => get($$array)[1];
-			var div_1 = root_1$12();
+			var div_1 = root_2$8();
 			var h2 = child(div_1);
 			var text = child(h2, true);
 			reset(h2);
 			each(sibling(h2, 2), 17, items, (item) => item.key, ($$anchor, item, $$index) => {
 				const disabled = user_derived(() => !get(parseTitle) && (get(item).key === "performerLinks" || get(item).key === "showTags") || get(item).key === "spaceImageAnchor" && store.columnCount !== 1);
-				var label = root_2$6();
+				var label = root_1$10();
 				let classes;
 				var input = child(label);
 				remove_input_defaults(input);
@@ -5017,7 +5017,7 @@ location.reload();
 				html(node_1, () => get(item).label);
 				var node_2 = sibling(node_1, 2);
 				var consequent = ($$anchor) => {
-					var span_1 = root_3$6();
+					var span_1 = root$19();
 					var text_1 = child(span_1, true);
 					reset(span_1);
 					template_effect(() => set_text(text_1, get(item).description));
@@ -5099,9 +5099,9 @@ location.reload();
 		`
 		};
 	}
-	var root_1$11 = from_html(`<span><!></span>`);
-	var root_2$5 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-1obhcw8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-1obhcw8"></path></svg>`);
-	var root$4 = from_html(`<button class="svelte-1obhcw8"><!></button>`);
+	var root$18 = from_html(`<span><!></span>`);
+	var root_1$9 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-1obhcw8"><path d="M9.86 18a1 1 0 0 1-.73-.32l-4.86-5.17a1 1 0 1 1 1.46-1.37l4.12 4.39l8.41-9.2a1 1 0 1 1 1.48 1.34l-9.14 10a1 1 0 0 1-.73.33Z" class="svelte-1obhcw8"></path></svg>`);
+	var root_2$7 = from_html(`<button class="svelte-1obhcw8"><!></button>`);
 	function Checkmark($$anchor, $$props) {
 		push($$props, true);
 		const DURATION = 1e3;
@@ -5128,11 +5128,11 @@ location.reload();
 		onDestroy(() => {
 			if (timeout) clearTimeout(timeout);
 		});
-		var button = root$4();
+		var button = root_2$7();
 		let styles;
 		var node = child(button);
 		var consequent = ($$anchor) => {
-			var span = root_1$11();
+			var span = root$18();
 			snippet(child(span), () => $$props.children);
 			reset(span);
 			transition(3, span, () => scale, () => get(opts));
@@ -5141,7 +5141,7 @@ location.reload();
 			append($$anchor, span);
 		};
 		var alternate = ($$anchor) => {
-			var svg = root_2$5();
+			var svg = root_1$9();
 			var path = child(svg);
 			reset(svg);
 			transition(3, path, () => scale, () => get(opts));
@@ -5165,12 +5165,12 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root$3 = from_html(`<div class="container svelte-1hugea"><!> <div class="align-right svelte-1hugea"><!> <!> <!></div></div>`);
+	var root$17 = from_html(`<div class="container svelte-1hugea"><!> <div class="align-right svelte-1hugea"><!> <!> <!></div></div>`);
 	function Actions($$anchor, $$props) {
 		push($$props, true);
 		let parseTitle = user_derived(() => getSettings("parseTitle"));
 		let performerLinks = user_derived(() => getSettings("performerLinks"));
-		var div = root$3();
+		var div = root$17();
 		var node = child(div);
 		{
 			let $0 = user_derived(() => !get(parseTitle) || !get(performerLinks));
@@ -5255,7 +5255,7 @@ location.reload();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var img = root_2$4();
+			var img = root$16();
 			template_effect(() => {
 				set_attribute(img, "src", get(src));
 				set_attribute(img, "alt", link().label);
@@ -5268,19 +5268,19 @@ location.reload();
 		append($$anchor, fragment);
 	};
 	var Remove = ($$anchor, index = noop) => {
-		var button = root_4$4();
+		var button = root_2$6();
 		delegated("click", button, () => removePerformerLink(index()));
 		append($$anchor, button);
 	};
-	var root_2$4 = from_html(`<img class="svelte-kvmnko"/>`);
-	var root_3$5 = from_html(`<input type="text" class="svelte-kvmnko"/>`);
-	var root_4$4 = from_html(`<button title="Remove link" class="svelte-kvmnko">×</button>`);
-	var root_6$5 = from_html(`<div class="item svelte-kvmnko"><!> <!> <!> <!></div>`);
-	var root_5$5 = from_html(`<div class="container svelte-kvmnko"></div>`);
+	var root$16 = from_html(`<img class="svelte-kvmnko"/>`);
+	var root_1$8 = from_html(`<input type="text" class="svelte-kvmnko"/>`);
+	var root_2$6 = from_html(`<button title="Remove link" class="svelte-kvmnko">×</button>`);
+	var root_3$4 = from_html(`<div class="item svelte-kvmnko"><!> <!> <!> <!></div>`);
+	var root_4$4 = from_html(`<div class="container svelte-kvmnko"></div>`);
 	function Links($$anchor, $$props) {
 		push($$props, true);
 		const Input = ($$anchor, key = noop, link = noop, index = noop) => {
-			var input = root_3$5();
+			var input = root_1$8();
 			remove_input_defaults(input);
 			template_effect(() => {
 				set_attribute(input, "name", placeholders[key()]);
@@ -5300,9 +5300,9 @@ location.reload();
 		var fragment_1 = comment();
 		var node_1 = first_child(fragment_1);
 		var consequent_1 = ($$anchor) => {
-			var div = root_5$5();
+			var div = root_4$4();
 			each(div, 23, () => store.performerLinks, (link) => link.id, ($$anchor, link, index) => {
-				var div_1 = root_6$5();
+				var div_1 = root_3$4();
 				var node_2 = child(div_1);
 				Favicon(node_2, () => get(link));
 				var node_3 = sibling(node_2, 2);
@@ -5325,14 +5325,14 @@ location.reload();
 		pop();
 	}
 	delegate(["input", "click"]);
-	var root_1$10 = from_html(`<div class="svelte-1kxfd5y"><button class="svelte-1kxfd5y">×</button> <!> <!> <!></div>`);
+	var root$15 = from_html(`<div class="svelte-1kxfd5y"><button class="svelte-1kxfd5y">×</button> <!> <!> <!></div>`);
 	function Settings($$anchor, $$props) {
 		push($$props, false);
 		init();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var div = root_1$10();
+			var div = root$15();
 			var button = child(div);
 			var node_1 = sibling(button, 2);
 			Options(node_1, {});
@@ -5353,14 +5353,14 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_1$9 = from_html(`<div class="svelte-wvkwp9"><button class="ic--sharp-download svelte-wvkwp9" title="Download" aria-label="Download"></button></div>`);
+	var root$14 = from_html(`<div class="svelte-wvkwp9"><button class="ic--sharp-download svelte-wvkwp9" title="Download" aria-label="Download"></button></div>`);
 	function Float($$anchor, $$props) {
 		push($$props, true);
 		let floatingDownload = user_derived(() => getSettings("floatingDownload"));
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var div = root_1$9();
+			var div = root$14();
 			var button = child(div);
 			reset(div);
 			delegated("click", button, function(...$$args) {
@@ -5376,9 +5376,9 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_3$4 = from_html(`<link rel="prefetch" as="image"/>`);
-	var root_6$4 = from_html(`<a class="svelte-vtocc6"><img class="svelte-vtocc6"/> </a>`);
-	var root_4$3 = from_html(`<div role="tooltip" class="container svelte-vtocc6"><div class="indicator svelte-vtocc6"></div> <div class="items svelte-vtocc6"></div></div>`);
+	var root$13 = from_html(`<link rel="prefetch" as="image"/>`);
+	var root_1$7 = from_html(`<a class="svelte-vtocc6"><img class="svelte-vtocc6"/> </a>`);
+	var root_2$5 = from_html(`<div role="tooltip" class="container svelte-vtocc6"><div class="indicator svelte-vtocc6"></div> <div class="items svelte-vtocc6"></div></div>`);
 	function Dropdown$1($$anchor, $$props) {
 		push($$props, true);
 		let top = state$1(0);
@@ -5422,7 +5422,7 @@ location.reload();
 				var fragment_1 = comment();
 				var node_1 = first_child(fragment_1);
 				var consequent = ($$anchor) => {
-					var link_1 = root_3$4();
+					var link_1 = root$13();
 					template_effect(() => set_attribute(link_1, "href", store.favIcons[get(link).url]));
 					append($$anchor, link_1);
 				};
@@ -5435,14 +5435,14 @@ location.reload();
 		});
 		var node_2 = first_child(fragment_2);
 		var consequent_2 = ($$anchor) => {
-			var div = root_4$3();
+			var div = root_2$5();
 			let styles;
 			var div_1 = sibling(child(div), 2);
 			each(div_1, 21, () => store.performerLinks, (link) => link.id, ($$anchor, link) => {
 				var fragment_3 = comment();
 				var node_3 = first_child(fragment_3);
 				var consequent_1 = ($$anchor) => {
-					var a = root_6$4();
+					var a = root_1$7();
 					var img = child(a);
 					var text = sibling(img);
 					reset(a);
@@ -5478,7 +5478,7 @@ location.reload();
 		pop();
 	}
 	var Dropdown = ($$anchor, item = noop) => {
-		var span = root_3$3();
+		var span = root$12();
 		var text = child(span, true);
 		reset(span);
 		template_effect(() => set_text(text, item()));
@@ -5490,7 +5490,7 @@ location.reload();
 		var fragment_1 = comment();
 		each(first_child(fragment_1), 17, () => get(items), index, ($$anchor, item, i) => {
 			next();
-			var fragment_2 = root_5$4();
+			var fragment_2 = root_1$6();
 			var text_1 = first_child(fragment_2);
 			text_1.nodeValue = `${i > 0 ? " - " : ""} `;
 			Dropdown(sibling(text_1), () => get(item));
@@ -5498,14 +5498,12 @@ location.reload();
 		});
 		append($$anchor, fragment_1);
 	};
-	var root_3$3 = from_html(`<span class="title-item svelte-1gft3h5"> </span>`);
-	var root_5$4 = from_html(` <!>`, 1);
-	var root_9 = from_html(`<a class="title-item svelte-1gft3h5"> </a>`);
-	var root_10$1 = from_html(`<a class="title-item svelte-1gft3h5"> </a>`);
-	var root_13$1 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><!></h1>`);
-	var root_14$1 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"> </h1>`);
-	var root_15 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><!></h1>`);
-	var root_16 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><a class="original-title svelte-1gft3h5"> </a></h1>`);
+	var root$12 = from_html(`<span class="title-item svelte-1gft3h5"> </span>`);
+	var root_1$6 = from_html(` <!>`, 1);
+	var root_2$4 = from_html(`<a class="title-item svelte-1gft3h5"> </a>`);
+	var root_3$3 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><!></h1>`);
+	var root_4$3 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"> </h1>`);
+	var root_5$3 = from_html(`<h1 id="x-title" class="svelte-1gft3h5"><a class="original-title svelte-1gft3h5"> </a></h1>`);
 	function Title($$anchor, $$props) {
 		push($$props, true);
 		const ParsedTitle = ($$anchor, searchTerms = noop) => {
@@ -5518,7 +5516,7 @@ location.reload();
 					var fragment_5 = comment();
 					var node_5 = first_child(fragment_5);
 					var consequent_1 = ($$anchor) => {
-						var a_1 = root_9();
+						var a_1 = root_2$4();
 						var text_2 = child(a_1, true);
 						reset(a_1);
 						template_effect(($0) => {
@@ -5528,7 +5526,7 @@ location.reload();
 						append($$anchor, a_1);
 					};
 					var consequent_2 = ($$anchor) => {
-						var a_2 = root_10$1();
+						var a_2 = root_2$4();
 						var text_3 = child(a_2, true);
 						reset(a_2);
 						template_effect(($0) => {
@@ -5620,26 +5618,27 @@ location.reload();
 		});
 		var node_6 = first_child(fragment_8);
 		var consequent_5 = ($$anchor) => {
-			var h1 = root_13$1();
+			var h1 = root_3$3();
 			Placholder(child(h1));
 			reset(h1);
 			append($$anchor, h1);
 		};
 		var consequent_6 = ($$anchor) => {
-			var h1_1 = root_14$1();
+			var h1_1 = root_4$3();
 			var text_5 = child(h1_1, true);
 			reset(h1_1);
 			template_effect(() => set_text(text_5, get(firstTag)));
 			append($$anchor, h1_1);
 		};
 		var consequent_7 = ($$anchor) => {
-			var h1_2 = root_15();
-			ParsedTitle(child(h1_2), () => get(searchTerms));
+			var h1_2 = root_3$3();
+			var node_8 = child(h1_2);
+			ParsedTitle(node_8, () => get(searchTerms));
 			reset(h1_2);
 			append($$anchor, h1_2);
 		};
 		var consequent_8 = ($$anchor) => {
-			var h1_3 = root_16();
+			var h1_3 = root_5$3();
 			var a_3 = child(h1_3);
 			var text_6 = child(a_3, true);
 			reset(a_3);
@@ -5660,7 +5659,7 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_1$8 = from_html(`<button class="item svelte-1ai34w7" aria-label="thank"></button>`);
+	var root$11 = from_html(`<button class="item svelte-1ai34w7" aria-label="thank"></button>`);
 	function Thank($$anchor, $$props) {
 		push($$props, true);
 		let observer;
@@ -5719,7 +5718,7 @@ location.reload();
 		var fragment = comment();
 		var node_1 = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var button = root_1$8();
+			var button = root$11();
 			attach(button, () => handleElement(data.thank.element));
 			template_effect(() => {
 				set_attribute(button, "title", get(title));
@@ -5739,7 +5738,7 @@ location.reload();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var div = root_2$3();
+			var div = root$10();
 			var span = child(div);
 			var text = child(span);
 			reset(span);
@@ -5764,7 +5763,7 @@ location.reload();
 		append($$anchor, fragment);
 	};
 	var Error$1 = ($$anchor, title = noop) => {
-		var div_1 = root_4$2();
+		var div_1 = root_1$5();
 		var span_2 = child(div_1);
 		var text_2 = child(span_2);
 		reset(span_2);
@@ -5773,15 +5772,15 @@ location.reload();
 		template_effect(() => set_text(text_2, `${title() ?? ""}:`));
 		append($$anchor, div_1);
 	};
-	var root_2$3 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span> </span></div>`);
-	var root_4$2 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span class="error svelte-cjprq">N/A</span></div>`);
-	var root_6$3 = from_html(`<button class="item svelte-cjprq"><span class="title">Date:</span> <!></button>`);
-	var root_13 = from_html(`<span class="item svelte-cjprq"><!></span>`);
-	var root_20 = from_html(`<a id="dl-link">.torrent</a>`);
-	var root_17 = from_html(`<button class="item svelte-cjprq"><span class="title">Download:</span> <!></button>`);
-	var root_25 = from_html(`<span><a> </a> </span>`);
-	var root_24 = from_html(`<div class="item svelte-cjprq"><span class="title">Related:</span> <!></div>`);
-	var root_5$3 = from_html(`<div id="x-stats" class="svelte-cjprq"><!> <!> <!> <!> <button class="item svelte-cjprq"><span class="title">Files:</span> <!></button> <!> <!> <!> <!></div>`);
+	var root$10 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span> </span></div>`);
+	var root_1$5 = from_html(`<div class="item svelte-cjprq"><span class="title"> </span> <span class="error svelte-cjprq">N/A</span></div>`);
+	var root_2$3 = from_html(`<button class="item svelte-cjprq"><span class="title">Date:</span> <!></button>`);
+	var root_3$2 = from_html(`<span class="item svelte-cjprq"><!></span>`);
+	var root_4$2 = from_html(`<a id="dl-link">.torrent</a>`);
+	var root_5$2 = from_html(`<button class="item svelte-cjprq"><span class="title">Download:</span> <!></button>`);
+	var root_6$2 = from_html(`<span><a> </a> </span>`);
+	var root_7$1 = from_html(`<div class="item svelte-cjprq"><span class="title">Related:</span> <!></div>`);
+	var root_8$1 = from_html(`<div id="x-stats" class="svelte-cjprq"><!> <!> <!> <!> <button class="item svelte-cjprq"><span class="title">Files:</span> <!></button> <!> <!> <!> <!></div>`);
 	function Stats($$anchor, $$props) {
 		push($$props, true);
 		let showFullDate = state$1(false);
@@ -5805,7 +5804,7 @@ location.reload();
 		var fragment_2 = comment();
 		var node_1 = first_child(fragment_2);
 		var consequent_12 = ($$anchor) => {
-			var div_2 = root_5$3();
+			var div_2 = root_8$1();
 			var node_2 = child(div_2);
 			Item$1(node_2, () => "Seeders", () => data.torrent?.seeders || "0");
 			var node_3 = sibling(node_2, 2);
@@ -5814,7 +5813,7 @@ location.reload();
 			Item$1(node_4, () => "Size", () => data.torrent?.size);
 			var node_5 = sibling(node_4, 2);
 			var consequent_2 = ($$anchor) => {
-				var button = root_6$3();
+				var button = root_2$3();
 				var node_6 = sibling(child(button), 2);
 				var consequent_1 = ($$anchor) => {
 					var text_3 = text();
@@ -5860,7 +5859,7 @@ location.reload();
 			reset(button_1);
 			var node_8 = sibling(button_1, 2);
 			var consequent_5 = ($$anchor) => {
-				var span_3 = root_13();
+				var span_3 = root_3$2();
 				Thank(child(span_3), {});
 				reset(span_3);
 				append($$anchor, span_3);
@@ -5886,11 +5885,11 @@ location.reload();
 			});
 			var node_11 = sibling(node_10, 2);
 			var consequent_9 = ($$anchor) => {
-				var button_2 = root_17();
+				var button_2 = root_5$2();
 				button_2.disabled = false;
 				var node_12 = sibling(child(button_2), 2);
 				var alternate_6 = ($$anchor) => {
-					var a = root_20();
+					var a = root_4$2();
 					template_effect(() => set_attribute(a, "href", data.torrent.link));
 					append($$anchor, a);
 				};
@@ -5913,15 +5912,16 @@ location.reload();
 			var node_13 = sibling(node_11, 2);
 			var consequent_11 = ($$anchor) => {
 				const max = user_derived(() => 5);
+				const relatedPromise = user_derived(() => getRelated(data.title.original));
 				var fragment_10 = comment();
-				await_block(first_child(fragment_10), () => getRelated(data.title.original), null, ($$anchor, related) => {
+				await_block(first_child(fragment_10), () => get(relatedPromise), null, ($$anchor, related) => {
 					const results = user_derived(() => get(related).filter((result) => result.textContent !== data.title?.original));
 					var fragment_11 = comment();
 					var node_15 = first_child(fragment_11);
 					var consequent_10 = ($$anchor) => {
-						var div_3 = root_24();
+						var div_3 = root_7$1();
 						each(sibling(child(div_3), 2), 17, () => get(results), index, ($$anchor, result, i) => {
-							var span_4 = root_25();
+							var span_4 = root_6$2();
 							var a_1 = child(span_4);
 							var text_10 = child(a_1, true);
 							reset(a_1);
@@ -5959,10 +5959,9 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_3$2 = from_html(`<a> </a>`);
-	var root_5$2 = from_html(`<a> </a>`);
-	var root_6$2 = from_html(`<span> </span>`);
-	var root_1$7 = from_html(`<div id="x-tags" class="svelte-ttnt4a"></div>`);
+	var root$9 = from_html(`<a> </a>`);
+	var root_1$4 = from_html(`<span> </span>`);
+	var root_2$2 = from_html(`<div id="x-tags" class="svelte-ttnt4a"></div>`);
 	function Tags($$anchor, $$props) {
 		push($$props, true);
 		let parseTitle = user_derived(() => getSettings("parseTitle"));
@@ -5985,13 +5984,13 @@ location.reload();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent_3 = ($$anchor) => {
-			var div = root_1$7();
+			var div = root_2$2();
 			each(div, 21, () => get(derivedTags), index, ($$anchor, item) => {
 				const classList = user_derived(() => ["tag-item", resTag(get(item)) && "tag-res"]);
 				var fragment_1 = comment();
 				var node_1 = first_child(fragment_1);
 				var consequent = ($$anchor) => {
-					var a = root_3$2();
+					var a = root$9();
 					var text = child(a, true);
 					reset(a);
 					template_effect(($0) => {
@@ -6006,7 +6005,7 @@ location.reload();
 					var fragment_2 = comment();
 					var node_2 = first_child(fragment_2);
 					var consequent_1 = ($$anchor) => {
-						var a_1 = root_5$2();
+						var a_1 = root$9();
 						var text_1 = child(a_1, true);
 						reset(a_1);
 						template_effect(($0) => {
@@ -6022,7 +6021,7 @@ location.reload();
 					append($$anchor, fragment_2);
 				};
 				var alternate = ($$anchor) => {
-					var span = root_6$2();
+					var span = root_1$4();
 					var text_2 = child(span, true);
 					reset(span);
 					template_effect(() => {
@@ -6050,7 +6049,7 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_1$6 = from_html(`<div class="filelist svelte-1xito9"></div>`);
+	var root$8 = from_html(`<div class="filelist svelte-1xito9"></div>`);
 	function FileList($$anchor, $$props) {
 		push($$props, true);
 		function humanSize(bytes) {
@@ -6128,7 +6127,7 @@ location.reload();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var div = root_1$6();
+			var div = root$8();
 			html(div, () => store.fileListData, true);
 			reset(div);
 			transition(3, div, () => slideFade, () => store.transition);
@@ -6140,16 +6139,47 @@ location.reload();
 		append($$anchor, fragment);
 		pop();
 	}
+	var _GM_xmlhttpRequest = (() => typeof GM_xmlhttpRequest != "undefined" ? GM_xmlhttpRequest : void 0)();
+	function GM_fetch(method, url, responseType, headers, data) {
+		return new Promise((resolve, reject) => {
+			_GM_xmlhttpRequest({
+				method,
+				url,
+				responseType,
+				headers,
+				data,
+				timeout: 5e3,
+				onload: (response) => resolve(response),
+				onerror: () => reject(new Error(`GM_fetch failed: ${url}`)),
+				ontimeout: () => reject(new Error(`GM_fetch timed out: ${url}`))
+			});
+		});
+	}
 	var parser$3 = new DOMParser();
+	async function fastpic(href) {
+		const { response, responseText, finalUrl } = await GM_fetch("GET", href, "blob");
+		if (response.type.startsWith("image/")) return finalUrl;
+		const src = parser$3.parseFromString(responseText, "text/html").querySelector("a.btn-outline-secondary")?.getAttribute("href");
+		if (!src) throw new Error(`image not found: ${href}`);
+		const url = new URL(src, href);
+		url.searchParams.delete("dl");
+		return url.href;
+	}
+	var parser$2 = new DOMParser();
 	async function generic(href, selector, headers) {
 		const { response, responseText, finalUrl } = await GM_fetch("GET", href, "blob", headers);
 		if (response.type.startsWith("image/")) return finalUrl;
-		const src = parser$3.parseFromString(responseText, "text/html").querySelector(selector)?.getAttribute("src");
+		const src = parser$2.parseFromString(responseText, "text/html").querySelector(selector)?.getAttribute("src");
 		if (!src) throw new Error(`image not found: ${href}`);
 		return new URL(src, href).href;
 	}
 	async function imagebam(href, selector) {
 		return generic(href, selector, { Cookie: "nsfw_inter=1" });
+	}
+	async function getBlob(url) {
+		if (getSettings("proxyCache")) return "https://corsproxy.io/?url=" + encodeURIComponent(url);
+		const { response } = await GM_fetch("GET", url, "blob");
+		return URL.createObjectURL(response);
 	}
 	async function imagenimage(href, src) {
 		const match = src?.match(/(https:\/\/img\d+\.imagenimage\.com\/)th\/(.+)\.jpg/);
@@ -6189,13 +6219,6 @@ location.reload();
 		if (href.includes("thumbs")) return href.replace("thumbs", "images").replace("_t.", "_o.");
 		return generic(href, "#img");
 	}
-	var parser$2 = new DOMParser();
-	async function imgbum(href) {
-		const { responseText } = await GM_fetch("GET", href, "text");
-		const imgSrc = ((parser$2.parseFromString(responseText, "text/html").querySelector("table > tbody > tr > td > img")?.getAttribute("onclick"))?.match(/\/\*mshow\('([^']+)'\);\*\//))?.[1];
-		if (!imgSrc) throw new Error(`image not found: ${href}`);
-		return new URL(imgSrc, href).href;
-	}
 	async function imgdrive(href, src) {
 		if (!src) return href;
 		const imgSrc = src.replace("/small/", "/big/");
@@ -6220,9 +6243,12 @@ location.reload();
 	var parser$1 = new DOMParser();
 	async function picforall(href) {
 		const { responseText } = await GM_fetch("GET", href, "text");
-		const imgSrc = ((parser$1.parseFromString(responseText, "text/html").querySelector("#pay_thumb_img img")?.getAttribute("onclick"))?.match(/mshow\('([^']+)'\)/))?.[1];
+		const doc = parser$1.parseFromString(responseText, "text/html");
+		let selector = "#pay_thumb_img img";
+		if (new URL(href).hostname.endsWith("imgbum.ru")) selector = "table > tbody > tr > td > img";
+		const imgSrc = ((doc.querySelector(selector)?.getAttribute("onclick"))?.match(/mshow\('([^']+)'\)/))?.[1];
 		if (!imgSrc) throw new Error(`image not found: ${href}`);
-		return imgSrc;
+		return new URL(imgSrc, href).href;
 	}
 	async function picshick(href, src) {
 		if (!src || !src.includes("/th/") || !href.includes("/")) return await getBlob(await generic(href, "img.pic"));
@@ -6255,7 +6281,7 @@ location.reload();
 		return (await generic(href, "#image-viewer-container > img")).replace(".md.", ".");
 	}
 	var HANDLERS = {
-		"fastpic.": (href) => generic(href, "#imglink > img.image.img-fluid"),
+		"fastpic.": (href) => fastpic(href),
 		"imagebam.com": (href) => imagebam(href, "img.main-image"),
 		"imageban.ru": (href) => generic(href, "#img_main"),
 		"imagenimage.com": (href, src) => imagenimage(href, src),
@@ -6273,7 +6299,6 @@ location.reload();
 		"picforall.eu": (href, src) => imgbase(href, src),
 		"pornoimages.de": (href, src) => imgbase(href, src),
 		"imgbox.com": (href) => imgbox(href),
-		"imgbum.ru": (href) => imgbum(href),
 		"imgdrive.net": (href, src) => imgdrive(href, src),
 		"imgadult.com": (href, src) => imgdrive(href, src),
 		"imgwallet.com": (href, src) => imgdrive(href, src),
@@ -6284,6 +6309,7 @@ location.reload();
 		"picforall.ru": (href) => picforall(href),
 		"imgclick.ru": (href) => picforall(href),
 		"freescreens.ru": (href) => picforall(href),
+		"imgbum.ru": (href) => picforall(href),
 		"picshick.com": (href, src) => picshick(href, src),
 		"turboimagehost.com": (href) => turboimagehost(href),
 		"imx.to": (href) => imx(href),
@@ -6396,7 +6422,7 @@ location.reload();
 			observer.observe(img);
 		});
 	}
-	var root$2 = from_html(`<div role="img"><!></div>`);
+	var root$7 = from_html(`<div role="img"><!></div>`);
 	function Resize($$anchor, $$props) {
 		push($$props, true);
 		let clicked = prop($$props, "clicked", 15), resized = prop($$props, "resized", 15);
@@ -6477,7 +6503,7 @@ location.reload();
 				});
 			});
 		});
-		var div = root$2();
+		var div = root$7();
 		event("pointermove", $document, onpointermove);
 		event("pointerup", $document, onpointerup);
 		let classes;
@@ -6496,13 +6522,13 @@ location.reload();
 		pop();
 	}
 	delegate(["pointerdown"]);
-	var root_1$5 = from_html(`<div class="loader svelte-bb97q4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="svelte-bb97q4"><path d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" class="svelte-bb97q4"></path><path class="animate svelte-bb97q4" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"></path></svg></div>`);
+	var root$6 = from_html(`<div class="loader svelte-bb97q4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="svelte-bb97q4"><path d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" class="svelte-bb97q4"></path><path class="animate svelte-bb97q4" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"></path></svg></div>`);
 	function Loader($$anchor, $$props) {
 		push($$props, true);
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent = ($$anchor) => {
-			var div = root_1$5();
+			var div = root$6();
 			transition(3, div, () => fade, () => store.transition);
 			append($$anchor, div);
 		};
@@ -6513,13 +6539,13 @@ location.reload();
 		pop();
 	}
 	var Item = ($$anchor, key = noop, value = noop, error = noop) => {
-		var p = root_1$4();
+		var p = root_4$1();
 		var strong = child(p);
 		var text = child(strong, true);
 		reset(strong);
 		var node = sibling(strong, 2);
 		var consequent = ($$anchor) => {
-			var a = root_2$2();
+			var a = root$5();
 			var text_1 = child(a, true);
 			reset(a);
 			template_effect(() => {
@@ -6530,14 +6556,14 @@ location.reload();
 		};
 		var d = user_derived(() => value() && value().startsWith("http"));
 		var consequent_1 = ($$anchor) => {
-			append($$anchor, root_3$1());
+			append($$anchor, root_1$3());
 		};
 		var alternate = ($$anchor) => {
-			var fragment = root_4$1();
+			var fragment = root_3$1();
 			var text_2 = first_child(fragment);
 			var node_1 = sibling(text_2);
 			var consequent_2 = ($$anchor) => {
-				var span_1 = root_5$1();
+				var span_1 = root_2$1();
 				var text_3 = child(span_1, true);
 				reset(span_1);
 				template_effect(() => set_text(text_3, error()));
@@ -6561,13 +6587,13 @@ location.reload();
 		});
 		append($$anchor, p);
 	};
-	var root_2$2 = from_html(`<a class="svelte-swtc1e"> </a>`);
-	var root_3$1 = from_html(`<span class="error svelte-swtc1e">null</span>`);
-	var root_5$1 = from_html(`<span class="error svelte-swtc1e"> </span>`);
-	var root_4$1 = from_html(` <!>`, 1);
-	var root_1$4 = from_html(`<p class="svelte-swtc1e"><strong> </strong>: <!></p>`);
-	var root_6$1 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-swtc1e"><path d="M17 9H7V7h10m0 6H7v-2h10m-3 6H7v-2h7M12 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" class="svelte-swtc1e"></path></svg>`);
-	var root$1 = from_html(`<div class="debug svelte-swtc1e"><!> <!> <!> <!> <div class="copy svelte-swtc1e"><!></div></div>`);
+	var root$5 = from_html(`<a class="svelte-swtc1e"> </a>`);
+	var root_1$3 = from_html(`<span class="error svelte-swtc1e">null</span>`);
+	var root_2$1 = from_html(`<span class="error svelte-swtc1e"> </span>`);
+	var root_3$1 = from_html(` <!>`, 1);
+	var root_4$1 = from_html(`<p class="svelte-swtc1e"><strong> </strong>: <!></p>`);
+	var root_5$1 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="svelte-swtc1e"><path d="M17 9H7V7h10m0 6H7v-2h10m-3 6H7v-2h7M12 3a1 1 0 0 1 1 1a1 1 0 0 1-1 1a1 1 0 0 1-1-1a1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2" class="svelte-swtc1e"></path></svg>`);
+	var root_6$1 = from_html(`<div class="debug svelte-swtc1e"><!> <!> <!> <!> <div class="copy svelte-swtc1e"><!></div></div>`);
 	function Debug($$anchor, $$props) {
 		push($$props, true);
 		let data = user_derived(() => store.upgradeImgData?.[$$props.img.id] || {});
@@ -6579,7 +6605,7 @@ location.reload();
 				console.error("Failed to copy debug:", err);
 			}
 		}
-		var div = root$1();
+		var div = root_6$1();
 		var node_2 = child(div);
 		Item(node_2, () => "status", () => get(data).status, () => get(data).error);
 		var node_3 = sibling(node_2, 2);
@@ -6600,7 +6626,7 @@ location.reload();
 			}),
 			title: "Copy to clipboard",
 			children: ($$anchor, $$slotProps) => {
-				append($$anchor, root_6$1());
+				append($$anchor, root_5$1());
 			},
 			$$slots: { default: true }
 		});
@@ -6610,8 +6636,8 @@ location.reload();
 		append($$anchor, div);
 		pop();
 	}
-	var root_1$3 = from_html(`<div class="slider svelte-1bzlgy6"><input type="range" min="1" max="5" step="1" class="svelte-1bzlgy6"/> <span class="value svelte-1bzlgy6" title="Max columns"><span class="text svelte-1bzlgy6"> </span></span></div>`);
-	var root = from_html(`<div role="img" class="image-columns svelte-1bzlgy6"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-1bzlgy6"><path d="M22 9.999V20a1 1 0 0 1-1 1h-8V9.999zm-11 6V21H3a1 1 0 0 1-1-1v-4.001zM11 3v10.999H2V4a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v3.999h-9V3z"></path></svg> <!></div>`);
+	var root$4 = from_html(`<div class="slider svelte-1bzlgy6"><input type="range" min="1" max="5" step="1" class="svelte-1bzlgy6"/> <span class="value svelte-1bzlgy6" title="Max columns"><span class="text svelte-1bzlgy6"> </span></span></div>`);
+	var root_1$2 = from_html(`<div role="img" class="image-columns svelte-1bzlgy6"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-1bzlgy6"><path d="M22 9.999V20a1 1 0 0 1-1 1h-8V9.999zm-11 6V21H3a1 1 0 0 1-1-1v-4.001zM11 3v10.999H2V4a1 1 0 0 1 1-1zm10 0a1 1 0 0 1 1 1v3.999h-9V3z"></path></svg> <!></div>`);
 	function Columns($$anchor, $$props) {
 		push($$props, true);
 		let open = state$1(false);
@@ -6624,14 +6650,14 @@ location.reload();
 		function onchange() {
 			saveColumnCount(store.columnCount);
 		}
-		var div = root();
+		var div = root_1$2();
 		var node = sibling(child(div), 2);
 		var consequent = ($$anchor) => {
 			const opts = user_derived(() => ({
 				...store.transition,
 				axis: "x"
 			}));
-			var div_1 = root_1$3();
+			var div_1 = root$4();
 			var input = child(div_1);
 			remove_input_defaults(input);
 			var span = sibling(input, 2);
@@ -6656,8 +6682,8 @@ location.reload();
 		pop();
 	}
 	delegate(["change"]);
-	var root_2$1 = from_html(`<div class="container svelte-27jg01"><!> <a target="_blank"><img/> <!></a></div>`);
-	var root_5 = from_html(`<div id="x-images"><!> <!></div>`);
+	var root$3 = from_html(`<div class="container svelte-27jg01"><!> <a target="_blank"><img/> <!></a></div>`);
+	var root_1$1 = from_html(`<div id="x-images"><!> <!></div>`);
 	function Images_1($$anchor, $$props) {
 		push($$props, true);
 		const Images = ($$anchor, images = noop) => {
@@ -6665,7 +6691,7 @@ location.reload();
 			each(first_child(fragment), 19, images, (img) => img.id, ($$anchor, img, i) => {
 				const gif = user_derived(() => get(img)?.src?.toLowerCase()?.includes(".gif"));
 				const loading = user_derived(() => get(img)?.href ? "eager" : "lazy");
-				var div = root_2$1();
+				var div = root$3();
 				let styles;
 				var node_1 = child(div);
 				var consequent = ($$anchor) => {
@@ -6746,7 +6772,7 @@ location.reload();
 		var fragment_3 = comment();
 		var node_3 = first_child(fragment_3);
 		var consequent_2 = ($$anchor) => {
-			var div_1 = root_5();
+			var div_1 = root_1$1();
 			let classes_2;
 			var node_4 = child(div_1);
 			Columns(node_4, {});
@@ -6784,7 +6810,7 @@ location.reload();
 		pop();
 	}
 	var Incognito = ($$anchor) => {
-		var div = root_1$2();
+		var div = root$2();
 		var a = sibling(child(div));
 		set_style(a, "", {}, { cursor: "pointer" });
 		reset(div);
@@ -6803,10 +6829,10 @@ location.reload();
 			"Раздача ожидает проверки": "Distribution is awaiting moderator approval<br /><br />Viewing is currently unavailable"
 		}));
 		const currentError = user_derived(() => Object.keys(get(errorMessages)).find((key) => forumline()?.textContent?.includes(key)));
-		var div_1 = root_2();
+		var div_1 = root_3();
 		var node = child(div_1);
 		var consequent = ($$anchor) => {
-			var fragment = root_3();
+			var fragment = root_1();
 			var p = sibling(first_child(fragment), 4);
 			set_style(p, "", {}, { "text-align": "center" });
 			html(p, () => get(errorMessages)[get(currentError)], true);
@@ -6815,7 +6841,7 @@ location.reload();
 			append($$anchor, fragment);
 		};
 		var consequent_1 = ($$anchor) => {
-			var fragment_1 = root_4();
+			var fragment_1 = root_2();
 			var h3 = first_child(fragment_1);
 			var text = child(h3, true);
 			reset(h3);
@@ -6840,7 +6866,7 @@ location.reload();
 		var a_1 = root_6();
 		var node_3 = child(a_1);
 		var consequent_2 = ($$anchor) => {
-			var img = root_7();
+			var img = root_4();
 			template_effect(() => {
 				set_attribute(img, "src", avatar());
 				set_attribute(img, "alt", nick());
@@ -6848,7 +6874,7 @@ location.reload();
 			append($$anchor, img);
 		};
 		var alternate_1 = ($$anchor) => {
-			append($$anchor, root_8());
+			append($$anchor, root_5());
 		};
 		if_block(node_3, ($$render) => {
 			if (avatar()) $$render(consequent_2);
@@ -6863,10 +6889,10 @@ location.reload();
 		var node_4 = first_child(fragment_3);
 		var consequent_4 = ($$anchor) => {
 			const content = user_derived(() => nick() === "Гость" ? "Guest" : nick());
-			var span = root_10();
+			var span = root_8();
 			var node_5 = child(span);
 			var consequent_3 = ($$anchor) => {
-				var a_2 = root_11();
+				var a_2 = root_7();
 				var text_1 = child(a_2, true);
 				reset(a_2);
 				template_effect(() => {
@@ -6892,18 +6918,18 @@ location.reload();
 		});
 		append($$anchor, fragment_3);
 	};
-	var root_1$2 = from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-wfy26x">turn off incognito</a></div>`);
-	var root_3 = from_html(`<h3>Information</h3> <br/> <p></p> <br/> <a href="/forum/index.php" class="svelte-wfy26x">Return to home page</a>`, 1);
-	var root_4 = from_html(`<h3> </h3> <!>`, 1);
-	var root_2 = from_html(`<div class="forumline svelte-wfy26x"><!></div>`);
-	var root_7 = from_html(`<img class="svelte-wfy26x"/>`);
-	var root_8 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-wfy26x"><path fill="currentcolor" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd"></path></svg>`);
+	var root$2 = from_html(`<div>Post not rendered... <a href="#incognito" class="svelte-wfy26x">turn off incognito</a></div>`);
+	var root_1 = from_html(`<h3>Information</h3> <br/> <p></p> <br/> <a href="/forum/index.php" class="svelte-wfy26x">Return to home page</a>`, 1);
+	var root_2 = from_html(`<h3> </h3> <!>`, 1);
+	var root_3 = from_html(`<div class="forumline svelte-wfy26x"><!></div>`);
+	var root_4 = from_html(`<img class="svelte-wfy26x"/>`);
+	var root_5 = from_svg(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svelte-wfy26x"><path fill="currentcolor" fill-rule="evenodd" d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z" clip-rule="evenodd"></path></svg>`);
 	var root_6 = from_html(`<a class="no-avatar svelte-wfy26x"><!></a>`);
-	var root_11 = from_html(`<a class="svelte-wfy26x"> </a>`);
-	var root_10 = from_html(`<span class="nick svelte-wfy26x"><!></span>`);
-	var root_14 = from_html(`<button class="date svelte-wfy26x"><!></button>`);
-	var root_21 = from_html(`<div class="post svelte-wfy26x"><div class="avatar svelte-wfy26x"><!></div> <div class="content svelte-wfy26x"><div class="header svelte-wfy26x"><!> <!></div> <div class="message svelte-wfy26x"></div></div></div>`);
-	var root_18 = from_html(`<div id="x-post"><!></div>`);
+	var root_7 = from_html(`<a class="svelte-wfy26x"> </a>`);
+	var root_8 = from_html(`<span class="nick svelte-wfy26x"><!></span>`);
+	var root_9 = from_html(`<button class="date svelte-wfy26x"><!></button>`);
+	var root_10 = from_html(`<div class="post svelte-wfy26x"><div class="avatar svelte-wfy26x"><!></div> <div class="content svelte-wfy26x"><div class="header svelte-wfy26x"><!> <!></div> <div class="message svelte-wfy26x"></div></div></div>`);
+	var root_11 = from_html(`<div id="x-post"><!></div>`);
 	function Post($$anchor, $$props) {
 		push($$props, true);
 		const Date = ($$anchor, date = noop, i = noop) => {
@@ -6911,7 +6937,7 @@ location.reload();
 			var node_6 = first_child(fragment_5);
 			var consequent_6 = ($$anchor) => {
 				const paredDate = user_derived(() => handleDate(date()));
-				var button = root_14();
+				var button = root_9();
 				var node_7 = child(button);
 				var consequent_5 = ($$anchor) => {
 					var text_3 = text();
@@ -6953,7 +6979,7 @@ location.reload();
 			Incognito($$anchor);
 		};
 		var alternate_4 = ($$anchor) => {
-			var div_2 = root_18();
+			var div_2 = root_11();
 			let classes;
 			var node_9 = child(div_2);
 			var consequent_8 = ($$anchor) => {
@@ -6967,7 +6993,7 @@ location.reload();
 					let avatar = () => get($$item).avatar;
 					let date = () => get($$item).date;
 					let message = () => get($$item).message;
-					var div_3 = root_21();
+					var div_3 = root_10();
 					var div_4 = child(div_3);
 					Avatar(child(div_4), avatar, nick, link);
 					reset(div_4);
@@ -6975,7 +7001,8 @@ location.reload();
 					var div_6 = child(div_5);
 					var node_12 = child(div_6);
 					Nick(node_12, nick, link);
-					Date(sibling(node_12, 2), date, () => i);
+					var node_13 = sibling(node_12, 2);
+					Date(node_13, date, () => i);
 					reset(div_6);
 					attach(sibling(div_6, 2), () => insertPost(message()));
 					reset(div_5);
@@ -7001,7 +7028,7 @@ location.reload();
 		pop();
 	}
 	delegate(["click"]);
-	var root_1$1 = from_html(`<div id="ultra-pagination" class="svelte-dlb7of"><!></div>`);
+	var root$1 = from_html(`<div id="ultra-pagination" class="svelte-dlb7of"><!></div>`);
 	function Pagination($$anchor, $$props) {
 		push($$props, true);
 		const parser = new DOMParser();
@@ -7023,7 +7050,7 @@ location.reload();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent_1 = ($$anchor) => {
-			var div = root_1$1();
+			var div = root$1();
 			var node_1 = child(div);
 			var consequent = ($$anchor) => {
 				var fragment_1 = comment();
@@ -7042,7 +7069,7 @@ location.reload();
 		append($$anchor, fragment);
 		pop();
 	}
-	var root_1 = from_html(`<!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!>`, 1);
+	var root = from_html(`<!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!> <!>`, 1);
 	function App($$anchor, $$props) {
 		push($$props, true);
 		let app = prop($$props, "app", 7);
@@ -7077,7 +7104,7 @@ location.reload();
 		var fragment = comment();
 		var node = first_child(fragment);
 		var consequent_1 = ($$anchor) => {
-			var fragment_1 = root_1();
+			var fragment_1 = root();
 			var node_1 = first_child(fragment_1);
 			Events(node_1, {});
 			var node_2 = sibling(node_1, 2);
