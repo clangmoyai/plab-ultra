@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         plab-ultra
 // @namespace    https://github.com/clangmoyai/plab-ultra
-// @version      2026.08.05
+// @version      2026.08.15
 // @author       clangmoyai
 // @description  Userscript for PornoLab.Net
 // @license      MIT
@@ -1020,10 +1020,12 @@
 					current_batch = next_batch;
 				}
 			}
-			if (this.#roots.length > 0) if (next_batch !== null) {
-				const batch = next_batch;
-				batch.#roots.push(...this.#roots.filter((r) => !batch.#roots.includes(r)));
-			} else next_batch = this;
+			if (this.#roots.length > 0) {
+				if (next_batch !== null) {
+					const batch = next_batch;
+					batch.#roots.push(...this.#roots.filter((r) => !batch.#roots.includes(r)));
+				} else next_batch = this;
+			}
 			if (next_batch !== null) next_batch.#process();
 		}
 		#traverse(root, effects, render_effects) {
@@ -1181,10 +1183,12 @@
 						return v2[0] !== v1[0] || v2[1] !== v1[1];
 					}).map(([c]) => c);
 					if (current_unequal.length > 0) {
-						for (const effect of this.#new_effects) if ((effect.f & 155648) === 0 && depends_on(effect, current_unequal, checked)) if ((effect.f & 4194320) !== 0) {
-							set_signal_status(effect, DIRTY);
-							batch.schedule(effect);
-						} else batch.#dirty_effects.add(effect);
+						for (const effect of this.#new_effects) if ((effect.f & 155648) === 0 && depends_on(effect, current_unequal, checked)) {
+							if ((effect.f & 4194320) !== 0) {
+								set_signal_status(effect, DIRTY);
+								batch.schedule(effect);
+							} else batch.#dirty_effects.add(effect);
+						}
 					}
 					if (batch.#roots.length > 0 && !batch.#decrement_queued) {
 						batch.apply();
@@ -1442,8 +1446,10 @@
 			}
 			source.wv = increment_write_version();
 			mark_reactions(source, DIRTY, updated_during_traversal);
-			if (is_runes() && active_effect !== null && (active_effect.f & 1024) !== 0 && (active_effect.f & 96) === 0) if (untracked_writes === null) set_untracked_writes([source]);
-			else untracked_writes.push(source);
+			if (is_runes() && active_effect !== null && (active_effect.f & 1024) !== 0 && (active_effect.f & 96) === 0) {
+				if (untracked_writes === null) set_untracked_writes([source]);
+				else untracked_writes.push(source);
+			}
 			if (!batch.is_fork && eager_effects.size > 0 && !eager_effects_deferred) flush_eager_effects();
 		}
 		return value;
@@ -1777,9 +1783,10 @@
 		};
 		current_batch?.register_created_effect(effect);
 		var e = effect;
-		if ((type & 4) !== 0) if (collected_effects !== null) collected_effects.push(effect);
-		else Batch.ensure().schedule(effect);
-		else if (fn !== null) {
+		if ((type & 4) !== 0) {
+			if (collected_effects !== null) collected_effects.push(effect);
+			else Batch.ensure().schedule(effect);
+		} else if (fn !== null) {
 			try {
 				update_effect(effect);
 			} catch (e) {
@@ -2118,8 +2125,10 @@
 				read_version++;
 				if (previous_reaction.deps !== null) for (let i = 0; i < previous_skipped_deps; i += 1) previous_reaction.deps[i].rv = read_version;
 				if (previous_deps !== null) for (const dep of previous_deps) dep.rv = read_version;
-				if (untracked_writes !== null) if (previous_untracked_writes === null) previous_untracked_writes = untracked_writes;
-				else previous_untracked_writes.push(...untracked_writes);
+				if (untracked_writes !== null) {
+					if (previous_untracked_writes === null) previous_untracked_writes = untracked_writes;
+					else previous_untracked_writes.push(...untracked_writes);
+				}
 			}
 			if ((reaction.f & 8388608) !== 0) reaction.f ^= ERROR_VALUE;
 			return result;
@@ -2671,15 +2680,17 @@
 		ensure(key, fn) {
 			var batch = current_batch;
 			var defer = should_defer_append();
-			if (fn && !this.#onscreen.has(key) && !this.#offscreen.has(key)) if (defer) {
-				var fragment = document.createDocumentFragment();
-				var target = create_text();
-				fragment.append(target);
-				this.#offscreen.set(key, {
-					effect: branch(() => fn(target)),
-					fragment
-				});
-			} else this.#onscreen.set(key, branch(() => fn(this.anchor)));
+			if (fn && !this.#onscreen.has(key) && !this.#offscreen.has(key)) {
+				if (defer) {
+					var fragment = document.createDocumentFragment();
+					var target = create_text();
+					fragment.append(target);
+					this.#offscreen.set(key, {
+						effect: branch(() => fn(target)),
+						fragment
+					});
+				} else this.#onscreen.set(key, branch(() => fn(this.anchor)));
+			}
 			this.#batches.set(batch, key);
 			if (defer) {
 				for (const [k, effect] of this.#onscreen) if (k === key) batch.unskip_effect(effect);
@@ -2813,7 +2824,7 @@
 			}, false);
 		}
 		if (remaining === 0) {
-			var fast_path = transitions.length === 0 && controlled_anchor !== null;
+			var fast_path = transitions.length === 0 && controlled_anchor !== null && state.pending.size === 0;
 			if (fast_path) {
 				var anchor = controlled_anchor;
 				var parent_node = anchor.parentNode;
@@ -2866,14 +2877,17 @@
 			state.pending.delete(batch);
 			state.fallback = fallback;
 			reconcile(state, array, anchor, flags, get_key);
-			if (fallback !== null) if (array.length === 0) if ((fallback.f & 33554432) === 0) resume_effect(fallback);
-			else {
-				fallback.f ^= EFFECT_OFFSCREEN;
-				move(fallback, null, anchor);
+			if (fallback !== null) {
+				if (array.length === 0) {
+					if ((fallback.f & 33554432) === 0) resume_effect(fallback);
+					else {
+						fallback.f ^= EFFECT_OFFSCREEN;
+						move(fallback, null, anchor);
+					}
+				} else pause_effect(fallback, () => {
+					fallback = null;
+				});
 			}
-			else pause_effect(fallback, () => {
-				fallback = null;
-			});
 		}
 		function discard(batch) {
 			state.pending.delete(batch);
@@ -2914,10 +2928,12 @@
 					}
 					keys.add(key);
 				}
-				if (length === 0 && fallback_fn && !fallback) if (first_run) fallback = branch(() => fallback_fn(anchor));
-				else {
-					fallback = branch(() => fallback_fn(offscreen_anchor ??= create_text()));
-					fallback.f |= EFFECT_OFFSCREEN;
+				if (length === 0 && fallback_fn && !fallback) {
+					if (first_run) fallback = branch(() => fallback_fn(anchor));
+					else {
+						fallback = branch(() => fallback_fn(offscreen_anchor ??= create_text()));
+						fallback.f |= EFFECT_OFFSCREEN;
+					}
 				}
 				if (length > keys.size) each_key_duplicate("", "", "");
 				if (hydrating && length > 0) set_hydrate_node(skip_nodes());
@@ -3535,9 +3551,11 @@
 		var prev = dom[CLASS_CACHE];
 		if (hydrating || prev !== value || prev === void 0) {
 			var next_class_name = to_class(value, hash, next_classes);
-			if (!hydrating || next_class_name !== dom.getAttribute("class")) if (next_class_name == null) dom.removeAttribute("class");
-			else if (is_html) dom.className = next_class_name;
-			else dom.setAttribute("class", next_class_name);
+			if (!hydrating || next_class_name !== dom.getAttribute("class")) {
+				if (next_class_name == null) dom.removeAttribute("class");
+				else if (is_html) dom.className = next_class_name;
+				else dom.setAttribute("class", next_class_name);
+			}
 			dom[CLASS_CACHE] = value;
 		} else if (next_classes && prev_classes !== next_classes) for (var key in next_classes) {
 			var is_present = !!next_classes[key];
@@ -3548,21 +3566,27 @@
 	function update_styles(dom, prev = {}, next, priority) {
 		for (var key in next) {
 			var value = next[key];
-			if (prev[key] !== value) if (next[key] == null) dom.style.removeProperty(key);
-			else dom.style.setProperty(key, value, priority);
+			if (prev[key] !== value) {
+				if (next[key] == null) dom.style.removeProperty(key);
+				else dom.style.setProperty(key, value, priority);
+			}
 		}
 	}
 	function set_style(dom, value, prev_styles, next_styles) {
 		var prev = dom[STYLE_CACHE];
 		if (hydrating || prev !== value) {
 			var next_style_attr = to_style(value, next_styles);
-			if (!hydrating || next_style_attr !== dom.getAttribute("style")) if (next_style_attr == null) dom.removeAttribute("style");
-			else dom.style.cssText = next_style_attr;
+			if (!hydrating || next_style_attr !== dom.getAttribute("style")) {
+				if (next_style_attr == null) dom.removeAttribute("style");
+				else dom.style.cssText = next_style_attr;
+			}
 			dom[STYLE_CACHE] = value;
-		} else if (next_styles) if (Array.isArray(next_styles)) {
-			update_styles(dom, prev_styles?.[0], next_styles[0]);
-			update_styles(dom, prev_styles?.[1], next_styles[1], "important");
-		} else update_styles(dom, prev_styles, next_styles);
+		} else if (next_styles) {
+			if (Array.isArray(next_styles)) {
+				update_styles(dom, prev_styles?.[0], next_styles[0]);
+				update_styles(dom, prev_styles?.[1], next_styles[1], "important");
+			} else update_styles(dom, prev_styles, next_styles);
+		}
 		return next_styles;
 	}
 	var IS_CUSTOM_ELEMENT = Symbol("is custom element");
@@ -6159,11 +6183,21 @@ location.reload();
 	async function fastpic(href) {
 		const { response, responseText, finalUrl } = await GM_fetch("GET", href, "blob");
 		if (response.type.startsWith("image/")) return finalUrl;
-		const src = parser$3.parseFromString(responseText, "text/html").querySelector("a.btn-outline-secondary")?.getAttribute("href");
-		if (!src) throw new Error(`image not found: ${href}`);
-		const url = new URL(src, href);
-		url.searchParams.delete("dl");
-		return url.href;
+		const doc = parser$3.parseFromString(responseText, "text/html");
+		const template = doc.querySelector("template");
+		if (template) {
+			const src = template.content.querySelector("img")?.getAttribute("src");
+			if (src) return new URL(src, href).href;
+		}
+		const imgSrc = doc.querySelector("img.image.img-fluid")?.getAttribute("src");
+		if (imgSrc) return new URL(imgSrc, href).href;
+		const anchorHref = doc.querySelector("a.btn-outline-secondary")?.getAttribute("href");
+		if (anchorHref) {
+			const url = new URL(anchorHref, href);
+			url.searchParams.delete("dl");
+			return url.href;
+		}
+		throw new Error(`image not found: ${href}`);
 	}
 	var parser$2 = new DOMParser();
 	async function generic(href, selector, headers) {
@@ -7147,9 +7181,10 @@ location.reload();
 		pop();
 	}
 	_css("html{--border-radius-large:8px;--border-radius-small:4px;--tag-color:#fff;--content-margin:1rem;--highlighted:#b46300}html[data-theme=dark]{--main-bg:#121212;--post-bg:#282828;--post-date-color:#87b3df;--post-border-color:#555;--post-odd-bg:#373737;--link-color:#9cceff;--tag-bg:#323232;--search-color:#fff;--overlay-bg:#202020bf;--input-bg:#1c1b1b;--incognito-filter:brightness(0);--button-color:#284a86;--seed-color:#33b933;--leech-color:#ff5454}html[data-theme=light]{--main-bg:#fff;--post-bg:#efefef;--post-date-color:#345da4;--post-border-color:#cacaca;--post-odd-bg:#e3e3e3;--link-color:#345da4;--tag-bg:var(--link-color);--search-color:#000;--overlay-bg:#ffffffbf;--input-bg:#fafafa;--incognito-filter:brightness(0) invert(1);--button-color:#4677cc;--seed-color:#060;--leech-color:#900}#ultra{background-color:var(--main-bg);flex-direction:column;padding:1.5rem 2.5rem;font-family:system-ui;display:flex}#ultra .section{background-color:var(--post-bg);border-radius:var(--border-radius-large);border:1px solid var(--post-border-color);overflow:hidden}#ultra img{filter:unset}body{min-width:unset!important}");
-	if (userscriptDisabled()) if (document.readyState === "loading") on(document, "DOMContentLoaded", appendUserscriptEnableButton, { once: true });
-	else appendUserscriptEnableButton();
-	else {
+	if (userscriptDisabled()) {
+		if (document.readyState === "loading") on(document, "DOMContentLoaded", appendUserscriptEnableButton, { once: true });
+		else appendUserscriptEnableButton();
+	} else {
 		const cachedTheme = sessionStorage.getItem("dark-mode");
 		if (cachedTheme !== null) document.documentElement.dataset["theme"] = cachedTheme === "true" ? "dark" : "light";
 		let CSP = false;
