@@ -17,18 +17,30 @@ export async function fastpic(href: string): Promise<string> {
   }
 
   const doc = parser.parseFromString(responseText, "text/html");
+
+  // first try template tag
+  const template = doc.querySelector<HTMLTemplateElement>("template");
+  if (template) {
+    const templateImg = template.content.querySelector("img");
+    const src = templateImg?.getAttribute("src");
+    if (src) return new URL(src, href).href;
+  }
+
+  // fall back to direct image
+  const img = doc.querySelector<HTMLImageElement>("img.image.img-fluid");
+  const imgSrc = img?.getAttribute("src");
+  if (imgSrc) return new URL(imgSrc, href).href;
+
+  // else try download button link
   const anchor = doc.querySelector<HTMLAnchorElement>(
     "a.btn-outline-secondary",
   );
-  const src = anchor?.getAttribute("href");
-
-  if (!src) {
-    throw new Error(`image not found: ${href}`);
+  const anchorHref = anchor?.getAttribute("href");
+  if (anchorHref) {
+    const url = new URL(anchorHref, href);
+    url.searchParams.delete("dl");
+    return url.href;
   }
 
-  // dl=1 forces a download instead of rendering the image
-  const url = new URL(src, href);
-  url.searchParams.delete("dl");
-
-  return url.href;
+  throw new Error(`image not found: ${href}`);
 }
