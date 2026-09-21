@@ -4,11 +4,16 @@ const parser = new DOMParser();
 
 /**
  * Handles fastpic.org
+ *
+ * The /view/ page sets the image src via obfuscated JS (and sometimes shows
+ * an interstitial first). The /fullview/ page exposes the signed full size
+ * URL in a plain `loading_img` variable.
  */
 export async function fastpic(href: string): Promise<string> {
+  const fullview = href.replace("/view/", "/fullview/");
   const { response, responseText, finalUrl } = await GM_fetch(
     "GET",
-    href,
+    fullview,
     "blob",
   );
 
@@ -16,31 +21,25 @@ export async function fastpic(href: string): Promise<string> {
     return finalUrl;
   }
 
+  const src = findSrc(responseText);
+  if (src) return src;
+
+  // interstitial page: follow the "continue" link, which has a token query
   const doc = parser.parseFromString(responseText, "text/html");
+  const path = new URL(fullview).pathname;
+  const next = [...doc.querySelectorAll<HTMLAnchorElement>("a[href]")]
+    .map((a) => new URL(a.getAttribute("href")!, fullview))
+    .find((u) => u.pathname === path && u.search.includes("="));
 
-  // first try template tag
-  const template = doc.querySelector<HTMLTemplateElement>("template");
-  if (template) {
-    const templateImg = template.content.querySelector("img");
-    const src = templateImg?.getAttribute("src");
-    if (src) return new URL(src, href).href;
-  }
-
-  // fall back to direct image
-  const img = doc.querySelector<HTMLImageElement>("img.image.img-fluid");
-  const imgSrc = img?.getAttribute("src");
-  if (imgSrc) return new URL(imgSrc, href).href;
-
-  // else try download button link
-  const anchor = doc.querySelector<HTMLAnchorElement>(
-    "a.btn-outline-secondary",
-  );
-  const anchorHref = anchor?.getAttribute("href");
-  if (anchorHref) {
-    const url = new URL(anchorHref, href);
-    url.searchParams.delete("dl");
-    return url.href;
+  if (next) {
+    const retry = await GM_fetch("GET", next.href, "blob");
+    const retrySrc = findSrc(retry.responseText);
+    if (retrySrc) return retrySrc;
   }
 
   throw new Error(`image not found: ${href}`);
+}
+
+function findSrc(html: string): string | undefined {
+  return html.match(/loading_img\s*=\s*(["'])(.+?)\1/)?.[2];
 }
