@@ -9,8 +9,24 @@ const parser = new DOMParser();
  * an interstitial first). The /fullview/ page exposes the signed full size
  * URL in a plain `loading_img` variable.
  */
+/**
+ * Some posts link straight to the image CDN (e.g. `i128.fastpic.org/big/...`)
+ * instead of the `fastpic.org/view/...html` page. Those CDN URLs need a
+ * signed `md5`/`expires` query to load, which the plain link lacks, so
+ * rebuild the `/view/` URL from it to fetch a fresh signed link.
+ */
+function toViewHref(href: string): string {
+  const match = href.match(
+    /^https?:\/\/i(\d+)\.fastpic\.org\/(?:big|thumb)\/(\d{4})\/(\d{4})\/[0-9a-f]{2}\/(_[0-9a-f]+\.\w+)/,
+  );
+  if (!match) return href;
+
+  const [, server, year, monthDay, filename] = match;
+  return `https://fastpic.org/view/${server}/${year}/${monthDay}/${filename}.html`;
+}
+
 export async function fastpic(href: string): Promise<string> {
-  const fullview = href.replace("/view/", "/fullview/");
+  const fullview = toViewHref(href).replace("/view/", "/fullview/");
   const { response, responseText, finalUrl } = await GM_fetch(
     "GET",
     fullview,
